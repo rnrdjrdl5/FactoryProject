@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Hub_BuiltIn
+  m_EditorClassIdentifier: 
+  m_GroupName: Hub_BuiltIn
+  m_GUID: c1fc461410ffe489ba71259eaa12b143
+  m_SerializeEntries:
+  - m_GUID: 5a77c77413f374c2e971b2f54f944838
+    m_Address: Hub/Hub
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d7e3143cac64941479c893567315aac2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b1b98726eb9a74fdbaab05c8ba9e944c, type: 2}
