@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: Core_BuiltIn
   m_GUID: 1be9436d52b084a15ac7b96fbab8dcb4
   m_SerializeEntries:
-  - m_GUID: caf3816fbb2364c76af41e82c16af7a6
-    m_Address: Core/FactoryStage
+  - m_GUID: afc240c4190be46d48df3a854e3d8cd2
+    m_Address: Core/FactoryRealm
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
