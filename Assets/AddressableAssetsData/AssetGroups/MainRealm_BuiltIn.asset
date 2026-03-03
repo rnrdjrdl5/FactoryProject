@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: MainRealm_BuiltIn
+  m_EditorClassIdentifier: 
+  m_GroupName: MainRealm_BuiltIn
+  m_GUID: 438e7af2f9b34490eb87fc129479041b
+  m_SerializeEntries:
+  - m_GUID: 6c6c8d4cbe7274bf48ba7d018ece320c
+    m_Address: MainRealm/Brain
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aee23259f9449470f82b2c25e2d7d11c
+    m_Address: MainRealm/Entity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d7e3143cac64941479c893567315aac2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9e738f3885f00476e880c96dcb36dd62, type: 2}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5286885057811837180}
   - component: {fileID: -1351406094760236139}
-  - component: {fileID: -7535643609568323211}
+  - component: {fileID: -3693889069108018448}
   m_Layer: 0
   m_Name: FactoryRealm
   m_TagString: Untagged
@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a62997c9d89466586bc5f129e81274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  realmTrait: {fileID: -7535643609568323211}
---- !u!114 &-7535643609568323211
+  prefabPath: MainRealm/MainRealm
+--- !u!114 &-3693889069108018448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,6 +55,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4156024333512794089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c9fb8a809d4766858876b0c8436dbe, type: 3}
+  m_Script: {fileID: 11500000, guid: 6addb394475b94d8b9a287851100f47d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
