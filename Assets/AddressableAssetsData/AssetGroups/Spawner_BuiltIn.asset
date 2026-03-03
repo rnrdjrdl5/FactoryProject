@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: Spawner_BuiltIn
   m_GUID: 9a1115bed543d4aec9117b01117a34d9
   m_SerializeEntries:
-  - m_GUID: 55b55dabbbbac41dfa21a7e7c9a7b65e
-    m_Address: Spawner/SpanwerEntity
+  - m_GUID: d2ced7654f6354607b5b4cca8511e056
+    m_Address: Spawner/SpawnerEntity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

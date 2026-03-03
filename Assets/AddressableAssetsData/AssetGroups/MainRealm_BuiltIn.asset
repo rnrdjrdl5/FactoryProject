@@ -16,12 +16,12 @@ MonoBehaviour:
   m_GUID: 438e7af2f9b34490eb87fc129479041b
   m_SerializeEntries:
   - m_GUID: 6c6c8d4cbe7274bf48ba7d018ece320c
-    m_Address: MainRealm/Brain
+    m_Address: Player/Brain
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aee23259f9449470f82b2c25e2d7d11c
-    m_Address: MainRealm/Entity
+    m_Address: Player/Entity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
