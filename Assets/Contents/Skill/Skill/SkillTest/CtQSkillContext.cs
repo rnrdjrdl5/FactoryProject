@@ -1,15 +1,8 @@
 using UnityEngine;
 
-public class CtQSkillContext : BaseSkillContext , IProjectileContext
+public class CtQSkillContext : BaseSkillContext , IStraightProjectileContext
 {
     public Vector2 Direction { get; set; }
     public float ProjectileTime { get; set; }
     public float ProjectileSpeed { get; set; }
-
-    public override void Use()
-    {
-        base.Use();
-
-        SkillAction.CreateProjectile<CtQProjectileEntity>(this, "Projectile/CtQProjectile");
-    }
 }

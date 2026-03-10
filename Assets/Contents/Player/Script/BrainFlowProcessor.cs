@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BrainFlowProcessor : Processor
 {
-    public override void Initialize()
+    public override void Initialize(Parameter parameter)
     {
-        base.Initialize();
+        base.Initialize(parameter);
 
         var flowAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
 

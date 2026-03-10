@@ -12,11 +12,6 @@ public class BaseSkillContext
         this.caster = caster;
         this.realm = realm;
     }
-    
-    public virtual void Use()
-    {
-        
-    }
 
     public static SkillContextType Create<SkillContextType>(Realm realm, Entity caster) where SkillContextType : BaseSkillContext , new()
     {

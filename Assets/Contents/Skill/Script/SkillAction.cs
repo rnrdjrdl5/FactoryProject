@@ -1,9 +1,16 @@
 public static class SkillAction
 {
-    public static ProjectileEntityType CreateProjectile<ProjectileEntityType>(BaseSkillContext skillContext, string prefabPath, Entity parent = null)
-        where ProjectileEntityType : ProjectileEntity, new()
+    public static EntityType CreateSkillEntity<EntityType>(BaseSkillContext skillContext, string prefabPath, Entity parent)
+        where EntityType : Entity, new()
     {
-        var projectileEntity = ProjectileEntity.Create<ProjectileEntityType>(skillContext, prefabPath, parent);
+        var projectileEntity = parent.AddEntity<EntityType>(prefabPath);
+        var processorAbility = projectileEntity.GetAbility<ProcessorAbility>();
+        var processors = processorAbility.GetUpdateProcessors<SkillProcessor>();
+
+        foreach (var processor in processors)
+        {
+            processor.SetSkillContext(skillContext);
+        }
         
         return projectileEntity;
     }

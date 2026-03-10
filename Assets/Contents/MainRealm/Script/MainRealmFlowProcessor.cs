@@ -5,9 +5,9 @@ public class MainRealmFlowProcessor : Processor
 {
     FlowRunnerAbility flowAbility;
     
-    public override void Initialize()
+    public override void Initialize(Parameter parameter)
     {
-        base.Initialize();
+        base.Initialize(parameter);
         
         flowAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
 

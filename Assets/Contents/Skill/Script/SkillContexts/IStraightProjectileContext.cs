@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IProjectileContext
+public interface IStraightProjectileContext
 {
     Vector2 Direction { get; set; }
     float ProjectileTime { get; set; }

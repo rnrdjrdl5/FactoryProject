@@ -1,21 +1,31 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class ProjectileFlowProcessor : Processor
+public class StraighProjectileSkillProcessor : SkillProcessor
 {
-    FlowRunnerAbility flowAbility;
-    
-    public override void Initialize()
-    {
-        base.Initialize();
-        
-        flowAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
+    RootFlow rootFlow;
 
-        var rootFlow = Flow.Create<RootFlow>(ProcessorAbility.Entity);
+    public override void Initialize(Parameter parameter)
+    {
+        base.Initialize(parameter);
+
+        rootFlow = Flow.Create<RootFlow>(ProcessorAbility.Entity);
         rootFlow.SetProcessor(this);
-        flowAbility.SetRootFlow(rootFlow);
-        
+        rootFlow.OnAddFlow();
         rootFlow.NextChildFlow();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        
+        rootFlow?.OnUpdateFlow();
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        
+        rootFlow?.OnFixedUpdateFlow();
     }
 
     public class RootFlow : ProcessorFlow
@@ -39,32 +49,34 @@ public class ProjectileFlowProcessor : Processor
             parent.ActivateChildFlow<MoveProjectileFlow>();
         }
     }
-    
+
     public class MoveProjectileFlow : ProcessorFlow
     {
-        ProjectileEntity projectileEntity;
-        IProjectileContext projectileContext;
-        
-        public override void OnAddFlow()
-        {
-            base.OnAddFlow();
-            
-            projectileEntity = Entity as ProjectileEntity;
-            projectileContext = projectileEntity.SkillContext as IProjectileContext;
-        }
+        IStraightProjectileContext straightProjectileContext;
 
         public override void OnUpdateFlow()
         {
             base.OnUpdateFlow();
+            
+            CacheContext();
 
-            Entity.transform.position = projectileContext.NextPosition(Entity.transform.position, Time.deltaTime);
-            if (elapsedTime >= projectileContext.ProjectileTime)
+            Entity.transform.position = straightProjectileContext.NextPosition(Entity.transform.position, Time.deltaTime);
+            if (elapsedTime >= straightProjectileContext.ProjectileTime)
             {
                 Parent.ActivateChildFlow<DestProjectileFlow>();
             }
         }
+
+        void CacheContext()
+        {
+            if (straightProjectileContext == null)
+            {
+                var processor = Processor as SkillProcessor;
+                straightProjectileContext = processor.SkillContext as IStraightProjectileContext;
+            }
+        }
     }
-    
+
     public class DestProjectileFlow : ProcessorFlow
     {
         ObjectPoolAbility objectPoolAbility;
