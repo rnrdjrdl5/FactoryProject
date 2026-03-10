@@ -4,8 +4,7 @@ using UnityEngine;
 public class BrainInputAbility : Ability
 {
     Brain brain;
-    Entity controlledEntity;
-    MessageBus messageBus;
+    PlayerProcessor processor;
     
     public override void Initialize(Parameter parameter)
     {
@@ -30,23 +29,20 @@ public class BrainInputAbility : Ability
 
         if (horizontal != 0f || vertical != 0f)
         {
-            if (messageBus == null)
+            if (processor == null)
             {
                 return;
             }
-            
-            var message = new EntityMoveMessage.MoveMessage();
-            message.x = horizontal;
-            message.y = vertical;
-            
-            messageBus.Publish(message);
+
+            processor.MoveMessage(horizontal, vertical);
         }
     }
 
     void OnControll(IControlled controlled)
     {
-        controlledEntity = controlled as Entity;
-        messageBus = controlledEntity.GetEntityData<MessageBus>();
+        var controlledEntity = controlled as Entity;
+        var processorAbility = controlledEntity.GetAbility<PlayerProcessorAbility>();
+        processor = processorAbility.GetProcessor<PlayerProcessor>();
     }
 }
 

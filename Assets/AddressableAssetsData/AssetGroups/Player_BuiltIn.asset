@@ -14,7 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Player_BuiltIn
   m_GUID: e2007ca2f52ea4ae396c2e8cb854dbb5
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 8c82e50a9be9b4d0ea8a112a1734d974
+    m_Address: Player/PlayerBrain
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c325d644889094307825fa26cfa10a8b
+    m_Address: Player/PlayerEntity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d7e3143cac64941479c893567315aac2, type: 2}
   m_SchemaSet:

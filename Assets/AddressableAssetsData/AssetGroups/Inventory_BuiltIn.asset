@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Inventory_BuiltIn
+  m_EditorClassIdentifier: 
+  m_GroupName: Inventory_BuiltIn
+  m_GUID: 05df7d3849a8846faa351074d900a3c4
+  m_SerializeEntries:
+  - m_GUID: c202b9eb59ddc4fc68a76aba2f2a230c
+    m_Address: Inventory/InventoryPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4f4a053196eb40118dfeb86e1349d0d
+    m_Address: Item/UIItem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: feffc43d9260f41ccb55dcc5822f0f0e
+    m_Address: Inventory/UIInventoryPanelElement
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d7e3143cac64941479c893567315aac2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 29893a0d5fbdc4cf59572e5b14b53e59, type: 2}

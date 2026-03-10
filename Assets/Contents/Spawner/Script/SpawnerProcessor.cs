@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class SpawnerProcessor : Processor
 {
     TimerAbility timerAbility;
@@ -24,8 +26,24 @@ public class SpawnerProcessor : Processor
 
     void OnTimer()
     {
-        var randomPoint = roundAbility.GetRandomPoint();
+        SpawnPlayerAndBrain(roundAbility.GetRandomPoint());
+    }
+
+    Brain SpawnPlayerAndBrain(Vector3 position)
+    {
+        var player = spawnEntityAbility.SpawnEntity(position);
+        var brain = Realm.AddEntity<Brain>(Brain.PrefabPath);
+        brain.AttachControll(player);
         
-        spawnEntityAbility.SpawnEntity(randomPoint);
+        SetAIBrain(brain);
+        
+        return brain;
+    }
+
+    void SetAIBrain(Brain brain)
+    {
+        var processorAbility = brain.GetAbility<BrainProcessorAbility>();
+        var brainProcessor = processorAbility.GetProcessor<BrainProcessor>();
+        brainProcessor.SetAIBrain();
     }
 }

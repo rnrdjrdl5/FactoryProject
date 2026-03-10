@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1452e5ad5bd6844c98721c8aff92b6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rootRealmPath: Core/FactoryRealm
+  rootRealmPath: MainRealm/MainRealm
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

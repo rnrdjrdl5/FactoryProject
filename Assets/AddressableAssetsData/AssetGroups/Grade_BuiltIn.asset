@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Grade_BuiltIn
+  m_EditorClassIdentifier: 
+  m_GroupName: Grade_BuiltIn
+  m_GUID: 1c4033094a33a4ef7aced658ed84bee6
+  m_SerializeEntries:
+  - m_GUID: 4493dd38f58cb4e4e9da3290930735ce
+    m_Address: Grade/icon_grade
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d7e3143cac64941479c893567315aac2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3052fc4de8f964565a285a3392c35f4f, type: 2}
