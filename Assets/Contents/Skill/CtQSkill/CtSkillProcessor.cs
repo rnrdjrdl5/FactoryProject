@@ -5,8 +5,9 @@ public class CtQSkillProcessor : SkillProcessor
     {
         base.OnReadySkillContext();
 
-        SkillLogic.CreateSkillEntity<CtQProjectileEntity>(SkillContext, CtQProjectileEntity.PrefabPath, Realm);
-        
+        var entity = SkillLogic.CreateSkillEntity<CtQProjectileEntity>(SkillContext, CtQProjectileEntity.PrefabPath, Realm);
+        entity.transform.position = Entity.transform.position;
+            
         ProcessorAbility.RemoveProcessor(this);
     }
 }

@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7385ffbe469964859a4211ca572b280a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timerInterval: 100
+  timerInterval: 1
   useUnscaledTime: 0
 --- !u!114 &3440895973462366966
 MonoBehaviour:
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownerType: 0
-  defaultPrefabPath: Player/PlayerEntity
+  defaultPrefabPath: Player/TestEntity
 --- !u!114 &7496851488438577419
 MonoBehaviour:
   m_ObjectHideFlags: 0

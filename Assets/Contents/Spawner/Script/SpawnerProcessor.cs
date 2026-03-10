@@ -6,10 +6,10 @@ public class SpawnerProcessor : Processor
     SpawnEntityAbility spawnEntityAbility;
     RoundAbility roundAbility;
 
-    public override void Ready()
+    public override void Initialize(Parameter parameter)
     {
-        base.Ready();
-
+        base.Initialize(parameter);
+        
         timerAbility = Entity.GetAbility<TimerAbility>();
         spawnEntityAbility = Entity.GetAbility<SpawnEntityAbility>();
         roundAbility = Entity.GetAbility<RoundAbility>();

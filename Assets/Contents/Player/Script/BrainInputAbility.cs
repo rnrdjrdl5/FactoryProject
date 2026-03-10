@@ -42,7 +42,10 @@ public class BrainInputAbility : Ability
     {
         var controlledEntity = controlled as Entity;
         var processorAbility = controlledEntity.GetAbility<PlayerProcessorAbility>();
-        processor = processorAbility.GetProcessor<PlayerProcessor>();
+        if (processorAbility != null)
+        {
+            processor = processorAbility.GetProcessor<PlayerProcessor>();
+        }
     }
 }
 

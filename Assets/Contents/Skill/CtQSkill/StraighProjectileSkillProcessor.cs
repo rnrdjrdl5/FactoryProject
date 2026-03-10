@@ -3,7 +3,7 @@ using UnityEngine;
 public class StraighProjectileSkillProcessor : SkillProcessor
 {
     RootFlow rootFlow;
-
+    
     public override void Initialize(Parameter parameter)
     {
         base.Initialize(parameter);
@@ -53,6 +53,14 @@ public class StraighProjectileSkillProcessor : SkillProcessor
     public class MoveProjectileFlow : ProcessorFlow
     {
         IStraightProjectileContext straightProjectileContext;
+        ObjectPoolAbility objectPoolAbility;
+
+        public override void OnEnterFlow()
+        {
+            base.OnEnterFlow();
+
+            objectPoolAbility = Entity.RootAbilitySet.GetAbility<ObjectPoolAbility>();
+        }
 
         public override void OnUpdateFlow()
         {
@@ -65,6 +73,8 @@ public class StraighProjectileSkillProcessor : SkillProcessor
             {
                 Parent.ActivateChildFlow<DestProjectileFlow>();
             }
+
+            DamageProcess();
         }
 
         void CacheContext()
@@ -74,6 +84,19 @@ public class StraighProjectileSkillProcessor : SkillProcessor
                 var processor = Processor as SkillProcessor;
                 straightProjectileContext = processor.SkillContext as IStraightProjectileContext;
             }
+        }
+
+        void DamageProcess()
+        {
+            var collider = Physics2D.OverlapCircle(Entity.transform.position, straightProjectileContext.Radius, Settings.LayerId.EntityMask);
+            if (collider == null || collider.gameObject == Entity.gameObject)
+            {
+                return;
+            }
+
+            var targetEntity = collider.GetComponent<Entity>();
+            objectPoolAbility.DeallocateGameObject(targetEntity.gameObject);
+            objectPoolAbility.DeallocateGameObject(Entity.gameObject);
         }
     }
 

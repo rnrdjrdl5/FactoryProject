@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpawnEntityAbility : Ability
 {
     [SerializeField] EntityOwnerType ownerType;
-    [SerializeField] private string defaultPrefabPath;
+    [SerializeField] string defaultPrefabPath;
 
     string? prefabPath;
 

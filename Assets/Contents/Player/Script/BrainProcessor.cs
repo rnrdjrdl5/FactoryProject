@@ -1,9 +1,11 @@
 public class BrainProcessor : Processor
 {
     FlowRunnerAbility flowRunnerAbility;
-    
-    public override void Ready()
+
+    public override void Initialize(Parameter parameter)
     {
+        base.Initialize(parameter);
+        
         flowRunnerAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
     }
     
