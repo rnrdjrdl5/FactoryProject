@@ -25,8 +25,11 @@ public class SkillAbility : Ability
             context.ProjectileSpeed = 3.0f;
             context.Direction = UnityEngine.Random.insideUnitCircle;
 
-            var skillProcessor = processorAbility.AddProcessor<CtQSkillProcessor>();
-            skillProcessor.SetSkillContext(context);
+            string skillKey = "CtQ";
+            if (SkillFactory.TryCreateSkillProcessor(processorAbility, skillKey, out var skillProcessor))
+            {
+                skillProcessor.SetSkillContext(context);
+            }
         }
     }
 }

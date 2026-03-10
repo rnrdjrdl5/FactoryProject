@@ -1,4 +1,4 @@
-public static class SkillAction
+public static class SkillLogic
 {
     public static EntityType CreateSkillEntity<EntityType>(BaseSkillContext skillContext, string prefabPath, Entity parent)
         where EntityType : Entity, new()
