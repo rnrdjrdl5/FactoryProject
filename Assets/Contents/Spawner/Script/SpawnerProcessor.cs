@@ -58,6 +58,8 @@ public class SpawnerProcessor : Processor
 
     void SetAIBrain(Brain brain)
     {
+        brain.SetAI(true);
+        
         var processorAbility = brain.GetAbility<BrainProcessorAbility>();
         var brainProcessor = processorAbility.GetProcessor<BrainProcessor>();
         brainProcessor.SetAIBrain();

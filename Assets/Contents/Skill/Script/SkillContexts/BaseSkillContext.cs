@@ -1,5 +1,8 @@
+using UnityEngine;
+
 public class BaseSkillContext
 {
+    public GameObject CasterObject => caster.gameObject;
     public Entity Caster => caster;
     public Realm Realm => realm;
 

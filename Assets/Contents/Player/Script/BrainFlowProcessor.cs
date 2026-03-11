@@ -90,6 +90,11 @@ public class BrainFlowProcessor : Processor
                 parent.ActivateChildFlow<IdleFlow>();
                 return;
             }
+
+            if (processor == null)
+            {
+                return;
+            }
             
             processor.MoveMessage(dir.x, dir.y);
         }

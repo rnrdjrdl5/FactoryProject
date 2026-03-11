@@ -52,6 +52,7 @@ public class StraighProjectileSkillProcessor : SkillProcessor
 
     public class MoveProjectileFlow : ProcessorFlow
     {
+        SkillProcessor skillProcessor;
         IStraightProjectileContext straightProjectileContext;
         ObjectPoolAbility objectPoolAbility;
 
@@ -80,23 +81,24 @@ public class StraighProjectileSkillProcessor : SkillProcessor
         void CacheContext()
         {
             if (straightProjectileContext == null)
-            {
-                var processor = Processor as SkillProcessor;
-                straightProjectileContext = processor.SkillContext as IStraightProjectileContext;
+            { 
+                skillProcessor = Processor as SkillProcessor; 
+                straightProjectileContext = skillProcessor.SkillContext as IStraightProjectileContext;
             }
         }
 
         void DamageProcess()
         {
             var collider = Physics2D.OverlapCircle(Entity.transform.position, straightProjectileContext.Radius, Settings.LayerId.EntityMask);
-            if (collider == null || collider.gameObject == Entity.gameObject)
+            if (collider == null || collider.gameObject == skillProcessor.SkillContext.CasterObject)
             {
                 return;
             }
 
             var targetEntity = collider.GetComponent<Entity>();
-            objectPoolAbility.DeallocateGameObject(targetEntity.gameObject);
-            objectPoolAbility.DeallocateGameObject(Entity.gameObject);
+            var hpAbility = targetEntity.GetAbility<HpAbility>();
+            hpAbility.TryApplyDamage(skillProcessor.SkillContext.Caster,5);
+            Realm.RemoveChild(Entity);
         }
     }
 

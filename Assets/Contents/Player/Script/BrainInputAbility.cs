@@ -24,6 +24,11 @@ public class BrainInputAbility : Ability
 
     private void Update()
     {
+        if (brain.IsAI || processor == null)
+        {
+            return;
+        }
+        
         var horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
 
