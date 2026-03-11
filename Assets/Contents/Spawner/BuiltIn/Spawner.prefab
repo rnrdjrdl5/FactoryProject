@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownerType: 0
-  defaultPrefabPath: Player/TestEntity
+  defaultPrefabPath: 
 --- !u!114 &7496851488438577419
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class SpawnerProcessor : Processor
 {
+    Spawner spawner;
+    
     TimerAbility timerAbility;
     SpawnEntityAbility spawnEntityAbility;
     RoundAbility roundAbility;
-
+    
     public override void Initialize(Parameter parameter)
     {
         base.Initialize(parameter);
         
+        spawner = Entity as Spawner;
+        
         timerAbility = Entity.GetAbility<TimerAbility>();
+        timerAbility.SetTimerInterval(spawner.SpawnerData.tick);
+        
         spawnEntityAbility = Entity.GetAbility<SpawnEntityAbility>();
         roundAbility = Entity.GetAbility<RoundAbility>();
 
@@ -26,9 +32,19 @@ public class SpawnerProcessor : Processor
 
     void OnTimer()
     {
+        SetSpawnPlayerKey();
         SpawnPlayerAndBrain(roundAbility.GetRandomPoint());
     }
 
+    void SetSpawnPlayerKey()
+    {
+        var spawnedPlayerKey = spawner.SpawnerData.GetSpawnPlayerKey();
+        var playerData = Tables.Player.Get(spawnedPlayerKey);
+        var prefabPath = playerData.prefabPath;
+        
+        spawnEntityAbility.SetPrefabPath(prefabPath);
+    }
+    
     Brain SpawnPlayerAndBrain(Vector3 position)
     {
         var player = spawnEntityAbility.SpawnEntity(position);

@@ -13,12 +13,15 @@ namespace Tables
     {
         public string Key { get; set; } = string.Empty;
         public string iconAtlasPath { get; set; } = string.Empty;
+        public string prefabPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
         public string uniqueSkillKey { get; set; } = string.Empty;
         public List<StatType> statTypes { get; set; } = new System.Collections.Generic.List<StatType>();
         public List<int> statValues { get; set; } = new System.Collections.Generic.List<int>();
         public string description { get; set; } = string.Empty;
         public GradeType gradeType { get; set; }
+        public string dropPlayerKey { get; set; } = string.Empty;
+        public float dropPlayerPercent { get; set; }
 
         private static readonly System.Collections.Generic.Dictionary<string, Player> _table = new System.Collections.Generic.Dictionary<string, Player>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, Player> Table => _table;
@@ -45,9 +48,11 @@ namespace Tables
                         kvp.Value.statTypes = kvp.Value.statTypes ?? new System.Collections.Generic.List<StatType>();
                         kvp.Value.statValues = kvp.Value.statValues ?? new System.Collections.Generic.List<int>();
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
+                        kvp.Value.prefabPath = kvp.Value.prefabPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
                         kvp.Value.uniqueSkillKey = kvp.Value.uniqueSkillKey ?? string.Empty;
                         kvp.Value.description = kvp.Value.description ?? string.Empty;
+                        kvp.Value.dropPlayerKey = kvp.Value.dropPlayerKey ?? string.Empty;
                         // Ensure Key property matches dictionary key
                         kvp.Value.Key = kvp.Key;
                         _table[kvp.Key] = kvp.Value;

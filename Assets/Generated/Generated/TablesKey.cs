@@ -9,10 +9,15 @@ namespace Tables
         public static string Grade_Rare = "Grade_Rare";
         public static string Grade_Uncommon = "Grade_Uncommon";
         public static string Grade_Unique = "Grade_Unique";
+        public static string Item_Human = "Item_Human";
         public static string Item_WoodBow = "Item_WoodBow";
         public static string Item_WoodStaff = "Item_WoodStaff";
         public static string Item_WoodSword = "Item_WoodSword";
+        public static string Player_Dog = "Player_Dog";
+        public static string Player_Eagle = "Player_Eagle";
         public static string Player_Human = "Player_Human";
+        public static string Player_Snake = "Player_Snake";
+        public static string Spawner_Test = "Spawner_Test";
         public static string SynergeBiome_Test = "SynergeBiome_Test";
         public static string SynergeElement_Test = "SynergeElement_Test";
     }

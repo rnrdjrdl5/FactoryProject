@@ -25,7 +25,13 @@ public class SpawnEntityAbility : Ability
             targetEntity = Entity.Parent;
         }
 
-        var entity = targetEntity.AddEntity<Entity>(GetPrefabPath());
+        var prefabPath = GetPrefabPath();
+        if (string.IsNullOrEmpty(prefabPath))
+        {
+            return null;
+        }
+
+        var entity = targetEntity.AddEntity<Entity>(prefabPath);
         entity.transform.position = position;
         
         return entity;

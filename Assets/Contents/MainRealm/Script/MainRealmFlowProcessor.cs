@@ -48,8 +48,13 @@ class IngameFlow : ProcessorFlow
     {
         base.OnEnterFlow();
 
-        var brain = BrainLogic.CreateBrainAndEntity(Processor.Realm, Brain.PrefabPath, Player.PrefabPath);
-        Processor.Realm.AddEntity<Spawner>(Spawner.PrefabName);
+        var humanData = Tables.Player.Get(TablesKey.Player_Human);
+        var brain = BrainLogic.CreateBrainAndEntity(Processor.Realm, Brain.PrefabPath, humanData.prefabPath);
+        
+        var memoryPoolAbility = Entity.RootAbilitySet.GetAbility<MemoryPoolAbility>();
+        using var param = Parameter.Create(memoryPoolAbility);
+        param.Add(nameof(Spawner.SpawnerKey), TablesKey.Spawner_Test);
+        var spawner = Processor.Realm.AddEntity<Spawner>(Spawner.PrefabName, param);
 
         // var panelAbility = Processor.Realm.GetAbility<PanelAbility>();
         // var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);

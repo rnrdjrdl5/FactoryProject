@@ -15,18 +15,28 @@ MonoBehaviour:
   m_GroupName: Player_BuiltIn
   m_GUID: e2007ca2f52ea4ae396c2e8cb854dbb5
   m_SerializeEntries:
+  - m_GUID: 4a40b2dde15a54d47b5d1a5a350607fa
+    m_Address: Player/Eagle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8c82e50a9be9b4d0ea8a112a1734d974
     m_Address: Player/PlayerBrain
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a21a7b19678a4449582de5abc6346d34
+    m_Address: Player/Snake
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c325d644889094307825fa26cfa10a8b
-    m_Address: Player/PlayerEntity
+    m_Address: Player/Human
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d9ea4e59d5a8449b7a755631237a7abd
-    m_Address: Player/TestEntity
+    m_Address: Player/Dog
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
