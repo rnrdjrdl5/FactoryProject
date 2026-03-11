@@ -9,11 +9,22 @@ public class Spawner : Entity
     
     Tables.Spawner spawnerData;
 
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        SpawnerKey = parameter.Get<string>(nameof(SpawnerKey));
+        initData ??= EmptyInitData.Instance;
+        if (initData is not SpawnerInitData spawnerInitData)
+        {
+            return;
+        }
+
+        SpawnerKey = spawnerInitData.SpawnerKey;
         spawnerData = Tables.Spawner.Get(SpawnerKey);
         
-        base.Initialize(parameter);
+        base.Initialize(initData);
     }
+}
+
+public class SpawnerInitData : IInitData
+{
+    public string SpawnerKey;
 }

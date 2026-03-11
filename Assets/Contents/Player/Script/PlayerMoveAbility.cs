@@ -7,9 +7,9 @@ public class PlayerMoveAbility : Ability
     [SerializeField] float moveSpeed = 5;
     MessageBus messageBus;
     
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
 
         InitializeMessage();
     }

@@ -10,7 +10,7 @@ public class SkillAbility : Ability
     
     // NOTE : 각 상황에 맞는 BaseSkillContext를 생성할 방법 생각해보기.
 
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
         realm = Entity.GetRootParent<Realm>();
         processorAbility = Entity.GetAbility<ProcessorAbility>();

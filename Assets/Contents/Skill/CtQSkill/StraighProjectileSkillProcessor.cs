@@ -4,9 +4,9 @@ public class StraighProjectileSkillProcessor : SkillProcessor
 {
     RootFlow rootFlow;
     
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
 
         rootFlow = Flow.Create<RootFlow>(ProcessorAbility.Entity);
         rootFlow.SetProcessor(this);

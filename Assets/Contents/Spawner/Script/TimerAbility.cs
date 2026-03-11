@@ -13,9 +13,9 @@ public class TimerAbility : Ability
 
     CancellationTokenSource timerCts;
 
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
 
         StartTimer();
     }

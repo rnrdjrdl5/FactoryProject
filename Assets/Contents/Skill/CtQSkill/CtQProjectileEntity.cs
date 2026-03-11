@@ -4,8 +4,8 @@ public class CtQProjectileEntity : Entity
 {
     public static string PrefabPath = "Projectile/CtQProjectile";
     
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
     }
 }

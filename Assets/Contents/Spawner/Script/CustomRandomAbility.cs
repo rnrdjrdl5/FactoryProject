@@ -10,9 +10,9 @@ public class CustomRandomAbility : Ability
     public int Seed => seed;
     public float Value => (float)EnsureRandom().NextDouble();
 
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
         Reseed(seed);
     }
 

@@ -2,9 +2,9 @@ public class PlayerProcessor : Processor
 {
     MessageBus messageBus;
 
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
         
         messageBus = Entity.GetEntityData<MessageBus>();
     }

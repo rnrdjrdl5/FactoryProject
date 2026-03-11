@@ -8,9 +8,9 @@ public class SpawnerProcessor : Processor
     SpawnEntityAbility spawnEntityAbility;
     RoundAbility roundAbility;
     
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
         
         spawner = Entity as Spawner;
         

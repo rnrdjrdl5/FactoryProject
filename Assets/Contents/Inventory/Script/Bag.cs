@@ -5,7 +5,7 @@ public class Bag : IEntityData
 {
     Dictionary<Tables.ItemType, Inventory> inventoryTab = new();
     
-    public void Initialize(Parameter parameter)
+    public void Initialize(IInitData initData = null)
     {
         inventoryTab.Clear();
         foreach (var itemType in Tables.Item.ItemTypes)

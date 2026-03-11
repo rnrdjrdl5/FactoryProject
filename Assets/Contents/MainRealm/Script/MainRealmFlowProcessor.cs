@@ -5,9 +5,9 @@ public class MainRealmFlowProcessor : Processor
 {
     FlowRunnerAbility flowAbility;
     
-    public override void Initialize(Parameter parameter)
+    public override void Initialize(IInitData initData = null)
     {
-        base.Initialize(parameter);
+        base.Initialize(initData);
         
         flowAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
 
@@ -51,10 +51,11 @@ class IngameFlow : ProcessorFlow
         var humanData = Tables.Player.Get(TablesKey.Player_Human);
         var brain = BrainLogic.CreateBrainAndEntity(Processor.Realm, Brain.PrefabPath, humanData.prefabPath);
         
-        var memoryPoolAbility = Entity.RootAbilitySet.GetAbility<MemoryPoolAbility>();
-        using var param = Parameter.Create(memoryPoolAbility);
-        param.Add(nameof(Spawner.SpawnerKey), TablesKey.Spawner_Test);
-        var spawner = Processor.Realm.AddEntity<Spawner>(Spawner.PrefabName, param);
+        var spawnerInitData = new SpawnerInitData
+        {
+            SpawnerKey = TablesKey.Spawner_Test
+        };
+        var spawner = Processor.Realm.AddEntity<Spawner>(Spawner.PrefabName, spawnerInitData);
 
         // var panelAbility = Processor.Realm.GetAbility<PanelAbility>();
         // var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);

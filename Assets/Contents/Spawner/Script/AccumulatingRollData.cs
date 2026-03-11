@@ -37,7 +37,7 @@ public class AccumulatingRollData : IEntityData
 
     public float CurrentThreshold => currentThreshold;
 
-    public void Initialize(Parameter parameter)
+    public void Initialize(IInitData initData = null)
     {
         ResetAccumulation();
     }
