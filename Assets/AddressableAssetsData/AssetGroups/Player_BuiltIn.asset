@@ -15,28 +15,33 @@ MonoBehaviour:
   m_GroupName: Player_BuiltIn
   m_GUID: e2007ca2f52ea4ae396c2e8cb854dbb5
   m_SerializeEntries:
-  - m_GUID: 4a40b2dde15a54d47b5d1a5a350607fa
+  - m_GUID: 3674a0dc7abc24e38bfc211fa445ec06
+    m_Address: Player/Player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e88582460eed44b4b4abe513007e656
+    m_Address: Player/Human
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6289b19ac41f94075ab447d5d4ff4221
+    m_Address: Player/Dog
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c8e8b981873f42ac9f13fccb17e0dcc
+    m_Address: Player/Snake
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8be305c559b534c9b872ec8348ddf693
     m_Address: Player/Eagle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8c82e50a9be9b4d0ea8a112a1734d974
     m_Address: Player/PlayerBrain
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a21a7b19678a4449582de5abc6346d34
-    m_Address: Player/Snake
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c325d644889094307825fa26cfa10a8b
-    m_Address: Player/Human
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d9ea4e59d5a8449b7a755631237a7abd
-    m_Address: Player/Dog
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

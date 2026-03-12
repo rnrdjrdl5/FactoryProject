@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7544454377970921574}
   - component: {fileID: 1610100414547193680}
   - component: {fileID: 3440895973462366966}
-  - component: {fileID: 5040448962059746178}
   - component: {fileID: 7496851488438577419}
   m_Layer: 0
   m_Name: Spawner
@@ -76,20 +75,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circleRadius: 1
   useLocalSpace: 1
---- !u!114 &5040448962059746178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7792102327096205464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea72611316fe240cc97a25ac353cf9db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ownerType: 0
-  defaultPrefabPath: 
 --- !u!114 &7496851488438577419
 MonoBehaviour:
   m_ObjectHideFlags: 0

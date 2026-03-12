@@ -18,7 +18,7 @@ public class SkillAbility : Ability
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             var context = BaseSkillContext.Create<CtQSkillContext>(realm, Entity);
             context.ProjectileTime = 3.0f;

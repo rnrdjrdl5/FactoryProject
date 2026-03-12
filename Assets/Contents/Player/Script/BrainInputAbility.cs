@@ -4,7 +4,9 @@ using UnityEngine;
 public class BrainInputAbility : Ability
 {
     Brain brain;
-    PlayerProcessor processor;
+    
+    PlayerProcessor playerProcessor;
+    PlayerPickProcessor playerPickProcessor;
     
     public override void Initialize(IInitData initData = null)
     {
@@ -24,7 +26,7 @@ public class BrainInputAbility : Ability
 
     private void Update()
     {
-        if (brain.IsAI || processor == null)
+        if (brain.IsAI || playerProcessor == null)
         {
             return;
         }
@@ -34,12 +36,17 @@ public class BrainInputAbility : Ability
 
         if (horizontal != 0f || vertical != 0f)
         {
-            if (processor == null)
+            if (playerProcessor == null)
             {
                 return;
             }
 
-            processor.MoveMessage(horizontal, vertical);
+            playerProcessor.MoveMessage(horizontal, vertical);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            
         }
     }
 
@@ -49,7 +56,7 @@ public class BrainInputAbility : Ability
         var processorAbility = controlledEntity.GetAbility<PlayerProcessorAbility>();
         if (processorAbility != null)
         {
-            processor = processorAbility.GetProcessor<PlayerProcessor>();
+            playerProcessor = processorAbility.GetProcessor<PlayerProcessor>();
         }
     }
 }
