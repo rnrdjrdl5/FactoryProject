@@ -148,11 +148,11 @@ public static class SkillFactory
 
         if (processor is UpdateProcessor updateProcessor)
         {
-            ability.AddProcessor(updateProcessor);
+            ability.AddDynamicProcessor(updateProcessor);
         }
         else
         {
-            ability.AddProcessor(processor);
+            ability.AddDynamicProcessor(processor);
         }
 
         return processor;

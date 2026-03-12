@@ -9,7 +9,10 @@ namespace Tables
         public static string Grade_Rare = "Grade_Rare";
         public static string Grade_Uncommon = "Grade_Uncommon";
         public static string Grade_Unique = "Grade_Unique";
+        public static string Item_Dog = "Item_Dog";
+        public static string Item_Eagle = "Item_Eagle";
         public static string Item_Human = "Item_Human";
+        public static string Item_Snake = "Item_Snake";
         public static string Item_WoodBow = "Item_WoodBow";
         public static string Item_WoodStaff = "Item_WoodStaff";
         public static string Item_WoodSword = "Item_WoodSword";

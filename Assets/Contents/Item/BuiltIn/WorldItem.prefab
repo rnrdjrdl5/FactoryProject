@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1823359423405766113}
   - component: {fileID: 8553466686292281498}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Skin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,6 +138,10 @@ PrefabInstance:
     - target: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
       propertyPath: m_Name
       value: WorldItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

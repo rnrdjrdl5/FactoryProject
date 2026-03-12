@@ -65,8 +65,8 @@ public class BrainFlowProcessor : Processor
     public class MoveFlow : ProcessorFlow
     {
         public float Duration { get; private set; } = 1;
-
-        PlayerProcessor processor;
+        
+        PlayerMoveAbility moveAbility;
         Vector2 dir;
 
         public override void OnEnterFlow()
@@ -75,8 +75,7 @@ public class BrainFlowProcessor : Processor
 
             var brain = Processor.Entity as Brain;
             var entity = brain.Controll as Entity;
-            var processorAbility = entity.GetAbility<PlayerProcessorAbility>();
-            processor = processorAbility.GetProcessor<PlayerProcessor>();
+            moveAbility = entity.GetAbility<PlayerMoveAbility>();
             
             dir = Random.insideUnitCircle;
         }
@@ -91,12 +90,12 @@ public class BrainFlowProcessor : Processor
                 return;
             }
 
-            if (processor == null)
+            if (moveAbility == null)
             {
                 return;
             }
-            
-            processor.MoveMessage(dir.x, dir.y);
+
+            moveAbility.Move(new Vector2(dir.x, dir.y));
         }
 
         public void SetDuration(float duration)

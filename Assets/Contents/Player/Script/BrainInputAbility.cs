@@ -5,7 +5,7 @@ public class BrainInputAbility : Ability
 {
     Brain brain;
     
-    PlayerProcessor playerProcessor;
+    PlayerMoveAbility playerMoveAbility;
     PlayerPickProcessor playerPickProcessor;
     
     public override void Initialize(IInitData initData = null)
@@ -26,7 +26,7 @@ public class BrainInputAbility : Ability
 
     private void Update()
     {
-        if (brain.IsAI || playerProcessor == null)
+        if (brain.IsAI)
         {
             return;
         }
@@ -36,27 +36,33 @@ public class BrainInputAbility : Ability
 
         if (horizontal != 0f || vertical != 0f)
         {
-            if (playerProcessor == null)
+            if (playerMoveAbility == null)
             {
                 return;
             }
 
-            playerProcessor.MoveMessage(horizontal, vertical);
+            playerMoveAbility.Move(new Vector2(horizontal, vertical));
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            
+            if (playerPickProcessor != null)
+            {
+                playerPickProcessor.PickItem();
+            }
         }
     }
 
     void OnControll(IControlled controlled)
     {
         var controlledEntity = controlled as Entity;
+        
+        playerMoveAbility = controlledEntity.GetAbility<PlayerMoveAbility>();
+        
         var processorAbility = controlledEntity.GetAbility<PlayerProcessorAbility>();
         if (processorAbility != null)
         {
-            playerProcessor = processorAbility.GetProcessor<PlayerProcessor>();
+            playerPickProcessor = processorAbility.GetProcessor<PlayerPickProcessor>();
         }
     }
 }
