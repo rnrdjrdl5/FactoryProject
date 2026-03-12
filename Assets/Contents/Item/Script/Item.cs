@@ -8,6 +8,7 @@ public class Item
     public long UniqueId => uniqueId;
     public string ItemKey => itemKey;
     public int MaxAmount => itemData.maxAmount;
+    public int Amount => amount;
     
     Tables.Item itemData;
     long uniqueId;

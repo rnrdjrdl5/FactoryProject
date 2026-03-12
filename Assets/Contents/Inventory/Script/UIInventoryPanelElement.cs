@@ -9,20 +9,13 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     [SerializeField] GameObject cellPrefab;
     [SerializeField] float cellSize;
     [SerializeField] int lowCount;
+    [SerializeField] AllocGameObject allocGameObject;
     
-    ObjectPoolAbility objectPoolAbility;
     Tables.ItemType itemType;
     Bag bag;
     Inventory inventory;
 
     List<ItemList> itemLists = new(); 
-    
-    public override void Initialize(IInitData initData = null)
-    {
-        base.Initialize(initData);
-
-        objectPoolAbility = Entry.RootRealm.GetAbility<ObjectPoolAbility>();
-    }
 
     protected override void OnSetPanelDatas()
     {
@@ -58,7 +51,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
 
     public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int dataIndex, int cellIndex)
     {
-        var cellObject = objectPoolAbility.AllocateGameObject(cellPrefab, transform);
+        var cellObject = allocGameObject.AllocateObject(cellPrefab);
         var cellView = cellObject.GetComponent<UIItemListCellView>();
         var itemList = itemLists[dataIndex];
         cellView.SetItemList(itemList);

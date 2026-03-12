@@ -50,7 +50,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9187818609255137603, guid: 3674a0dc7abc24e38bfc211fa445ec06, type: 3}
       propertyPath: m_Name
-      value: Dog 1
+      value: Eagle
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187818609255137603, guid: 3674a0dc7abc24e38bfc211fa445ec06, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5094851720396938345, guid: 3674a0dc7abc24e38bfc211fa445ec06, type: 3}

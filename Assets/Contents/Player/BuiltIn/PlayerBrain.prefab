@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 603245880479232532, guid: 8a46f50d762e543e6b76f30e6efbbafb, type: 3}
       propertyPath: m_Name
-      value: PlayerBrain2
+      value: PlayerBrain
+      objectReference: {fileID: 0}
+    - target: {fileID: 603245880479232532, guid: 8a46f50d762e543e6b76f30e6efbbafb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1386375701860848397, guid: 8a46f50d762e543e6b76f30e6efbbafb, type: 3}
       propertyPath: m_LocalPosition.x
