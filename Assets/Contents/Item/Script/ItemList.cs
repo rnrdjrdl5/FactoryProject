@@ -3,14 +3,14 @@ using System.Linq;
 
 public class ItemList
 {
-     public IEnumerable<string> ItemKeys => itemKeys;
+     public IEnumerable<Item> Items => items;
      
-     IEnumerable<string> itemKeys;
+     IEnumerable<Item> items;
 
-     public static ItemList Create(IEnumerable<string> keys)
+     public static ItemList Create(IEnumerable<Item> items)
      {
           var itemList = new ItemList();
-          itemList.itemKeys = keys;
+          itemList.items = items;
 
           return itemList;
      }

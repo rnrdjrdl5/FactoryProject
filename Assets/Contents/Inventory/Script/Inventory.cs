@@ -1,12 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory
 {
-    public IReadOnlyDictionary<string, int> Items => items;
-    public IEnumerable<string> ItemKeys => Items.Keys;
+    public IReadOnlyList<Item> Items => items;
 
-    Dictionary<string, int> items = new();
+    List<Item> items = new();
     Tables.ItemType itemType;
     
     public void Initialize(Tables.ItemType itemType)
@@ -19,28 +19,33 @@ public class Inventory
     {
         
     }
-
-    public void AddItem(string itemKey, int amount)
+    
+    public Item AddItem(string itemKey, int amount)
     {
-        if (!items.ContainsKey(itemKey))
+        var item = items.FirstOrDefault(item => item.ItemKey == itemKey && !item.IsFull());
+        if (item == null)
         {
-            items.Add(itemKey, amount);
-            return;
+            item = new Item(itemKey, amount);
+            items.Add(item);
+
+            return item;
         }
         
-        items[itemKey] += amount;
+        item.Acquire(amount);
+        
+        return item;
     }
 
     public bool TryRemoveItem(string itemKey, int amount)
     {
-        if (!items.TryGetValue(itemKey, out var leftAmount))
+        var item = items.FirstOrDefault(item => item.ItemKey == itemKey && !item.IsEmpty());
+        if (item == null)
         {
             return false;
         }
 
-        leftAmount = Mathf.Max(0, leftAmount - amount);
-        items[itemKey] = leftAmount;
-
+        item.Spend(amount);
+        
         return true;
     }
 }

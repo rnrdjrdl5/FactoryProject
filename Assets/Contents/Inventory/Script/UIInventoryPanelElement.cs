@@ -34,7 +34,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         itemLists.Clear();
         for (int i = 0; i < inventory.Items.Count; i+= lowCount)
         {
-            itemLists.Add(ItemList.Create(inventory.ItemKeys.Skip(i).Take(lowCount)));
+            itemLists.Add(ItemList.Create(inventory.Items.Skip(i).Take(lowCount)));
         }
 
         scroller.Delegate ??= this;

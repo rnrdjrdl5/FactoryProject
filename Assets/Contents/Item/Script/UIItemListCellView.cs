@@ -8,17 +8,16 @@ public class UIItemListCellView : EnhancedScrollerCellView
     
     public void SetItemList(ItemList itemList)
     {
-        var itemCount = itemList.ItemKeys.Count();
+        var itemCount = itemList.Items.Count();
         cellAllocator.DeallocateObjects();
         cellAllocator.AllocateObject(itemCount);
 
         var index = 0;
-        foreach (var itemKey in itemList.ItemKeys)
+        foreach (var item in itemList.Items)
         {
-            var itemData = Tables.Item.Get(itemKey);
             var cellObject = cellAllocator.AllocatedObjects[index];
             var uiItem = cellObject.GetComponent<UIItem>();
-            uiItem.UpdateItemData(itemData, itemData, itemData);
+            uiItem.UpdateItemData(item);
             index++;
         }
     }

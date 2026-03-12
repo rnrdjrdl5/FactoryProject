@@ -7,6 +7,7 @@ public class BrainInputAbility : Ability
     
     PlayerMoveAbility playerMoveAbility;
     PlayerPickProcessor playerPickProcessor;
+    PlayerUIProcessor playerUIProcessor;
     
     public override void Initialize(IInitData initData = null)
     {
@@ -51,6 +52,11 @@ public class BrainInputAbility : Ability
                 playerPickProcessor.PickItem();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            playerUIProcessor.OpenInpventory();
+        }
     }
 
     void OnControll(IControlled controlled)
@@ -63,6 +69,7 @@ public class BrainInputAbility : Ability
         if (processorAbility != null)
         {
             playerPickProcessor = processorAbility.GetProcessor<PlayerPickProcessor>();
+            playerUIProcessor = processorAbility.GetProcessor<PlayerUIProcessor>();
         }
     }
 }

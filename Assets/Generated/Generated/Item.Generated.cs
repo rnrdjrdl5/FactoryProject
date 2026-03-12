@@ -21,6 +21,7 @@ namespace Tables
         public string attackSkillKey { get; set; } = string.Empty;
         public string uniqueSkillKey { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
+        public int maxAmount { get; set; }
 
         private static readonly System.Collections.Generic.Dictionary<string, Item> _table = new System.Collections.Generic.Dictionary<string, Item>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, Item> Table => _table;

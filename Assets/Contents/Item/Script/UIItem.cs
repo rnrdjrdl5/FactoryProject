@@ -11,6 +11,11 @@ public class UIItem : UISetter
     IIconSprite iconData;
     IIconSprite gradeIconData;
     IDescription descriptionData;
+
+    public void UpdateItemData(Item item)
+    {
+        UpdateItemData(item.ItemData, item.ItemData, item.ItemData);
+    }
     
     public void UpdateItemData(IIconSprite iconData, IGradeType gradeData, IDescription descriptionData)
     {
