@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class Bag : IEntityData
 {
+    public event Action OnChanged;
+    
     Dictionary<Tables.ItemType, Inventory> inventoryTab = new();
     
     public void Initialize(IInitData initData = null)
@@ -33,11 +35,12 @@ public class Bag : IEntityData
     {
         if (!inventoryTab.TryGetValue(item.itemType, out var inventory))
         {
-            inventory = CreateInventory(item.itemType);
+            inventory = Inventory.Create(item.itemType);
             inventoryTab.Add(item.itemType, inventory);
         }
 
         inventory.AddItem(item.Key,amount);
+        OnChanged?.Invoke();
     }
 
     public void AddItem(string itemKey, int amount)
@@ -53,14 +56,12 @@ public class Bag : IEntityData
             return false;
         }
         
-        return inventory.TryRemoveItem(item.Key, amount);
-    }
+        var result = inventory.TryRemoveItem(item.Key, amount);
+        if (result)
+        {
+            OnChanged?.Invoke();
+        }
 
-    Inventory CreateInventory(Tables.ItemType itemType)
-    {
-        var inventory = new Inventory();
-        inventory.Initialize(itemType);
-
-        return inventory;
+        return result;
     }
 }

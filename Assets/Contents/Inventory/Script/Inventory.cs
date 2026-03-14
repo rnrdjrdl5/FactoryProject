@@ -48,4 +48,12 @@ public class Inventory
         
         return true;
     }
+
+    public static Inventory Create(Tables.ItemType itemType)
+    {
+        var inventory = new Inventory();
+        inventory.Initialize(itemType);
+
+        return inventory;
+    }
 }

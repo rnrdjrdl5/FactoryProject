@@ -4,14 +4,12 @@ using System.Collections.Generic;
 // Team -> TeamFormation -> Item(Player)
 public class Team : IEntityData
 {
-    public event Action OnChangedTeamFormation; 
-    
+    public event Action OnChanged;
     List<TeamFormation> teamFormations = new();
     TeamFormation selectedTeam;
     
     public void Initialize(IInitData initData = null)
     {
-        
     }
 
     public void Uninitialize()
@@ -23,6 +21,7 @@ public class Team : IEntityData
     {
         var teamFormation = TeamFormation.Create();
         teamFormations.Add(teamFormation);
+        OnChanged?.Invoke();
     }
 
     public bool TryRemoveTeamFormation(TeamFormation teamFormation)
@@ -33,7 +32,7 @@ public class Team : IEntityData
         }
 
         teamFormations.Remove(teamFormation);
-        
+        OnChanged?.Invoke();
         return true;
     }
 }

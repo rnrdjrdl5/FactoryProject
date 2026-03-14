@@ -11,9 +11,10 @@ public class GlobalProcessor : Processor
         base.Ready();
 
         mainStorage = FactoryEntry.MainStorage;
+        team = mainStorage.GetEntityData<Team>();
+        
         messageBus = Entity.GetEntityData<MessageBus>();
         messageBus.Subscribe<AddFormationMessage>(AddTeam);
-        team = Entity.GetEntityData<Team>();
     }
 
     public override void Uninitialize()
@@ -30,7 +31,7 @@ public class GlobalProcessor : Processor
         var uiInventoryPanelElement = teamPopup.GetPanelElement<UIInventoryPanelElement>();
         uiInventoryPanelElement.SetItemType(Tables.ItemType.Animal);
         
-        teamPopup.SetTargetPanelDatas(mainStorage.ToData());
+        teamPopup.SetTargetData(mainStorage, mainStorage.MessageBus);
     }
 
     void AddTeam(AddFormationMessage msg)

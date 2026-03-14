@@ -13,6 +13,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     Tables.ItemType itemType = Tables.ItemType.Animal;
     Bag bag;
     Inventory inventory;
+    Team team;
 
     List<ItemList> teamLists = new();
     
@@ -22,8 +23,14 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         
         bag = GetTargetPanelDatas<Bag>();
         inventory = bag.GetInventory(itemType);
+        team = GetTargetPanelDatas<Team>();
 
         RefreshUI();
+    }
+
+    protected override void OnUnsetPanelDatas()
+    {
+        base.OnUnsetPanelDatas();
     }
 
     public override void RefreshUI()
@@ -62,7 +69,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     public void OnClickAddFormation()
     {
-        MessageBus.Publish(new AddFormationMessage());
+        TargetMessageBus.Publish(new AddFormationMessage());
     }
 }
 

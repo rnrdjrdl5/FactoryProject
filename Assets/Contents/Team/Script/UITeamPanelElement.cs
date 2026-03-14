@@ -50,7 +50,7 @@ public class UITeamPanelElement : PanelElement, IEnhancedScrollerDelegate
         var cellView = cellObject.GetComponent<UITeamListCellView>();
         var teamList = teamLists[dataIndex];
         cellView.SetTeamList(teamList);
-        cellView.SetMessageBus(MessageBus);
+        cellView.SetMessageBus(TargetMessageBus);
 
         return cellView;
     }

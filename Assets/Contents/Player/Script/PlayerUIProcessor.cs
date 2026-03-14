@@ -7,6 +7,6 @@ public class PlayerUIProcessor : Processor
         var uiInventoryPanelElement = inventoryPopup.GetPanelElement<UIInventoryPanelElement>();
         uiInventoryPanelElement.SetItemType(Tables.ItemType.Animal);
         
-        inventoryPopup.SetTargetPanelDatas(Entity.ToData());
+        inventoryPopup.SetTargetData(Entity, Entity.MessageBus);
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 [Serializable]
 public class AccumulatingRollData : IEntityData
 {
+    public event Action OnChanged;
+    
     float minRange = 0f;
     float maxRange = 100f;
     float baseThreshold = 1f;
