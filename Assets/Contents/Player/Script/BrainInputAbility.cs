@@ -55,7 +55,7 @@ public class BrainInputAbility : Ability
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            playerUIProcessor.OpenInpventory();
+            playerUIProcessor.OpenInventory();
         }
     }
 

@@ -1,6 +1,6 @@
 public class PlayerUIProcessor : Processor
 {
-    public void OpenInpventory()
+    public void OpenInventory()
     {
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);

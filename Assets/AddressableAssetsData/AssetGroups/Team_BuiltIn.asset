@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Core_BuiltIn
+  m_Name: Team_BuiltIn
   m_EditorClassIdentifier: 
-  m_GroupName: Core_BuiltIn
-  m_GUID: 1be9436d52b084a15ac7b96fbab8dcb4
+  m_GroupName: Team_BuiltIn
+  m_GUID: 0be283882069d4f66817bb6547c121e7
   m_SerializeEntries:
-  - m_GUID: b92f75dcb9189437ca8164fbe8e57932
-    m_Address: MainStorage/MainStorage
+  - m_GUID: 2dde5a978dbaa475db7830a8238be14d
+    m_Address: Team/UITeamPanelElement
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c81174d07d6ee4365b226e13da7214e2
-    m_Address: Core/GameData
+  - m_GUID: 6f2973bc84fbe4599bc333140ef77e4b
+    m_Address: Team/UITeamFormationElement
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f142d8e7f90bd4958b52f979899b0b93
-    m_Address: MainRealm/MainRealm
+  - m_GUID: ec1dd1da01671474a87bbfd84c0f613c
+    m_Address: Team/TeamPopup
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -34,4 +34,4 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: d7e3143cac64941479c893567315aac2, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 8fec6b9989fef49d18b4141b29715407, type: 2}
+    - {fileID: 11400000, guid: b06b3c9050f1d40d9b8b593e4d528559, type: 2}

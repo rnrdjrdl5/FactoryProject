@@ -3,19 +3,19 @@ using System.Linq;
 using EnhancedUI.EnhancedScroller;
 using UnityEngine;
 
-public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate 
+public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDelegate
 {
     [SerializeField] EnhancedScroller scroller;
     [SerializeField] float cellSize;
     [SerializeField] int lowCount;
     [SerializeField] AllocGameObject allocGameObject;
-    
-    Tables.ItemType itemType;
+
+    Tables.ItemType itemType = Tables.ItemType.Animal;
     Bag bag;
     Inventory inventory;
 
-    List<ItemList> itemLists = new(); 
-
+    List<ItemList> teamLists = new();
+    
     protected override void OnSetPanelDatas()
     {
         base.OnSetPanelDatas();
@@ -30,24 +30,19 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     {
         base.RefreshUI();
         
-        itemLists.Clear();
+        teamLists.Clear();
         for (int i = 0; i < inventory.Items.Count; i+= lowCount)
         {
-            itemLists.Add(ItemList.Create(inventory.Items.Skip(i).Take(lowCount)));
+            teamLists.Add(ItemList.Create(inventory.Items.Skip(i).Take(lowCount)));
         }
 
         scroller.Delegate ??= this;
         scroller.ReloadData();
     }
 
-    public void SetItemType(Tables.ItemType itemType)
-    {
-        this.itemType = itemType;
-    }
-
     public int GetNumberOfCells(EnhancedScroller scroller)
     {
-        return itemLists.Count;
+        return teamLists.Count;
     }
 
     public float GetCellViewSize(EnhancedScroller scroller, int dataIndex)
@@ -58,10 +53,20 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int dataIndex, int cellIndex)
     {
         var cellObject = allocGameObject.AllocateObject();
-        var cellView = cellObject.GetComponent<UIItemListCellView>();
-        var itemList = itemLists[dataIndex];
-        cellView.SetItemList(itemList);
+        var cellView = cellObject.GetComponent<UITeamListCellView>();
+        var teamList = teamLists[dataIndex];
+        cellView.SetTeamList(teamList);
 
         return cellView;
     }
+
+    public void OnClickAddFormation()
+    {
+        MessageBus.Publish(new AddFormationMessage());
+    }
+}
+
+public class AddFormationMessage
+{
+
 }
