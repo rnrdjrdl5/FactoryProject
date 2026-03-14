@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class PlayerPickProcessor : Processor
 {
+    MainStorage mainStorage;
     Bag bag;
-    Inventory animalInventory; 
+    Inventory inventory; 
     
     public override void Ready()
     {
         base.Ready();
 
-        bag = Entity.GetEntityData<Bag>();
-        animalInventory = bag.GetInventory(ItemType.Animal);
+        mainStorage = FactoryEntry.MainStorage;
+        bag = mainStorage.GetEntityData<Bag>();
+        inventory = bag.GetInventory(ItemType.Animal);
     }
 
     public void PickItem()
@@ -33,7 +35,7 @@ public class PlayerPickProcessor : Processor
             return;
         }
         
-        animalInventory.AddItem(worldItem.ItemData.Key, 1);
+        inventory.AddItem(worldItem.ItemData.Key, 1);
         Realm.RemoveChild(worldItem);
     }
 }

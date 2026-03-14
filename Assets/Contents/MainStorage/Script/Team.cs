@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-// Team -> TeamFormation -> Item(Player)
 public class Team : IEntityData
 {
     public event Action OnChanged;
+    public IReadOnlyList<TeamFormation> TeamFormations => teamFormations;
+    
     List<TeamFormation> teamFormations = new();
     TeamFormation selectedTeam;
     

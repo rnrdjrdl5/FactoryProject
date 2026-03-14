@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class TeamFormation
 {
-    public event Action<Item> OnAddPlayer;
-    public event Action<Item> OnRemovePlayer;
+    public event Action OnChanged;
+    public IReadOnlyList<Item> Players => players;
     
     List<Item> players = new();
     
@@ -18,7 +18,7 @@ public class TeamFormation
         }
 
         players.Add(item);
-        OnAddPlayer?.Invoke(item);
+        OnChanged?.Invoke();
 
         return true;
     }
@@ -31,7 +31,7 @@ public class TeamFormation
         }
         
         players.Remove(item);
-        OnRemovePlayer?.Invoke(item);
+        OnChanged?.Invoke();
 
         return true;
     }

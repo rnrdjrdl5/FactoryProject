@@ -10,26 +10,29 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     [SerializeField] int lowCount;
     [SerializeField] AllocGameObject allocGameObject;
 
+    IReadOnlyList<TeamFormation> teamFormationList;
     Tables.ItemType itemType = Tables.ItemType.Animal;
-    Bag bag;
-    Inventory inventory;
+    TeamFormation selectedTeamFormation;
     Team team;
-
-    List<ItemList> teamLists = new();
+    
     
     protected override void OnSetPanelDatas()
     {
         base.OnSetPanelDatas();
         
-        bag = GetTargetPanelDatas<Bag>();
-        inventory = bag.GetInventory(itemType);
         team = GetTargetPanelDatas<Team>();
+        team.OnChanged += RefreshUI;
 
         RefreshUI();
     }
 
     protected override void OnUnsetPanelDatas()
     {
+        if (team != null)
+        {
+            team.OnChanged -= RefreshUI;
+        }
+
         base.OnUnsetPanelDatas();
     }
 
@@ -37,19 +40,21 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     {
         base.RefreshUI();
         
-        teamLists.Clear();
-        for (int i = 0; i < inventory.Items.Count; i+= lowCount)
-        {
-            teamLists.Add(ItemList.Create(inventory.Items.Skip(i).Take(lowCount)));
-        }
+        teamFormationList = team.TeamFormations;
 
         scroller.Delegate ??= this;
         scroller.ReloadData();
     }
 
+    public void SetSelectedTeamFormation(TeamFormation teamFormation)
+    {
+        selectedTeamFormation = teamFormation;
+        RefreshUI();
+    }
+
     public int GetNumberOfCells(EnhancedScroller scroller)
     {
-        return teamLists.Count;
+        return teamFormationList.Count;
     }
 
     public float GetCellViewSize(EnhancedScroller scroller, int dataIndex)
@@ -60,20 +65,16 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int dataIndex, int cellIndex)
     {
         var cellObject = allocGameObject.AllocateObject();
-        var cellView = cellObject.GetComponent<UITeamListCellView>();
-        var teamList = teamLists[dataIndex];
-        cellView.SetTeamList(teamList);
+        var cellView = cellObject.GetComponent<UITeamFormationListCellView>();
+        var teamFormation = teamFormationList[dataIndex];
+        var isSelected = selectedTeamFormation != null && selectedTeamFormation == teamFormation;
+        cellView.Initialize(team, teamFormation, this, isSelected);
 
         return cellView;
     }
 
     public void OnClickAddFormation()
     {
-        TargetMessageBus.Publish(new AddFormationMessage());
+        team.AddTeamFormation();
     }
-}
-
-public class AddFormationMessage
-{
-
 }

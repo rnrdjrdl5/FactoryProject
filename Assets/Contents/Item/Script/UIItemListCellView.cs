@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using EnhancedUI.EnhancedScroller;
 using UnityEngine;
@@ -6,7 +7,7 @@ public class UIItemListCellView : EnhancedScrollerCellView
 {
     [SerializeField] AllocGameObject cellAllocator;
     
-    public void SetItemList(ItemList itemList)
+    public void SetItem(ItemList itemList, Action<Item> OnClickItem)
     {
         var itemCount = itemList.Items.Count();
         cellAllocator.DeallocateObjects();
@@ -18,6 +19,7 @@ public class UIItemListCellView : EnhancedScrollerCellView
             var cellObject = cellAllocator.AllocatedObjects[index];
             var uiItem = cellObject.GetComponent<UIItem>();
             uiItem.UpdateItemData(item);
+            uiItem.SetClickEvent(OnClickItem);
             index++;
         }
     }

@@ -320,6 +320,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7033072215959820166, guid: 6f2973bc84fbe4599bc333140ef77e4b, type: 3}
+      propertyPath: cellSize
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033072215959820166, guid: 6f2973bc84fbe4599bc333140ef77e4b, type: 3}
+      propertyPath: lowCount
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -407,6 +415,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5123316634221202591, guid: fd00248db82394a03b40b08d13363715, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8861628036257719128}
+    - targetCorrespondingSourceObject: {fileID: 5123316634221202591, guid: fd00248db82394a03b40b08d13363715, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3082435442935062049}
   m_SourcePrefab: {fileID: 100100000, guid: fd00248db82394a03b40b08d13363715, type: 3}
 --- !u!223 &1964038586514847620 stripped
 Canvas:
@@ -439,3 +450,15 @@ MonoBehaviour:
   - {fileID: 5645607700612538204}
   - {fileID: 4843189773621626696}
   canvas: {fileID: 1964038586514847620}
+--- !u!114 &3082435442935062049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7053373259763931555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acfd9a7876727498cbef551b4da5e248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

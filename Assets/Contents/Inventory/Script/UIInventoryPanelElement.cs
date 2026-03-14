@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EnhancedUI.EnhancedScroller;
@@ -9,12 +10,13 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     [SerializeField] float cellSize;
     [SerializeField] int lowCount;
     [SerializeField] AllocGameObject allocGameObject;
+
+    public event Action<Item> OnClickItem;
     
+    List<ItemList> itemLists = new();
     Tables.ItemType itemType;
     Bag bag;
     Inventory inventory;
-
-    List<ItemList> itemLists = new(); 
 
     protected override void OnSetPanelDatas()
     {
@@ -60,8 +62,13 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         var cellObject = allocGameObject.AllocateObject();
         var cellView = cellObject.GetComponent<UIItemListCellView>();
         var itemList = itemLists[dataIndex];
-        cellView.SetItemList(itemList);
+        cellView.SetItem(itemList, ClickItem);
 
         return cellView;
+    }
+
+    void ClickItem(Item item)
+    {
+        OnClickItem?.Invoke(item);
     }
 }

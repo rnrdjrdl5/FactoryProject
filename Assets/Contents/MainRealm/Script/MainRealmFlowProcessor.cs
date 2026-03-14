@@ -38,6 +38,9 @@ class LoadFlow : ProcessorFlow
         var gameData = Realm.LoadResources<TextAsset>("Core/GameData");
         DataLoader.LoadAllData(gameData.bytes);
         
+        Entity.AddEntity<MainStorage>(MainStorage.PrefabPath);
+        Entity.AddEntity<GlobalRealm>(GlobalRealm.PrefabPath);
+        
         Finish();
     }
 }

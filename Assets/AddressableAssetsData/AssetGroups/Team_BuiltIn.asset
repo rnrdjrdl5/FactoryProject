@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Team_BuiltIn
   m_GUID: 0be283882069d4f66817bb6547c121e7
   m_SerializeEntries:
-  - m_GUID: 2dde5a978dbaa475db7830a8238be14d
-    m_Address: Team/UITeamPanelElement
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f2973bc84fbe4599bc333140ef77e4b
     m_Address: Team/UITeamFormationElement
     m_ReadOnly: 0

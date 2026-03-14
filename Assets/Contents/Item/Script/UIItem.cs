@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,9 +13,12 @@ public class UIItem : UISetter
     IIconSprite iconData;
     IIconSprite gradeIconData;
     IDescription descriptionData;
+    Action<Item> OnClickEvent;
+    Item item;
 
     public void UpdateItemData(Item item)
     {
+        this.item = item;
         UpdateItemData(item.ItemData, item.ItemData, item.ItemData, item.Amount);
     }
     
@@ -26,5 +30,15 @@ public class UIItem : UISetter
         SetImage(gradeSprite, gradeIconData.GetIconSprite());
         SetText(descText, descriptionData.description);
         SetText(amountText, $"{amount}");
+    }
+
+    public void SetClickEvent(Action<Item> onClickEvent)
+    {
+        OnClickEvent = onClickEvent;
+    }
+
+    public void OnClick()
+    {
+        OnClickEvent?.Invoke(item);
     }
 }
