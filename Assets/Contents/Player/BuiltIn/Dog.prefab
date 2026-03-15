@@ -48,6 +48,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7453695619302407653, guid: 3674a0dc7abc24e38bfc211fa445ec06, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7453695619302407653, guid: 3674a0dc7abc24e38bfc211fa445ec06, type: 3}
+      propertyPath: m_Color.g
+      value: 0.4538545
+      objectReference: {fileID: 0}
+    - target: {fileID: 7453695619302407653, guid: 3674a0dc7abc24e38bfc211fa445ec06, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9187818609255137603, guid: 3674a0dc7abc24e38bfc211fa445ec06, type: 3}
       propertyPath: m_Name
       value: Dog

@@ -59,7 +59,7 @@ class IngameFlow : ProcessorFlow
 
         var processorAbility = Realm.GetAbility<ProcessorAbility>();
         var teamProcessor = processorAbility.GetProcessor<MainRealmTeamProcessor>();
-        teamProcessor.CreatePlayerByTeamFormation();
+        teamProcessor.CreatePlayerBySelectedTeamFormation();
         
         var spawnerInitData = new SpawnerInitData
         {

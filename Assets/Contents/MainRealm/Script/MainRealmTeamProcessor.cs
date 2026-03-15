@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+
 public class MainRealmTeamProcessor : Processor
 {
+    List<Player> players = new();
+    List<Brain> brains = new();
     Team team;
     
     public override void Ready()
@@ -9,7 +13,6 @@ public class MainRealmTeamProcessor : Processor
         team = FactoryEntry.MainStorage.GetEntityData<Team>();
         if (team?.MessageBus != null)
         {
-            team.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
             team.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
         }
     }
@@ -20,20 +23,11 @@ public class MainRealmTeamProcessor : Processor
         {
             if (team.MessageBus != null)
             {
-                team.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
                 team.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
             }
         }
         
         base.Uninitialize();
-    }
-
-    void OnTeamSelectedFormationChanged(EntityDataMsg.TeamSelectedFormationChangedMsg msg)
-    {
-        if (msg.Team != team)
-            return;
-
-        CreatePlayerByTeamFormation();
     }
 
     void OnTeamFormationChanged(EntityDataMsg.TeamFormationChangedMsg msg)
@@ -44,19 +38,45 @@ public class MainRealmTeamProcessor : Processor
         if (msg.Formation != team.SelectedTeamFormation)
             return;
 
-        CreatePlayerByTeamFormation();
+        CreatePlayerBySelectedTeamFormation();
     }
 
-    public void CreatePlayerByTeamFormation()
+    public void CreatePlayerBySelectedTeamFormation()
     {
         var teamFormation = team.SelectedTeamFormation;
         if (teamFormation == null)
             return;
+        
+        CreatePlayerByTeamFormation(teamFormation);
+    }
 
+    public void CreatePlayerByTeamFormation(TeamFormation teamFormation)
+    {
+        RemovePlayerAndBrain();
+        players.Clear();
+        brains.Clear();
+        
         foreach (var item in teamFormation.Players)
         {
             var playerData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
             var brain = BrainLogic.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath);
+
+            var player = brain.Controll as Player;
+            players.Add(player);
+            brains.Add(brain);
+        }
+    }
+
+    void RemovePlayerAndBrain()
+    {
+        foreach (var player in players)
+        {
+            Realm.RemoveChild(player);
+        }
+
+        foreach (var brain in brains)
+        {
+            Realm.RemoveChild(brain);
         }
     }
 }

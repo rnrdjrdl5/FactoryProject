@@ -25,7 +25,7 @@ public class TeamPopupProcessor : Processor
         teamPopup.MessageBus.Subscribe<UIMsg.RemoveTeamFormationMsg>(RemoveTeamFormation);
         teamPopup.MessageBus.Subscribe<UIMsg.SelectInventoryItemMsg>(AddTeamFormationItem);
         teamPopup.MessageBus.Subscribe<UIMsg.ClickAddFormationMsg>(AddFormation);
-        
+        teamPopup.MessageBus.Subscribe<UIMsg.TeamFormationGoMsg>(GoFormation);
     }
 
     public override void Uninitialize()
@@ -98,5 +98,13 @@ public class TeamPopupProcessor : Processor
         }
         
         team.AddTeamFormation();
+    }
+
+    void GoFormation(UIMsg.TeamFormationGoMsg msg)
+    {
+        var mainRealm = Realm.GetParent<MainRealm>();
+        var processorAbility = mainRealm.GetAbility<ProcessorAbility>();
+        var mainRealmTeamProcessor = processorAbility.GetProcessor<MainRealmTeamProcessor>();
+        mainRealmTeamProcessor.CreatePlayerByTeamFormation(msg.TeamFormation);
     }
 }

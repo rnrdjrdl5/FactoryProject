@@ -214,6 +214,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1915887557142023929, guid: 6f2973bc84fbe4599bc333140ef77e4b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickTeamFormationGo
+      objectReference: {fileID: 0}
     - target: {fileID: 3854692638574818619, guid: 6f2973bc84fbe4599bc333140ef77e4b, type: 3}
       propertyPath: m_Name
       value: UITeamFormationElement

@@ -12,7 +12,7 @@ public class SkillAbility : Ability
 
     public override void Initialize(IInitData initData = null)
     {
-        realm = Entity.GetRootParent<Realm>();
+        realm = Entity.GetParent<Realm>();
         processorAbility = Entity.GetAbility<ProcessorAbility>();
     }
 
