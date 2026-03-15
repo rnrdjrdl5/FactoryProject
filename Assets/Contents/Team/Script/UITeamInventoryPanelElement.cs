@@ -13,7 +13,7 @@ public class UITeamInventoryPanelElement : UIInventoryPanelElement
 
         if (inventory != null)
         {
-            ExternalMessageBus?.Subscribe<InventoryChangedMsg>(OnInventoryChanged);
+            ExternalMessageBus?.Subscribe<EntityDataMsg.InventoryChangedMsg>(OnInventoryChanged);
         }
     }
 
@@ -21,13 +21,13 @@ public class UITeamInventoryPanelElement : UIInventoryPanelElement
     {
         if (inventory != null)
         {
-            ExternalMessageBus?.Unsubscribe<InventoryChangedMsg>(OnInventoryChanged);
+            ExternalMessageBus?.Unsubscribe<EntityDataMsg.InventoryChangedMsg>(OnInventoryChanged);
         }
         
         base.OnUnsetPanelDatas(); 
     }
 
-    void OnInventoryChanged(InventoryChangedMsg msg)
+    void OnInventoryChanged(EntityDataMsg.InventoryChangedMsg msg)
     {
         if (msg.Inventory != inventory)
             return;

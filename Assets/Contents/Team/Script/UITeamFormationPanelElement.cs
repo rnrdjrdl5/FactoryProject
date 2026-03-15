@@ -22,9 +22,9 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         team = GetTargetPanelDatas<Team>();
         if (team?.MessageBus != null)
         {
-            team.MessageBus.Subscribe<TeamFormationAddedMsg>(OnTeamFormationAdded);
-            team.MessageBus.Subscribe<TeamFormationRemovedMsg>(OnTeamFormationRemoved);
-            team.MessageBus.Subscribe<TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+            team.MessageBus.Subscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
+            team.MessageBus.Subscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+            team.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
         }
 
         RefreshUI();
@@ -36,16 +36,16 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         {
             if (team.MessageBus != null)
             {
-                team.MessageBus.Unsubscribe<TeamFormationAddedMsg>(OnTeamFormationAdded);
-                team.MessageBus.Unsubscribe<TeamFormationRemovedMsg>(OnTeamFormationRemoved);
-                team.MessageBus.Unsubscribe<TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+                team.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
+                team.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+                team.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
             }
         }
 
         base.OnUnsetPanelDatas();
     }
 
-    void OnTeamFormationAdded(TeamFormationAddedMsg msg)
+    void OnTeamFormationAdded(EntityDataMsg.TeamFormationAddedMsg msg)
     {
         if (msg.Team != team)
             return;
@@ -53,7 +53,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         RefreshUI();
     }
 
-    void OnTeamFormationRemoved(TeamFormationRemovedMsg msg)
+    void OnTeamFormationRemoved(EntityDataMsg.TeamFormationRemovedMsg msg)
     {
         if (msg.Team != team)
             return;
@@ -61,7 +61,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         RefreshUI();
     }
 
-    void OnTeamSelectedFormationChanged(TeamSelectedFormationChangedMsg msg)
+    void OnTeamSelectedFormationChanged(EntityDataMsg.TeamSelectedFormationChangedMsg msg)
     {
         if (msg.Team != team)
             return;
@@ -103,12 +103,15 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     public void OnClickAddFormation()
     {
-        var msg = new ClickAddFormationMsg();
+        var msg = new UIMsg.ClickAddFormationMsg();
         Panel.MessageBus.Publish(msg);
     }
 }
 
-public struct ClickAddFormationMsg
+public static partial class UIMsg
 {
-    
+    public struct ClickAddFormationMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+    }
 }

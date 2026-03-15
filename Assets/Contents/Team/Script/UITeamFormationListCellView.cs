@@ -45,7 +45,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     {
         if (externalMessageBus != null)
         {
-            externalMessageBus.Subscribe<TeamFormationChangedMsg>(OnFormationChanged);
+            externalMessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnFormationChanged);
         }
     }
     
@@ -53,7 +53,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     {
         if (externalMessageBus != null)
         {
-            externalMessageBus.Unsubscribe<TeamFormationChangedMsg>(OnFormationChanged);
+            externalMessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnFormationChanged);
             externalMessageBus = null;
         }
     }
@@ -79,7 +79,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
         }
     }
 
-    void OnFormationChanged(TeamFormationChangedMsg msg)
+    void OnFormationChanged(EntityDataMsg.TeamFormationChangedMsg msg)
     {
         if (teamFormation == null || msg.Formation != teamFormation)
             return;
@@ -89,7 +89,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
 
     public void OnClickRemoveFormation()
     {
-        var msg = new RemoveTeamFormationMsg
+        var msg = new UIMsg.RemoveTeamFormationMsg
         {
             TeamFormation = teamFormation,
             Team = team
@@ -100,7 +100,17 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
 
     public void OnClickSelectedTeamFormation()
     {
-        var msg = new SelectTeamFormationMsg
+        var msg = new UIMsg.SelectTeamFormationMsg
+        {
+            TeamFormation = teamFormation
+        };
+        
+        panelElement.Panel.MessageBus.Publish(msg);
+    }
+
+    public void OnClickTeamFormationGo()
+    {
+        var msg = new UIMsg.TeamFormationGoMsg
         {
             TeamFormation = teamFormation
         };
@@ -110,7 +120,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
 
     void OnRemoveTeamFormationItem(Item item)
     {
-        var msg = new RemoveTeamFormationItemMsg
+        var msg = new UIMsg.RemoveTeamFormationItemMsg
         {
             TeamFormation = teamFormation,
             Item = item
@@ -120,19 +130,32 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     }
 }
 
-public struct RemoveTeamFormationItemMsg
-{
-    public TeamFormation TeamFormation;
-    public Item Item;
-}
 
-public struct RemoveTeamFormationMsg
+public static partial class UIMsg
 {
-    public TeamFormation TeamFormation;
-    public Team Team;
-}
+    public struct RemoveTeamFormationItemMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+        public TeamFormation TeamFormation;
+        public Item Item;
+    }
 
-public struct SelectTeamFormationMsg
-{
-    public TeamFormation TeamFormation;
+    public struct RemoveTeamFormationMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+        public TeamFormation TeamFormation;
+        public Team Team;
+    }
+
+    public struct SelectTeamFormationMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+        public TeamFormation TeamFormation;
+    }
+
+    public struct TeamFormationGoMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+        public TeamFormation TeamFormation;
+    }
 }

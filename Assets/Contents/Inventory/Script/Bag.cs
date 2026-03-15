@@ -53,7 +53,7 @@ public class Bag : IEntityData, IMessageBus
 
         inventory.AddItem(item.Key,amount);
         
-        MessageBus?.Publish(new BagItemAddedMsg
+        MessageBus?.Publish(new EntityDataMsg.BagItemAddedMsg
         {
             Bag = this,
             Item = item,
@@ -77,7 +77,7 @@ public class Bag : IEntityData, IMessageBus
         var result = inventory.TryRemoveItem(item.Key, amount);
         if (result)
         {
-            MessageBus?.Publish(new BagItemRemovedMsg
+            MessageBus?.Publish(new EntityDataMsg.BagItemRemovedMsg
             {
                 Bag = this,
                 Item = item,
@@ -89,16 +89,21 @@ public class Bag : IEntityData, IMessageBus
     }
 }
 
-public struct BagItemAddedMsg
+public static partial class EntityDataMsg
 {
-    public Bag Bag;
-    public Tables.Item Item;
-    public int Amount;
-}
+    public struct BagItemAddedMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Bag Bag;
+        public Tables.Item Item;
+        public int Amount;
+    }
 
-public struct BagItemRemovedMsg
-{
-    public Bag Bag;
-    public Tables.Item Item;
-    public int Amount;
+    public struct BagItemRemovedMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Bag Bag;
+        public Tables.Item Item;
+        public int Amount;
+    }
 }

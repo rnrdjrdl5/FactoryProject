@@ -23,7 +23,7 @@ public class TeamFormation : IMessageBus
         }
 
         players.Add(item);
-        MessageBus?.Publish(new TeamFormationChangedMsg
+        MessageBus?.Publish(new EntityDataMsg.TeamFormationChangedMsg
         {
             Formation = this
         });
@@ -39,7 +39,7 @@ public class TeamFormation : IMessageBus
         }
         
         players.Remove(item);
-        MessageBus?.Publish(new TeamFormationChangedMsg
+        MessageBus?.Publish(new EntityDataMsg.TeamFormationChangedMsg
         {
             Formation = this
         });
@@ -60,7 +60,11 @@ public class TeamFormation : IMessageBus
     }
 }
 
-public struct TeamFormationChangedMsg
+public static partial class EntityDataMsg
 {
-    public TeamFormation Formation;
+    public struct TeamFormationChangedMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public TeamFormation Formation;
+    }
 }

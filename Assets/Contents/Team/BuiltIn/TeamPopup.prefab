@@ -89,10 +89,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UITeamInventoryPanelElement
       objectReference: {fileID: 0}
-    - target: {fileID: 2921097992926710291, guid: 24f404af6a6924673b95eecdc9454eea, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5600445350357122757, guid: 24f404af6a6924673b95eecdc9454eea, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

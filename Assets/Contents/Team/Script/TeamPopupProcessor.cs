@@ -20,21 +20,21 @@ public class TeamPopupProcessor : Processor
     {
         base.Ready();
         
-        teamPopup.MessageBus.Subscribe<SelectTeamFormationMsg>(SelectTeamFormation);
-        teamPopup.MessageBus.Subscribe<RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
-        teamPopup.MessageBus.Subscribe<RemoveTeamFormationMsg>(RemoveTeamFormation);
-        teamPopup.MessageBus.Subscribe<SelectInventoryItemMsg>(AddTeamFormationItem);
-        teamPopup.MessageBus.Subscribe<ClickAddFormationMsg>(AddFormation);
+        teamPopup.MessageBus.Subscribe<UIMsg.SelectTeamFormationMsg>(SelectTeamFormation);
+        teamPopup.MessageBus.Subscribe<UIMsg.RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
+        teamPopup.MessageBus.Subscribe<UIMsg.RemoveTeamFormationMsg>(RemoveTeamFormation);
+        teamPopup.MessageBus.Subscribe<UIMsg.SelectInventoryItemMsg>(AddTeamFormationItem);
+        teamPopup.MessageBus.Subscribe<UIMsg.ClickAddFormationMsg>(AddFormation);
         
     }
 
     public override void Uninitialize()
     {
         teamPopup.OnSetPanelDatas -= OnSetPanelDatas;
-        teamPopup.MessageBus.Unsubscribe<SelectTeamFormationMsg>(SelectTeamFormation);
-        teamPopup.MessageBus.Unsubscribe<RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
-        teamPopup.MessageBus.Unsubscribe<RemoveTeamFormationMsg>(RemoveTeamFormation);
-        teamPopup.MessageBus.Unsubscribe<SelectInventoryItemMsg>(AddTeamFormationItem);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.SelectTeamFormationMsg>(SelectTeamFormation);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.RemoveTeamFormationMsg>(RemoveTeamFormation);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.SelectInventoryItemMsg>(AddTeamFormationItem);
         
         base.Uninitialize();
     }
@@ -47,7 +47,7 @@ public class TeamPopupProcessor : Processor
         teamInventory = bag?.GetInventory(Tables.ItemType.Animal);
     }
 
-    void SelectTeamFormation(SelectTeamFormationMsg msg)
+    void SelectTeamFormation(UIMsg.SelectTeamFormationMsg msg)
     {
         if (team == null)
         {
@@ -57,7 +57,7 @@ public class TeamPopupProcessor : Processor
         team.SelectTeamFormation(msg.TeamFormation);
     }
 
-    void RemoveTeamFormationItem(RemoveTeamFormationItemMsg msg)
+    void RemoveTeamFormationItem(UIMsg.RemoveTeamFormationItemMsg msg)
     {
         if (team == null)
         {
@@ -69,7 +69,7 @@ public class TeamPopupProcessor : Processor
         team.SelectTeamFormation(msg.TeamFormation);
     }
     
-    void RemoveTeamFormation(RemoveTeamFormationMsg msg)
+    void RemoveTeamFormation(UIMsg.RemoveTeamFormationMsg msg)
     {
         if (team == null)
         {
@@ -79,7 +79,7 @@ public class TeamPopupProcessor : Processor
         team.TryRemoveTeamFormation(msg.TeamFormation);
     }
 
-    void AddTeamFormationItem(SelectInventoryItemMsg msg)
+    void AddTeamFormationItem(UIMsg.SelectInventoryItemMsg msg)
     { 
         if (team == null || team.SelectedTeamFormation.Players.Contains(msg.Item))
         {
@@ -90,7 +90,7 @@ public class TeamPopupProcessor : Processor
         team.SelectedTeamFormation.TryAddPlayer(msg.Item);
     }
 
-    void AddFormation(ClickAddFormationMsg msg)
+    void AddFormation(UIMsg.ClickAddFormationMsg msg)
     {
         if (team == null)
         {

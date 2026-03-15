@@ -71,7 +71,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
 
     void ClickItem(Item item)
     {
-        var msg = new SelectInventoryItemMsg
+        var msg = new UIMsg.SelectInventoryItemMsg
         {
             Item = item
         };
@@ -80,7 +80,11 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     }
 }
 
-public struct SelectInventoryItemMsg
+public static partial class UIMsg
 {
-    public Item Item;
+    public struct SelectInventoryItemMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+        public Item Item;
+    }
 }

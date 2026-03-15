@@ -35,7 +35,7 @@ public class Inventory : IMessageBus
         
         item.Acquire(amount);
         
-        MessageBus?.Publish(new InventoryChangedMsg
+        MessageBus?.Publish(new EntityDataMsg.InventoryChangedMsg
         {
             Inventory = this
         });
@@ -53,7 +53,7 @@ public class Inventory : IMessageBus
 
         item.Spend(amount);
         
-        MessageBus?.Publish(new InventoryChangedMsg
+        MessageBus?.Publish(new EntityDataMsg.InventoryChangedMsg
         {
             Inventory = this
         });
@@ -71,7 +71,7 @@ public class Inventory : IMessageBus
     {
         item.SetEquip(true);
         
-        MessageBus?.Publish(new InventoryChangedMsg
+        MessageBus?.Publish(new EntityDataMsg.InventoryChangedMsg
         {
             Inventory = this
         });
@@ -87,7 +87,7 @@ public class Inventory : IMessageBus
     {
         item.SetEquip(false);
         
-        MessageBus?.Publish(new InventoryChangedMsg
+        MessageBus?.Publish(new EntityDataMsg.InventoryChangedMsg
         {
             Inventory = this
         });
@@ -107,7 +107,11 @@ public class Inventory : IMessageBus
     }
 }
 
-public struct InventoryChangedMsg
+public static partial class EntityDataMsg
 {
-    public Inventory Inventory;
+    public struct InventoryChangedMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Inventory Inventory;
+    }
 }

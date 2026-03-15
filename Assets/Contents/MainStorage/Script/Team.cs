@@ -40,7 +40,7 @@ public class Team : IEntityData, IMessageBus
         teamFormation.OnSetMessageBus();
         
         teamFormations.Add(teamFormation);
-        MessageBus?.Publish(new TeamFormationAddedMsg
+        MessageBus?.Publish(new EntityDataMsg.TeamFormationAddedMsg
         {
             Team = this,
             Formation = teamFormation
@@ -66,14 +66,14 @@ public class Team : IEntityData, IMessageBus
         if (selectedFormation == teamFormation)
         {
             selectedFormation = null;
-            MessageBus?.Publish(new TeamSelectedFormationChangedMsg
+            MessageBus?.Publish(new EntityDataMsg.TeamSelectedFormationChangedMsg
             {
                 Team = this,
                 Formation = null
             });
         }
 
-        MessageBus?.Publish(new TeamFormationRemovedMsg
+        MessageBus?.Publish(new EntityDataMsg.TeamFormationRemovedMsg
         {
             Team = this,
             Formation = teamFormation
@@ -90,7 +90,7 @@ public class Team : IEntityData, IMessageBus
 
         selectedFormation = teamFormation;
 
-        MessageBus?.Publish(new TeamSelectedFormationChangedMsg
+        MessageBus?.Publish(new EntityDataMsg.TeamSelectedFormationChangedMsg
         {
             Team = this,
             Formation = teamFormation
@@ -98,20 +98,26 @@ public class Team : IEntityData, IMessageBus
     }
 }
 
-public struct TeamFormationAddedMsg
+public static partial class EntityDataMsg
 {
-    public Team Team;
-    public TeamFormation Formation;
-}
+    public struct TeamFormationAddedMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Team Team;
+        public TeamFormation Formation;
+    }
 
-public struct TeamFormationRemovedMsg
-{
-    public Team Team;
-    public TeamFormation Formation;
-}
+    public struct TeamFormationRemovedMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Team Team;
+        public TeamFormation Formation;
+    }
 
-public struct TeamSelectedFormationChangedMsg
-{
-    public Team Team;
-    public TeamFormation Formation;
+    public struct TeamSelectedFormationChangedMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Team Team;
+        public TeamFormation Formation;
+    }
 }
