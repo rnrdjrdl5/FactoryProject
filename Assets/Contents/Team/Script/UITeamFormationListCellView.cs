@@ -1,5 +1,6 @@
 using System;
 using EnhancedUI.EnhancedScroller;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
 {
     [SerializeField] AllocGameObject cellAllocator;
     [SerializeField] GameObject selectedObject;
+    [SerializeField] TMP_Text formationNameText;
     
     Team team;
     TeamFormation teamFormation;
@@ -39,6 +41,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     void RefreshUI()
     {
         selectedObject.SetActive(isSelected);
+        formationNameText.text = teamFormation.FormationName;
         
         var playerCount = teamFormation.Players.Count;
         cellAllocator.DeallocateObjects();

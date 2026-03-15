@@ -3,6 +3,7 @@ using System.Linq;
 using EnhancedUI.EnhancedScroller;
 using UnityEngine;
 
+// NOTE : 추후 Refresh말고도 Redraw 추가
 public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDelegate
 {
     [SerializeField] EnhancedScroller scroller;
@@ -75,6 +76,12 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     public void OnClickAddFormation()
     {
-        team.AddTeamFormation();
+        var msg = new ClickAddFormationMsg();
+        Panel.MessageBus.Publish(msg);
     }
+}
+
+public class ClickAddFormationMsg
+{
+    
 }

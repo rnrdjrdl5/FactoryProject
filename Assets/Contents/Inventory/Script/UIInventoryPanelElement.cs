@@ -11,9 +11,8 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     [SerializeField] int lowCount;
     [SerializeField] AllocGameObject allocGameObject;
 
-    public event Action<Item> OnClickItem;
-    
-    List<ItemList> itemLists = new();
+    List<Item> equipItemKeys = new();
+    List<ExItemList> itemLists = new();
     Tables.ItemType itemType;
     Bag bag;
     Inventory inventory;
@@ -25,7 +24,10 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         bag = GetTargetPanelDatas<Bag>();
         inventory = bag.GetInventory(itemType);
 
-        RefreshUI();
+        if (inventory != null)
+        {
+            RefreshUI();
+        }
     }
 
     public override void RefreshUI()
@@ -35,7 +37,11 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         itemLists.Clear();
         for (int i = 0; i < inventory.Items.Count; i+= lowCount)
         {
-            itemLists.Add(ItemList.Create(inventory.Items.Skip(i).Take(lowCount)));
+            var exItems = inventory.Items
+                .Skip(i)
+                .Take(lowCount)
+                .Select(item => ExItem.Create(item, equipItemKeys.Contains(item)));
+            itemLists.Add(ExItemList.Create(exItems));
         }
 
         scroller.Delegate ??= this;
@@ -45,6 +51,17 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     public void SetItemType(Tables.ItemType itemType)
     {
         this.itemType = itemType;
+    }
+
+    public void SetEquipItemKeys(IEnumerable<Item> items)
+    {
+        equipItemKeys.Clear();
+        if (items != null)
+        {
+            equipItemKeys.AddRange(items);
+        }
+
+        RefreshUI();
     }
 
     public int GetNumberOfCells(EnhancedScroller scroller)
@@ -69,6 +86,16 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
 
     void ClickItem(Item item)
     {
-        OnClickItem?.Invoke(item);
+        var msg = new ClickInventoryItemMsg
+        {
+            Item = item
+        };
+        
+        Panel.MessageBus.Publish(msg);
     }
+}
+
+public class ClickInventoryItemMsg
+{
+    public Item Item;
 }

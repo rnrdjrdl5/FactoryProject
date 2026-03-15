@@ -7,8 +7,10 @@ public class TeamFormation
 {
     public event Action OnChanged;
     public IReadOnlyList<Item> Players => players;
+    public string FormationName => formationName;
     
     List<Item> players = new();
+    string formationName;
     
     public bool TryAddPlayer(Item item)
     {
@@ -41,9 +43,10 @@ public class TeamFormation
         return item.ItemData.itemType == ItemType.Animal;
     }
 
-    public static TeamFormation Create()
+    public static TeamFormation Create(string formationName)
     {
         var teamFormation = new TeamFormation();
+        teamFormation.formationName = formationName;
         return teamFormation;
     }
 }

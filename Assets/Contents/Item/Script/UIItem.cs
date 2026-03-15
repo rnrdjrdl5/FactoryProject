@@ -9,20 +9,29 @@ public class UIItem : UISetter
     [SerializeField] Image gradeSprite;
     [SerializeField] TMP_Text descText;
     [SerializeField] TMP_Text amountText;
+    [SerializeField] GameObject isEquipObject;
     
     IIconSprite iconData;
     IIconSprite gradeIconData;
     IDescription descriptionData;
     Action<Item> OnClickEvent;
     Item item;
+    bool isEquip;
 
     public void UpdateItemData(Item item)
     {
-        this.item = item;
-        UpdateItemData(item.ItemData, item.ItemData, item.ItemData, item.Amount);
+        UpdateItemData(item, false);
     }
     
-    public void UpdateItemData(IIconSprite iconData, IGradeType gradeData, IDescription descriptionData, int amount)
+    public void UpdateItemData(Item item, bool isEquip)
+    {
+        this.item = item;
+        this.isEquip = isEquip;
+        
+        UpdateItemData(item.ItemData, item.ItemData, item.ItemData, item.Amount, isEquip);
+    }
+    
+    public void UpdateItemData(IIconSprite iconData, IGradeType gradeData, IDescription descriptionData, int amount, bool isEquip)
     {
         var gradeIconData = gradeData.Grade as IIconSprite;
         
@@ -30,6 +39,7 @@ public class UIItem : UISetter
         SetImage(gradeSprite, gradeIconData.GetIconSprite());
         SetText(descText, descriptionData.description);
         SetText(amountText, $"{amount}");
+        SetObject(isEquipObject, isEquip);
     }
 
     public void SetClickEvent(Action<Item> onClickEvent)

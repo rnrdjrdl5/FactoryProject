@@ -19,9 +19,9 @@ public class Team : IEntityData
         
     }
 
-    public void AddTeamFormation()
+    public void AddTeamFormation(string formationName)
     {
-        var teamFormation = TeamFormation.Create();
+        var teamFormation = TeamFormation.Create(formationName);
         teamFormations.Add(teamFormation);
         OnChanged?.Invoke();
     }
@@ -36,5 +36,17 @@ public class Team : IEntityData
         teamFormations.Remove(teamFormation);
         OnChanged?.Invoke();
         return true;
+    }
+
+    public IEnumerable<Item> GetEquipItemKeys(IEnumerable<Item> items)
+    {
+        if (items == null || !items.Any())
+        {
+            return null;
+        }
+
+        return teamFormations
+            .SelectMany(teamFormation => teamFormation.Players)
+            .Where(items.Contains);
     }
 }

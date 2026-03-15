@@ -7,18 +7,18 @@ public class UIItemListCellView : EnhancedScrollerCellView
 {
     [SerializeField] AllocGameObject cellAllocator;
     
-    public void SetItem(ItemList itemList, Action<Item> OnClickItem)
+    public void SetItem(ExItemList exItemList, Action<Item> OnClickItem)
     {
-        var itemCount = itemList.Items.Count();
+        var itemCount = exItemList.ExItems.Count();
         cellAllocator.DeallocateObjects();
         cellAllocator.AllocateObject(itemCount);
 
         var index = 0;
-        foreach (var item in itemList.Items)
+        foreach (var item in exItemList.ExItems)
         {
             var cellObject = cellAllocator.AllocatedObjects[index];
             var uiItem = cellObject.GetComponent<UIItem>();
-            uiItem.UpdateItemData(item);
+            uiItem.UpdateItemData(item.Item, item.IsEquip);
             uiItem.SetClickEvent(OnClickItem);
             index++;
         }
