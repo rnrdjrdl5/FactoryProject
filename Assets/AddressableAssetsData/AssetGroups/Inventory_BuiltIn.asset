@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Inventory_BuiltIn
   m_GUID: 05df7d3849a8846faa351074d900a3c4
   m_SerializeEntries:
+  - m_GUID: 24f404af6a6924673b95eecdc9454eea
+    m_Address: Team/UIInventoryPanelElement 1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c202b9eb59ddc4fc68a76aba2f2a230c
     m_Address: Inventory/InventoryPopup
     m_ReadOnly: 0
