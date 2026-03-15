@@ -13,7 +13,7 @@ public class UITeamInventoryPanelElement : UIInventoryPanelElement
 
         if (inventory != null)
         {
-            inventory.OnChanged += RefreshUI;
+            ExternalMessageBus?.Subscribe<InventoryChangedMsg>(OnInventoryChanged);
         }
     }
 
@@ -21,9 +21,17 @@ public class UITeamInventoryPanelElement : UIInventoryPanelElement
     {
         if (inventory != null)
         {
-            inventory.OnChanged -= RefreshUI;
+            ExternalMessageBus?.Unsubscribe<InventoryChangedMsg>(OnInventoryChanged);
         }
         
         base.OnUnsetPanelDatas(); 
+    }
+
+    void OnInventoryChanged(InventoryChangedMsg msg)
+    {
+        if (msg.Inventory != inventory)
+            return;
+
+        RefreshUI();
     }
 }

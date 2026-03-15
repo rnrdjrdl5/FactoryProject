@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-public class Bag : IEntityData
+public class Bag : IEntityData, IMessageBus
 {
-    public event Action OnChanged;
+    public MessageBus MessageBus { get; set; }
     
     Dictionary<Tables.ItemType, Inventory> inventoryTab = new();
     
@@ -12,8 +12,9 @@ public class Bag : IEntityData
         inventoryTab.Clear();
         foreach (var itemType in Tables.Item.ItemTypes)
         {
-            var inventory = new Inventory();
-            inventory.Initialize(itemType);
+            var inventory = Inventory.Create(itemType);
+            inventory.MessageBus = MessageBus;
+            inventory.OnSetMessageBus();
             inventoryTab.Add(itemType, inventory);
         }
     }
@@ -23,6 +24,15 @@ public class Bag : IEntityData
         foreach (var inventory in inventoryTab.Values)
         {
             inventory.Uninitialize();
+        }
+    }
+    
+    public void OnSetMessageBus()
+    {
+        foreach (var inventory in inventoryTab.Values)
+        {
+            inventory.MessageBus = MessageBus;
+            inventory.OnSetMessageBus();
         }
     }
 
@@ -36,11 +46,19 @@ public class Bag : IEntityData
         if (!inventoryTab.TryGetValue(item.itemType, out var inventory))
         {
             inventory = Inventory.Create(item.itemType);
+            inventory.MessageBus = MessageBus;
+            inventory.OnSetMessageBus();
             inventoryTab.Add(item.itemType, inventory);
         }
 
         inventory.AddItem(item.Key,amount);
-        OnChanged?.Invoke();
+        
+        MessageBus?.Publish(new BagItemAddedMsg
+        {
+            Bag = this,
+            Item = item,
+            Amount = amount
+        });
     }
 
     public void AddItem(string itemKey, int amount)
@@ -59,9 +77,28 @@ public class Bag : IEntityData
         var result = inventory.TryRemoveItem(item.Key, amount);
         if (result)
         {
-            OnChanged?.Invoke();
+            MessageBus?.Publish(new BagItemRemovedMsg
+            {
+                Bag = this,
+                Item = item,
+                Amount = amount
+            });
         }
 
         return result;
     }
+}
+
+public struct BagItemAddedMsg
+{
+    public Bag Bag;
+    public Tables.Item Item;
+    public int Amount;
+}
+
+public struct BagItemRemovedMsg
+{
+    public Bag Bag;
+    public Tables.Item Item;
+    public int Amount;
 }

@@ -7,27 +7,51 @@ public class MainRealmTeamProcessor : Processor
         base.Ready();
         
         team = FactoryEntry.MainStorage.GetEntityData<Team>();
-        team.OnChanged += OnChanged;
+        if (team?.MessageBus != null)
+        {
+            team.MessageBus.Subscribe<TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+            team.MessageBus.Subscribe<TeamFormationChangedMsg>(OnTeamFormationChanged);
+        }
     }
 
     public override void Uninitialize()
     {
         if (team != null)
         {
-            team.OnChanged -= OnChanged;
+            if (team.MessageBus != null)
+            {
+                team.MessageBus.Unsubscribe<TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+                team.MessageBus.Unsubscribe<TeamFormationChangedMsg>(OnTeamFormationChanged);
+            }
         }
         
         base.Uninitialize();
     }
 
-    void OnChanged()
+    void OnTeamSelectedFormationChanged(TeamSelectedFormationChangedMsg msg)
     {
+        if (msg.Team != team)
+            return;
 
+        CreatePlayerByTeamFormation();
+    }
+
+    void OnTeamFormationChanged(TeamFormationChangedMsg msg)
+    {
+        if (team == null || msg.Formation == null)
+            return;
+
+        if (msg.Formation != team.SelectedTeamFormation)
+            return;
+
+        CreatePlayerByTeamFormation();
     }
 
     public void CreatePlayerByTeamFormation()
     {
         var teamFormation = team.SelectedTeamFormation;
+        if (teamFormation == null)
+            return;
 
         foreach (var item in teamFormation.Players)
         {

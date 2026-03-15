@@ -1,16 +1,19 @@
-using System;
 using System.Collections.Generic;
 using Tables;
 using UnityEngine;
 
-public class TeamFormation
+public class TeamFormation : IMessageBus
 {
-    public event Action OnChanged;
     public IReadOnlyList<Item> Players => players;
     public string FormationName => formationName;
+    public MessageBus MessageBus { get; set; }
     
     List<Item> players = new();
     string formationName;
+    
+    public void OnSetMessageBus()
+    {
+    }
     
     public bool TryAddPlayer(Item item)
     {
@@ -20,7 +23,10 @@ public class TeamFormation
         }
 
         players.Add(item);
-        OnChanged?.Invoke();
+        MessageBus?.Publish(new TeamFormationChangedMsg
+        {
+            Formation = this
+        });
 
         return true;
     }
@@ -33,7 +39,10 @@ public class TeamFormation
         }
         
         players.Remove(item);
-        OnChanged?.Invoke();
+        MessageBus?.Publish(new TeamFormationChangedMsg
+        {
+            Formation = this
+        });
 
         return true;
     }
@@ -49,4 +58,9 @@ public class TeamFormation
         teamFormation.formationName = formationName;
         return teamFormation;
     }
+}
+
+public struct TeamFormationChangedMsg
+{
+    public TeamFormation Formation;
 }

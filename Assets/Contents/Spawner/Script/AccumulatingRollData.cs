@@ -4,7 +4,7 @@ using UnityEngine;
 [Serializable]
 public class AccumulatingRollData : IEntityData
 {
-    public event Action OnChanged;
+    public MessageBus MessageBus { get; set; }
     
     float minRange = 0f;
     float maxRange = 100f;

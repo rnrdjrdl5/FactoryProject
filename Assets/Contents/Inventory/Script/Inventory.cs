@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Inventory
+public class Inventory : IMessageBus
 {
     public IReadOnlyList<Item> Items => items;
-    public event Action OnChanged;
+    public MessageBus MessageBus { get; set; }
 
     List<Item> items = new();
     Tables.ItemType itemType;
@@ -34,7 +34,11 @@ public class Inventory
         }
         
         item.Acquire(amount);
-        OnChanged?.Invoke();
+        
+        MessageBus?.Publish(new InventoryChangedMsg
+        {
+            Inventory = this
+        });
         
         return item;
     }
@@ -48,7 +52,11 @@ public class Inventory
         }
 
         item.Spend(amount);
-        OnChanged?.Invoke();
+        
+        MessageBus?.Publish(new InventoryChangedMsg
+        {
+            Inventory = this
+        });
         
         return true;
     }
@@ -62,7 +70,11 @@ public class Inventory
     public void Equip(Item item)
     {
         item.SetEquip(true);
-        OnChanged?.Invoke();
+        
+        MessageBus?.Publish(new InventoryChangedMsg
+        {
+            Inventory = this
+        });
     }
 
     public void Unequip(string itemKey)
@@ -74,7 +86,11 @@ public class Inventory
     public void Unequip(Item item)
     {
         item.SetEquip(false);
-        OnChanged?.Invoke();
+        
+        MessageBus?.Publish(new InventoryChangedMsg
+        {
+            Inventory = this
+        });
     }
 
 
@@ -85,4 +101,13 @@ public class Inventory
 
         return inventory;
     }
+
+    public void OnSetMessageBus()
+    {
+    }
+}
+
+public struct InventoryChangedMsg
+{
+    public Inventory Inventory;
 }

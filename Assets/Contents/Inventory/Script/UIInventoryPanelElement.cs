@@ -80,7 +80,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     }
 }
 
-public class SelectInventoryItemMsg
+public struct SelectInventoryItemMsg
 {
     public Item Item;
 }

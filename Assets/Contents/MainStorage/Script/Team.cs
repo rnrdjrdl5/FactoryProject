@@ -1,12 +1,23 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Team : IEntityData
+public class Team : IEntityData, IMessageBus
 {
     const string FormationDefaultName = "Formation";
-    
-    public event Action OnChanged;
+
+    public MessageBus MessageBus { get; set; }
+
+    public void OnSetMessageBus()
+    {
+        if (MessageBus == null)
+            return;
+
+        foreach (var formation in teamFormations)
+        {
+            formation.MessageBus = MessageBus;
+            formation.OnSetMessageBus();
+        }
+    }
     public IReadOnlyList<TeamFormation> TeamFormations => teamFormations;
     public TeamFormation SelectedTeamFormation => selectedFormation;
     
@@ -25,8 +36,15 @@ public class Team : IEntityData
     public TeamFormation AddTeamFormation(string formationName)
     {
         var teamFormation = TeamFormation.Create(formationName);
+        teamFormation.MessageBus = MessageBus;
+        teamFormation.OnSetMessageBus();
+        
         teamFormations.Add(teamFormation);
-        OnChanged?.Invoke();
+        MessageBus?.Publish(new TeamFormationAddedMsg
+        {
+            Team = this,
+            Formation = teamFormation
+        });
 
         return teamFormation;
     }
@@ -45,13 +63,55 @@ public class Team : IEntityData
         }
 
         teamFormations.Remove(teamFormation);
-        OnChanged?.Invoke();
+        if (selectedFormation == teamFormation)
+        {
+            selectedFormation = null;
+            MessageBus?.Publish(new TeamSelectedFormationChangedMsg
+            {
+                Team = this,
+                Formation = null
+            });
+        }
+
+        MessageBus?.Publish(new TeamFormationRemovedMsg
+        {
+            Team = this,
+            Formation = teamFormation
+        });
         return true;
     }
 
     public void SelectTeamFormation(TeamFormation teamFormation)
     {
+        if (selectedFormation == teamFormation)
+        {
+            return;
+        }
+
         selectedFormation = teamFormation;
-        OnChanged?.Invoke();
+
+        MessageBus?.Publish(new TeamSelectedFormationChangedMsg
+        {
+            Team = this,
+            Formation = teamFormation
+        });
     }
+}
+
+public struct TeamFormationAddedMsg
+{
+    public Team Team;
+    public TeamFormation Formation;
+}
+
+public struct TeamFormationRemovedMsg
+{
+    public Team Team;
+    public TeamFormation Formation;
+}
+
+public struct TeamSelectedFormationChangedMsg
+{
+    public Team Team;
+    public TeamFormation Formation;
 }

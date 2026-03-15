@@ -20,7 +20,12 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         base.OnSetPanelDatas();
         
         team = GetTargetPanelDatas<Team>();
-        team.OnChanged += RefreshUI;
+        if (team?.MessageBus != null)
+        {
+            team.MessageBus.Subscribe<TeamFormationAddedMsg>(OnTeamFormationAdded);
+            team.MessageBus.Subscribe<TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+            team.MessageBus.Subscribe<TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+        }
 
         RefreshUI();
     }
@@ -29,10 +34,39 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     {
         if (team != null)
         {
-            team.OnChanged -= RefreshUI;
+            if (team.MessageBus != null)
+            {
+                team.MessageBus.Unsubscribe<TeamFormationAddedMsg>(OnTeamFormationAdded);
+                team.MessageBus.Unsubscribe<TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+                team.MessageBus.Unsubscribe<TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+            }
         }
 
         base.OnUnsetPanelDatas();
+    }
+
+    void OnTeamFormationAdded(TeamFormationAddedMsg msg)
+    {
+        if (msg.Team != team)
+            return;
+
+        RefreshUI();
+    }
+
+    void OnTeamFormationRemoved(TeamFormationRemovedMsg msg)
+    {
+        if (msg.Team != team)
+            return;
+
+        RefreshUI();
+    }
+
+    void OnTeamSelectedFormationChanged(TeamSelectedFormationChangedMsg msg)
+    {
+        if (msg.Team != team)
+            return;
+
+        RefreshUI();
     }
 
     public override void RefreshUI()
@@ -74,7 +108,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     }
 }
 
-public class ClickAddFormationMsg
+public struct ClickAddFormationMsg
 {
     
 }

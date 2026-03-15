@@ -10,6 +10,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     [SerializeField] GameObject selectedObject;
     [SerializeField] TMP_Text formationNameText;
     
+    MessageBus externalMessageBus;
     Team team;
     TeamFormation teamFormation;
     UITeamFormationPanelElement panelElement;
@@ -17,25 +18,44 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
 
     public void Initialize(Team team, TeamFormation teamFormation, UITeamFormationPanelElement panelElement, bool isSelected)
     {
+        Unsubscribe();
+
         this.team = team;
         this.teamFormation = teamFormation;
         this.panelElement = panelElement;
         this.isSelected = isSelected;
-
-        teamFormation.OnChanged -= RefreshUI;
-        teamFormation.OnChanged += RefreshUI;
+        
+        externalMessageBus = panelElement.ExternalMessageBus;
+        Subscribe();
         
         RefreshUI();
     }
 
     void OnDisable()
     {
-        teamFormation.OnChanged -= RefreshUI;
+        Unsubscribe();
     }
 
     void OnDestroy()
     {
-        teamFormation.OnChanged -= RefreshUI;
+        Unsubscribe();
+    }
+
+    void Subscribe()
+    {
+        if (externalMessageBus != null)
+        {
+            externalMessageBus.Subscribe<TeamFormationChangedMsg>(OnFormationChanged);
+        }
+    }
+    
+    void Unsubscribe()
+    {
+        if (externalMessageBus != null)
+        {
+            externalMessageBus.Unsubscribe<TeamFormationChangedMsg>(OnFormationChanged);
+            externalMessageBus = null;
+        }
     }
     
     void RefreshUI()
@@ -57,6 +77,14 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
 
             index++;
         }
+    }
+
+    void OnFormationChanged(TeamFormationChangedMsg msg)
+    {
+        if (teamFormation == null || msg.Formation != teamFormation)
+            return;
+
+        RefreshUI();
     }
 
     public void OnClickRemoveFormation()
@@ -92,19 +120,19 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     }
 }
 
-public class RemoveTeamFormationItemMsg
+public struct RemoveTeamFormationItemMsg
 {
     public TeamFormation TeamFormation;
     public Item Item;
 }
 
-public class RemoveTeamFormationMsg
+public struct RemoveTeamFormationMsg
 {
     public TeamFormation TeamFormation;
     public Team Team;
 }
 
-public class SelectTeamFormationMsg
+public struct SelectTeamFormationMsg
 {
     public TeamFormation TeamFormation;
 }
