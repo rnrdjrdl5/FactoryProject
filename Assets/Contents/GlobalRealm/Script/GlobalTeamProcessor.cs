@@ -17,8 +17,6 @@ public class GlobalTeamProcessor : Processor
     {
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var teamPopup = panelAbility.CreatePanel<TeamPopup>(TeamPopup.PrefabPath);
-        var uiInventoryPanelElement = teamPopup.GetPanelElement<UIInventoryPanelElement>();
-        uiInventoryPanelElement.SetItemType(Tables.ItemType.Animal);
         
         teamPopup.SetTargetData(mainStorage, mainStorage.MessageBus);
     }

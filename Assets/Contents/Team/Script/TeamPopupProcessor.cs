@@ -4,106 +4,99 @@ using UnityEngine;
 
 public class TeamPopupProcessor : Processor
 {
-    const string FormationDefaultName = "Formation";
-    
+    Team team;
+    Inventory teamInventory;
     TeamPopup teamPopup;
-    UITeamFormationPanelElement uiTeamFormationPanelElement;
-    UIInventoryPanelElement uiInventoryPanelElement;
-    TeamFormation selectedTeamFormation;
+    
+    public override void Initialize(IInitData initData = null)
+    {
+        base.Initialize(initData);
+
+        teamPopup = Entity as TeamPopup;
+        teamPopup.OnSetPanelDatas += OnSetPanelDatas;
+    }
 
     public override void Ready()
     {
         base.Ready();
         
-        teamPopup = Entity as TeamPopup;
-        uiTeamFormationPanelElement = teamPopup.GetPanelElement<UITeamFormationPanelElement>();
-        uiInventoryPanelElement = teamPopup.GetPanelElement<UIInventoryPanelElement>();
-        
         teamPopup.MessageBus.Subscribe<SelectTeamFormationMsg>(SelectTeamFormation);
         teamPopup.MessageBus.Subscribe<RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
         teamPopup.MessageBus.Subscribe<RemoveTeamFormationMsg>(RemoveTeamFormation);
-        teamPopup.MessageBus.Subscribe<ClickInventoryItemMsg>(AddTeamFormationItem);
+        teamPopup.MessageBus.Subscribe<SelectInventoryItemMsg>(AddTeamFormationItem);
         teamPopup.MessageBus.Subscribe<ClickAddFormationMsg>(AddFormation);
-
-        UpdateEquipItemKeys();
         
     }
 
     public override void Uninitialize()
     {
+        teamPopup.OnSetPanelDatas -= OnSetPanelDatas;
         teamPopup.MessageBus.Unsubscribe<SelectTeamFormationMsg>(SelectTeamFormation);
         teamPopup.MessageBus.Unsubscribe<RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
         teamPopup.MessageBus.Unsubscribe<RemoveTeamFormationMsg>(RemoveTeamFormation);
-        teamPopup.MessageBus.Unsubscribe<ClickInventoryItemMsg>(AddTeamFormationItem);
+        teamPopup.MessageBus.Unsubscribe<SelectInventoryItemMsg>(AddTeamFormationItem);
         
         base.Uninitialize();
     }
 
+    void OnSetPanelDatas()
+    {
+        team = teamPopup.GetTargetPanelDatas<Team>();
+        
+        var bag = teamPopup.GetTargetPanelDatas<Bag>();
+        teamInventory = bag?.GetInventory(Tables.ItemType.Animal);
+    }
+
     void SelectTeamFormation(SelectTeamFormationMsg msg)
     {
-        selectedTeamFormation = msg.TeamFormation;
-        uiTeamFormationPanelElement.SetSelectedTeamFormation(msg.TeamFormation);
-    }
-
-    void RemoveTeamFormationItem(RemoveTeamFormationItemMsg msg)
-    {
-        msg.TeamFormation.RemovePlayer(msg.Item);
-        
-        selectedTeamFormation = msg.TeamFormation;
-        uiTeamFormationPanelElement.SetSelectedTeamFormation(msg.TeamFormation);
-
-        UpdateEquipItemKeys();
-    }
-    
-    void RemoveTeamFormation(RemoveTeamFormationMsg msg)
-    {
-        msg.Team.TryRemoveTeamFormation(msg.TeamFormation);
-
-        UpdateEquipItemKeys();
-    }
-
-    void AddTeamFormationItem(ClickInventoryItemMsg msg)
-    {
-        if (selectedTeamFormation.Players.Contains(msg.Item))
-        {
-            return;
-        }
-        
-        selectedTeamFormation.TryAddPlayer(msg.Item);
-
-        UpdateEquipItemKeys();
-    }
-
-    void AddFormation(ClickAddFormationMsg msg)
-    {
-        var team = teamPopup.GetTargetPanelDatas<Team>();
-        var nextCount = team.TeamFormations.Count + 1;
-        
-        team.AddTeamFormation($"{FormationDefaultName} {nextCount}");
-    }
-
-    void UpdateEquipItemKeys()
-    {
-        if (uiInventoryPanelElement == null)
-        {
-            return;
-        }
-        
-        var team = teamPopup.GetTargetPanelDatas<Team>();
         if (team == null)
         {
             return;
         }
-
-        var bag = teamPopup.GetTargetPanelDatas<Bag>();
-        var inventory = bag.GetInventory(Tables.ItemType.Animal);
-        var equipItemKeys = team.GetEquipItemKeys(inventory.Items);
         
-        SetEquipItemKeys(equipItemKeys);
+        team.SelectTeamFormation(msg.TeamFormation);
+    }
+
+    void RemoveTeamFormationItem(RemoveTeamFormationItemMsg msg)
+    {
+        if (team == null)
+        {
+            return;
+        }
+        
+        msg.TeamFormation.RemovePlayer(msg.Item);
+        teamInventory.Unequip(msg.Item);
+        team.SelectTeamFormation(msg.TeamFormation);
     }
     
-    public void SetEquipItemKeys(IEnumerable<Item> items)
+    void RemoveTeamFormation(RemoveTeamFormationMsg msg)
     {
-        uiInventoryPanelElement.SetEquipItemKeys(items);
+        if (team == null)
+        {
+            return;
+        }
+        
+        team.TryRemoveTeamFormation(msg.TeamFormation);
+    }
+
+    void AddTeamFormationItem(SelectInventoryItemMsg msg)
+    { 
+        if (team == null || team.SelectedTeamFormation.Players.Contains(msg.Item))
+        {
+            return;
+        }
+        
+        teamInventory.Equip(msg.Item);
+        team.SelectedTeamFormation.TryAddPlayer(msg.Item);
+    }
+
+    void AddFormation(ClickAddFormationMsg msg)
+    {
+        if (team == null)
+        {
+            return;
+        }
+        
+        team.AddTeamFormation();
     }
 }

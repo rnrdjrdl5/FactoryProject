@@ -16,19 +16,12 @@ public class UIItem : UISetter
     IDescription descriptionData;
     Action<Item> OnClickEvent;
     Item item;
-    bool isEquip;
-
+    
     public void UpdateItemData(Item item)
     {
-        UpdateItemData(item, false);
-    }
-    
-    public void UpdateItemData(Item item, bool isEquip)
-    {
         this.item = item;
-        this.isEquip = isEquip;
         
-        UpdateItemData(item.ItemData, item.ItemData, item.ItemData, item.Amount, isEquip);
+        UpdateItemData(item.ItemData, item.ItemData, item.ItemData, item.Amount, item.IsEquip);
     }
     
     public void UpdateItemData(IIconSprite iconData, IGradeType gradeData, IDescription descriptionData, int amount, bool isEquip)

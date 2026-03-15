@@ -915,6 +915,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIItem
       objectReference: {fileID: 0}
+    - target: {fileID: 2823946004425756678, guid: d4f4a053196eb40118dfeb86e1349d0d, type: 3}
+      propertyPath: isEquipObject
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7767008309556387269, guid: d4f4a053196eb40118dfeb86e1349d0d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1004,7 +1008,8 @@ PrefabInstance:
       value: 15.200012
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4099109935694070065, guid: d4f4a053196eb40118dfeb86e1349d0d, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4f4a053196eb40118dfeb86e1349d0d, type: 3}

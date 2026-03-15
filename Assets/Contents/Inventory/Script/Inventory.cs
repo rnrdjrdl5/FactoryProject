@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class Inventory
 {
     public IReadOnlyList<Item> Items => items;
+    public event Action OnChanged;
 
     List<Item> items = new();
     Tables.ItemType itemType;
@@ -32,6 +34,7 @@ public class Inventory
         }
         
         item.Acquire(amount);
+        OnChanged?.Invoke();
         
         return item;
     }
@@ -45,9 +48,35 @@ public class Inventory
         }
 
         item.Spend(amount);
+        OnChanged?.Invoke();
         
         return true;
     }
+
+    public void Equip(string itemKey)
+    {
+        var item = items.FirstOrDefault(item => item.ItemKey == itemKey);
+        Equip(item);
+    }
+
+    public void Equip(Item item)
+    {
+        item.SetEquip(true);
+        OnChanged?.Invoke();
+    }
+
+    public void Unequip(string itemKey)
+    {
+        var item = items.FirstOrDefault(item => item.ItemKey == itemKey);
+        Unequip(item);
+    }
+
+    public void Unequip(Item item)
+    {
+        item.SetEquip(false);
+        OnChanged?.Invoke();
+    }
+
 
     public static Inventory Create(Tables.ItemType itemType)
     {

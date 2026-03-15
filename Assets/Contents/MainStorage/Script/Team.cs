@@ -4,11 +4,14 @@ using System.Linq;
 
 public class Team : IEntityData
 {
+    const string FormationDefaultName = "Formation";
+    
     public event Action OnChanged;
     public IReadOnlyList<TeamFormation> TeamFormations => teamFormations;
+    public TeamFormation SelectedTeamFormation => selectedFormation;
     
     List<TeamFormation> teamFormations = new();
-    TeamFormation selectedTeam;
+    TeamFormation selectedFormation;
     
     public void Initialize(IInitData initData = null)
     {
@@ -19,11 +22,19 @@ public class Team : IEntityData
         
     }
 
-    public void AddTeamFormation(string formationName)
+    public TeamFormation AddTeamFormation(string formationName)
     {
         var teamFormation = TeamFormation.Create(formationName);
         teamFormations.Add(teamFormation);
         OnChanged?.Invoke();
+
+        return teamFormation;
+    }
+
+    public TeamFormation AddTeamFormation()
+    {
+        var nextCount = teamFormations.Count + 1;
+        return AddTeamFormation($"{FormationDefaultName} {nextCount}");
     }
 
     public bool TryRemoveTeamFormation(TeamFormation teamFormation)
@@ -38,15 +49,9 @@ public class Team : IEntityData
         return true;
     }
 
-    public IEnumerable<Item> GetEquipItemKeys(IEnumerable<Item> items)
+    public void SelectTeamFormation(TeamFormation teamFormation)
     {
-        if (items == null || !items.Any())
-        {
-            return null;
-        }
-
-        return teamFormations
-            .SelectMany(teamFormation => teamFormation.Players)
-            .Where(items.Contains);
+        selectedFormation = teamFormation;
+        OnChanged?.Invoke();
     }
 }

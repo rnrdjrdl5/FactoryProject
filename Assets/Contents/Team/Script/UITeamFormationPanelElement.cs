@@ -13,9 +13,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     IReadOnlyList<TeamFormation> teamFormationList;
     Tables.ItemType itemType = Tables.ItemType.Animal;
-    TeamFormation selectedTeamFormation;
     Team team;
-    
     
     protected override void OnSetPanelDatas()
     {
@@ -46,12 +44,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         scroller.Delegate ??= this;
         scroller.ReloadData();
     }
-
-    public void SetSelectedTeamFormation(TeamFormation teamFormation)
-    {
-        selectedTeamFormation = teamFormation;
-        RefreshUI();
-    }
+    
 
     public int GetNumberOfCells(EnhancedScroller scroller)
     {
@@ -68,7 +61,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         var cellObject = allocGameObject.AllocateObject();
         var cellView = cellObject.GetComponent<UITeamFormationListCellView>();
         var teamFormation = teamFormationList[dataIndex];
-        var isSelected = selectedTeamFormation != null && selectedTeamFormation == teamFormation;
+        var isSelected = team.SelectedTeamFormation != null && team.SelectedTeamFormation == teamFormation;
         cellView.Initialize(team, teamFormation, this, isSelected);
 
         return cellView;

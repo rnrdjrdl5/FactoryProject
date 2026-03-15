@@ -18,7 +18,7 @@ public class UIItemListCellView : EnhancedScrollerCellView
         {
             var cellObject = cellAllocator.AllocatedObjects[index];
             var uiItem = cellObject.GetComponent<UIItem>();
-            uiItem.UpdateItemData(item.Item, item.IsEquip);
+            uiItem.UpdateItemData(item.Item);
             uiItem.SetClickEvent(OnClickItem);
             index++;
         }

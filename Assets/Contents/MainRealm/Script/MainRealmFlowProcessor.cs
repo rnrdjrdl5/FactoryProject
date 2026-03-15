@@ -40,8 +40,14 @@ class LoadFlow : ProcessorFlow
         
         Entity.AddEntity<MainStorage>(MainStorage.PrefabPath);
         Entity.AddEntity<GlobalRealm>(GlobalRealm.PrefabPath);
-        
-        Finish();
+    }
+
+    public override void OnUpdateFlow()
+    {
+        if (Entity.IsReady)
+        {
+            Finish();
+        }
     }
 }
 
@@ -51,8 +57,9 @@ class IngameFlow : ProcessorFlow
     {
         base.OnEnterFlow();
 
-        var humanData = Tables.Player.Get(TablesKey.Player_Human);
-        var brain = BrainLogic.CreateBrainAndEntity(Processor.Realm, Brain.PrefabPath, humanData.prefabPath);
+        var processorAbility = Realm.GetAbility<ProcessorAbility>();
+        var teamProcessor = processorAbility.GetProcessor<MainRealmTeamProcessor>();
+        teamProcessor.CreatePlayerByTeamFormation();
         
         var spawnerInitData = new SpawnerInitData
         {

@@ -9,11 +9,13 @@ public class Item
     public string ItemKey => itemKey;
     public int MaxAmount => itemData.maxAmount;
     public int Amount => amount;
+    public bool IsEquip => isEquip;
     
     Tables.Item itemData;
     long uniqueId;
     string itemKey;
     int amount;
+    bool isEquip;
 
     public Item(string itemKey, int amount)
     {
@@ -42,6 +44,11 @@ public class Item
     public bool IsEmpty()
     {
         return amount <= 0;
+    }
+
+    public void SetEquip(bool equip)
+    {
+        isEquip = equip;
     }
 
     public static Item Create(string itemKey, int amount)

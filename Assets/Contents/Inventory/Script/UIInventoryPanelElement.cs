@@ -11,23 +11,17 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     [SerializeField] int lowCount;
     [SerializeField] AllocGameObject allocGameObject;
 
-    List<Item> equipItemKeys = new();
+    protected Bag bag;
+    protected Inventory inventory;
+    
     List<ExItemList> itemLists = new();
     Tables.ItemType itemType;
-    Bag bag;
-    Inventory inventory;
 
     protected override void OnSetPanelDatas()
     {
         base.OnSetPanelDatas();
         
         bag = GetTargetPanelDatas<Bag>();
-        inventory = bag.GetInventory(itemType);
-
-        if (inventory != null)
-        {
-            RefreshUI();
-        }
     }
 
     public override void RefreshUI()
@@ -40,7 +34,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
             var exItems = inventory.Items
                 .Skip(i)
                 .Take(lowCount)
-                .Select(item => ExItem.Create(item, equipItemKeys.Contains(item)));
+                .Select(ExItem.Create);
             itemLists.Add(ExItemList.Create(exItems));
         }
 
@@ -51,19 +45,10 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     public void SetItemType(Tables.ItemType itemType)
     {
         this.itemType = itemType;
-    }
-
-    public void SetEquipItemKeys(IEnumerable<Item> items)
-    {
-        equipItemKeys.Clear();
-        if (items != null)
-        {
-            equipItemKeys.AddRange(items);
-        }
-
+        inventory = bag.GetInventory(itemType);
         RefreshUI();
     }
-
+    
     public int GetNumberOfCells(EnhancedScroller scroller)
     {
         return itemLists.Count;
@@ -86,7 +71,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
 
     void ClickItem(Item item)
     {
-        var msg = new ClickInventoryItemMsg
+        var msg = new SelectInventoryItemMsg
         {
             Item = item
         };
@@ -95,7 +80,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     }
 }
 
-public class ClickInventoryItemMsg
+public class SelectInventoryItemMsg
 {
     public Item Item;
 }
