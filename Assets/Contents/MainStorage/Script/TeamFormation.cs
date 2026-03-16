@@ -49,7 +49,7 @@ public class TeamFormation : IMessageBus
 
     bool IsPlayerType(Item item)
     {
-        return item.ItemData.itemType == ItemType.Animal;
+        return item.ItemData.itemType == ItemType.Player;
     }
 
     public static TeamFormation Create(string formationName)

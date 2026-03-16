@@ -7,6 +7,6 @@ namespace Tables
         Weapon = 2,
         Armor = 3,
         Pants = 4,
-        Animal = 5,
+        Player = 5,
     }
 }

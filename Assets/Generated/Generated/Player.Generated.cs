@@ -22,6 +22,7 @@ namespace Tables
         public GradeType gradeType { get; set; }
         public string dropPlayerKey { get; set; } = string.Empty;
         public float dropPlayerPercent { get; set; }
+        public FactionType factionType { get; set; }
 
         private static readonly System.Collections.Generic.Dictionary<string, Player> _table = new System.Collections.Generic.Dictionary<string, Player>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, Player> Table => _table;

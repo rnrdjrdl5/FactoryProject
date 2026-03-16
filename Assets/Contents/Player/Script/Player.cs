@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [EntityData(typeof(Bag))]
-[EntityData(typeof(Faction))]
 public class Player : Entity
 {
     public Tables.Player PlayerData => playerData;

@@ -61,11 +61,11 @@ class IngameFlow : ProcessorFlow
         var teamProcessor = processorAbility.GetProcessor<MainRealmTeamProcessor>();
         teamProcessor.CreatePlayerBySelectedTeamFormation();
         
-        var spawnerInitData = new SpawnerInitData
-        {
-            SpawnerKey = TablesKey.Spawner_Test
-        };
-        var spawner = Processor.Realm.AddEntity<Spawner>(Spawner.PrefabName, spawnerInitData);
+        // var spawnerInitData = new SpawnerInitData
+        // {
+        //     SpawnerKey = TablesKey.Spawner_Test
+        // };
+        // var spawner = Processor.Realm.AddEntity<Spawner>(Spawner.PrefabName, spawnerInitData);
 
         // var panelAbility = Processor.Realm.GetAbility<PanelAbility>();
         // var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);

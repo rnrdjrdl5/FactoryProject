@@ -44,7 +44,7 @@ public class TeamPopupProcessor : Processor
         team = teamPopup.GetTargetPanelDatas<Team>();
         
         var bag = teamPopup.GetTargetPanelDatas<Bag>();
-        teamInventory = bag?.GetInventory(Tables.ItemType.Animal);
+        teamInventory = bag?.GetInventory(Tables.ItemType.Player);
     }
 
     void SelectTeamFormation(UIMsg.SelectTeamFormationMsg msg)

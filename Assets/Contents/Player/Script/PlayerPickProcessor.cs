@@ -13,7 +13,7 @@ public class PlayerPickProcessor : Processor
 
         mainStorage = FactoryEntry.MainStorage;
         bag = mainStorage.GetEntityData<Bag>();
-        inventory = bag.GetInventory(ItemType.Animal);
+        inventory = bag.GetInventory(ItemType.Player);
     }
 
     public void PickItem()

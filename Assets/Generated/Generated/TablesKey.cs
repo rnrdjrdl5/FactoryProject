@@ -3,6 +3,10 @@ namespace Tables
 {
     public static class TablesKey
     {
+        public static string FactionRelation_Faction2 = "FactionRelation_Faction2";
+        public static string FactionRelation_Faction3 = "FactionRelation_Faction3";
+        public static string FactionRelation_Faction4 = "FactionRelation_Faction4";
+        public static string FactionRelation_Hero = "FactionRelation_Hero";
         public static string Grade_Common = "Grade_Common";
         public static string Grade_Epic = "Grade_Epic";
         public static string Grade_Legend = "Grade_Legend";

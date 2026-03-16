@@ -12,7 +12,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     [SerializeField] AllocGameObject allocGameObject;
 
     IReadOnlyList<TeamFormation> teamFormationList;
-    Tables.ItemType itemType = Tables.ItemType.Animal;
+    Tables.ItemType itemType = Tables.ItemType.Player;
     Team team;
     
     protected override void OnSetPanelDatas()

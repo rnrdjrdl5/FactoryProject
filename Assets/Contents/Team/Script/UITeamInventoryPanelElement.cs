@@ -9,7 +9,7 @@ public class UITeamInventoryPanelElement : UIInventoryPanelElement
     protected override void OnSetPanelDatas()
     {
         base.OnSetPanelDatas();
-        SetItemType(Tables.ItemType.Animal);
+        SetItemType(Tables.ItemType.Player);
 
         if (inventory != null)
         {
