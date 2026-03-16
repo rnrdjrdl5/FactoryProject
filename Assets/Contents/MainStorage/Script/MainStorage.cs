@@ -2,6 +2,7 @@ using UnityEngine;
 
 [EntityData(typeof(Team))]
 [EntityData(typeof(Bag))]
+[EntityData(typeof(FactionRelation))]
 public class MainStorage : Storage
 {
     public static string PrefabPath = $"MainStorage/{typeof(MainStorage)}";
