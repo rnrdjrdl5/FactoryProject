@@ -19,7 +19,18 @@ public class MainStorage : Storage
         var teamFormation = team.AddTeamFormation();
         
         teamFormation.TryAddPlayer(humanItem);
+        
+        var eagleItem = inventory.AddItem(Tables.TablesKey.Item_Eagle, 1);
+        var snakeItem = inventory.AddItem(Tables.TablesKey.Item_Snake, 1);
+        var dogItem = inventory.AddItem(Tables.TablesKey.Item_Dog, 1);
+        teamFormation.TryAddPlayer(eagleItem);
+        teamFormation.TryAddPlayer(snakeItem);
+        teamFormation.TryAddPlayer(dogItem);
+        
         humanItem.SetEquip(true);
+        snakeItem.SetEquip(true);
+        dogItem.SetEquip(true);
+        eagleItem.SetEquip(true);
         
         team.SelectTeamFormation(teamFormation);
     }
