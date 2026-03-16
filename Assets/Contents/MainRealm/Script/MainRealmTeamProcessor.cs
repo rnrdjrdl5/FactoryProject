@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class MainRealmTeamProcessor : Processor
 {
@@ -73,8 +74,9 @@ public class MainRealmTeamProcessor : Processor
         {
             var item = teamFormation.Players[i];
             var playerData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
-            var brain = BrainLogic.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath);
-            
+
+            var playerInitData = new PlayerInitData() { PlayerKey = playerData.Key, Position = Vector3.zero };
+            var brain = BrainLogic.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
             var isAI = teamFormation.Leader != item;
             brain.SetAI(isAI);
 

@@ -37,12 +37,9 @@ public class SpawnerProcessor : Processor
     {
         var spawnedPlayerKey = spawner.SpawnerData.GetSpawnPlayerKey();
         var playerData = Tables.Player.Get(spawnedPlayerKey);
-        var prefabPath = playerData.prefabPath;
+        var playerInitData = new PlayerInitData() { PlayerKey = spawnedPlayerKey, Position = position };
 
-        var player = Realm.AddEntity<Player>(prefabPath, new PlayerInitData() { PlayerKey = spawnedPlayerKey , Position = position});
-        var brain = Realm.AddEntity<Brain>(Brain.PrefabPath);
-        brain.AttachControll(player);
-        
+        var brain = BrainLogic.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
         SetAIBrain(brain);
         
         return brain;
