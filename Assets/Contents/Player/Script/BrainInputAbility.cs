@@ -8,6 +8,7 @@ public class BrainInputAbility : Ability
     PlayerMoveAbility playerMoveAbility;
     PlayerPickProcessor playerPickProcessor;
     PlayerUIProcessor playerUIProcessor;
+    SkillAbility skillAbility;
     
     public override void Initialize(IInitData initData = null)
     {
@@ -57,6 +58,11 @@ public class BrainInputAbility : Ability
         {
             playerUIProcessor.OpenInventory();
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            skillAbility.UseSkill();            
+        }
     }
 
     void OnControll(IControlled controlled)
@@ -64,6 +70,7 @@ public class BrainInputAbility : Ability
         var controlledEntity = controlled as Entity;
         
         playerMoveAbility = controlledEntity.GetAbility<PlayerMoveAbility>();
+        skillAbility = controlledEntity.GetAbility<SkillAbility>();
         
         var processorAbility = controlledEntity.GetAbility<PlayerProcessorAbility>();
         if (processorAbility != null)

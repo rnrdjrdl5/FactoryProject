@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class SpawnerProcessor : Processor
 {
+    MainRealm mainRealm;
+    MainRealmProcessor realmProcessor;
+    
     Spawner spawner;
     
     TimerAbility timerAbility;
@@ -10,9 +13,12 @@ public class SpawnerProcessor : Processor
     public override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);
+
+        mainRealm = Entity.GetParent<MainRealm>();
+        var mainRealmProcessorAbility = mainRealm.GetAbility<MainRealmProcessorAbility>();
+        realmProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmProcessor>();
         
         spawner = Entity as Spawner;
-        
         timerAbility = Entity.GetAbility<TimerAbility>();
         timerAbility.SetTimerInterval(spawner.SpawnerData.tick);
         
@@ -38,19 +44,15 @@ public class SpawnerProcessor : Processor
         var spawnedPlayerKey = spawner.SpawnerData.GetSpawnPlayerKey();
         var playerData = Tables.Player.Get(spawnedPlayerKey);
         var playerInitData = new PlayerInitData() { PlayerKey = spawnedPlayerKey, Position = position };
-
-        var brain = BrainLogic.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
-        SetAIBrain(brain);
         
-        return brain;
-    }
-
-    void SetAIBrain(Brain brain)
-    {
+        var tuple = realmProcessor.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
+        var brain = tuple.brain;
         brain.SetAI(true);
         
-        var processorAbility = brain.GetAbility<BrainProcessorAbility>();
-        var brainProcessor = processorAbility.GetProcessor<BrainProcessor>();
-        brainProcessor.SetAIBrain();
+        var brainProcessorAbility = brain.GetAbility<BrainProcessorAbility>();
+        var brainFlowProcessor = brainProcessorAbility.GetProcessor<BrainFlowProcessor>();
+        brainFlowProcessor.ChangeFlow<CommonWildPlayerFlow>();
+        
+        return brain;
     }
 }

@@ -54,22 +54,22 @@ public class StraighProjectileSkillProcessor : SkillProcessor
     {
         SkillProcessor skillProcessor;
         IStraightProjectileContext straightProjectileContext;
-        ObjectPoolAbility objectPoolAbility;
+        Faction casterFaction;
 
         public override void OnEnterFlow()
         {
             base.OnEnterFlow();
 
-            objectPoolAbility = Entity.RootAbilitySet.GetAbility<ObjectPoolAbility>();
+            skillProcessor = Processor as SkillProcessor;
         }
 
         public override void OnUpdateFlow()
         {
             base.OnUpdateFlow();
             
-            CacheContext();
-
+            straightProjectileContext ??= skillProcessor.SkillContext as IStraightProjectileContext;
             Entity.transform.position = straightProjectileContext.NextPosition(Entity.transform.position, Time.deltaTime);
+            
             if (elapsedTime >= straightProjectileContext.ProjectileTime)
             {
                 Parent.ActivateChildFlow<DestProjectileFlow>();
@@ -78,17 +78,10 @@ public class StraighProjectileSkillProcessor : SkillProcessor
             DamageProcess();
         }
 
-        void CacheContext()
-        {
-            if (straightProjectileContext == null)
-            { 
-                skillProcessor = Processor as SkillProcessor; 
-                straightProjectileContext = skillProcessor.SkillContext as IStraightProjectileContext;
-            }
-        }
-
         void DamageProcess()
         {
+            casterFaction ??= skillProcessor.SkillContext.Caster.GetEntityData<Faction>();
+            
             var collider = Physics2D.OverlapCircle(Entity.transform.position, straightProjectileContext.Radius, Settings.LayerId.EntityMask);
             if (collider == null || collider.gameObject == skillProcessor.SkillContext.CasterObject)
             {
@@ -96,6 +89,13 @@ public class StraighProjectileSkillProcessor : SkillProcessor
             }
 
             var targetEntity = collider.GetComponent<Entity>();
+            var targetFaction = targetEntity.GetEntityData<Faction>();
+            if (Tables.FactionRelation.GetRelation(casterFaction.FactionType, targetFaction.FactionType) !=
+                Tables.FactionRelationType.Hostile)
+            {
+                return;
+            }
+            
             var hpAbility = targetEntity.GetAbility<HpAbility>();
             hpAbility.TryApplyDamage(skillProcessor.SkillContext.Caster,5);
             Realm.RemoveChild(Entity);

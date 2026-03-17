@@ -260,8 +260,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody2D: {fileID: 6705612036161930933}
-  followDistance: 2
-  followSpeed: 5
+  followDistance: 0.4
+  followSpeed: 7
 --- !u!50 &6705612036161930933
 Rigidbody2D:
   serializedVersion: 5

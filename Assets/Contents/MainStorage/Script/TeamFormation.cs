@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Tables;
-using UnityEngine;
 
 public class TeamFormation : IMessageBus
 {
@@ -56,7 +54,7 @@ public class TeamFormation : IMessageBus
 
     bool IsPlayerType(Item item)
     {
-        return item.ItemData.itemType == ItemType.Player;
+        return item.ItemData.itemType == Tables.ItemType.Player;
     }
 
     void UpdateLeader()

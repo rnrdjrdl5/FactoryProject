@@ -1,4 +1,3 @@
-using Tables;
 using UnityEngine;
 
 public class PlayerPickProcessor : Processor
@@ -13,7 +12,7 @@ public class PlayerPickProcessor : Processor
 
         mainStorage = FactoryEntry.MainStorage;
         bag = mainStorage.GetEntityData<Bag>();
-        inventory = bag.GetInventory(ItemType.Player);
+        inventory = bag.GetInventory(Tables.ItemType.Player);
     }
 
     public void PickItem()

@@ -76,18 +76,32 @@ public class MainRealmTeamProcessor : Processor
             var playerData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
 
             var playerInitData = new PlayerInitData() { PlayerKey = playerData.Key, Position = Vector3.zero };
-            var brain = BrainLogic.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
-            var isAI = teamFormation.Leader != item;
-            brain.SetAI(isAI);
+            var mainRealmProcessor = ProcessorAbility.GetProcessor<MainRealmProcessor>();
+            var tuple = mainRealmProcessor.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
+            var brain = tuple.brain;
+            var player = tuple.player;
 
-            var player = brain.Controll as Player;
-            players.Add(player);
-            brains.Add(brain);
+            var faction = player.GetEntityData<Faction>();
+            faction.SetFactionType(Tables.FactionType.Hero);
+            
+            players.Add(tuple.player);
+            brains.Add(tuple.brain);
+            
+            var processorAbility = brain.GetAbility<BrainProcessorAbility>();
+            var brainFlowProcessor = processorAbility.GetProcessor<BrainFlowProcessor>();
 
             if (prevPlayer !=null)
             {
-                var followAbility = player.GetAbility<PlayerFollowAbility>();
+                var followAbility = tuple.player.GetAbility<PlayerFollowAbility>();
                 followAbility.SetTarget(prevPlayer);
+                brainFlowProcessor.ChangeFlow<FollowCivilizedPlayerFlow>();
+                brain.SetAI(true);
+            }
+
+            else
+            {
+                brainFlowProcessor.ChangeFlow<CommonCivilizedPlayerFlow>();
+                brain.SetAI(false);
             }
 
             prevPlayer = player;

@@ -35,7 +35,7 @@ public class PlayerFollowAbility : Ability
         base.Uninitialize();
     }
 
-    void FixedUpdate()
+    public void Move()
     {
         if (targetPlayer == null || rigidbody2D == null)
         {

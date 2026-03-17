@@ -16,21 +16,18 @@ public class SkillAbility : Ability
         processorAbility = Entity.GetAbility<ProcessorAbility>();
     }
 
-    public void Update()
+    public void UseSkill()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var context = BaseSkillContext.Create<CtQSkillContext>(realm, Entity);
-            context.ProjectileTime = 3.0f;
-            context.ProjectileSpeed = 3.0f;
-            context.Direction = UnityEngine.Random.insideUnitCircle;
-            context.Radius = 1.0f;
+        var context = BaseSkillContext.Create<CtQSkillContext>(realm, Entity);
+        context.ProjectileTime = 3.0f;
+        context.ProjectileSpeed = 3.0f;
+        context.Direction = UnityEngine.Random.insideUnitCircle;
+        context.Radius = 1.0f;
 
-            string skillKey = "CtQ";
-            if (SkillFactory.TryCreateSkillProcessor(processorAbility, skillKey, out var skillProcessor))
-            {
-                skillProcessor.SetSkillContext(context);
-            }
-        }
+        string skillKey = "CtQ";
+        if (SkillFactory.TryCreateSkillProcessor(processorAbility, skillKey, out var skillProcessor))
+        {
+            skillProcessor.SetSkillContext(context);
+        }   
     }
 }

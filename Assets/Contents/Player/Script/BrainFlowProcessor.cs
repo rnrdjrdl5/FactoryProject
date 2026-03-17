@@ -2,105 +2,21 @@ using UnityEngine;
 
 public class BrainFlowProcessor : Processor
 {
+    FlowRunnerAbility flowRunnerAbility;
+    
     public override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);
 
-        var flowAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
+        flowRunnerAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
+        ChangeFlow<CommonWildPlayerFlow>();
+    }
 
-        var rootFlow = Flow.Create<RootFlow>(ProcessorAbility.Entity);
+    public void ChangeFlow<TFlow>() where TFlow : ProcessorFlow, new()
+    {
+        var rootFlow = Flow.Create<TFlow>(Entity);
         rootFlow.SetProcessor(this);
-        flowAbility.SetRootFlow(rootFlow);
-        
+        flowRunnerAbility.SetRootFlow(rootFlow);
         rootFlow.NextChildFlow();
-    }
-
-    public class RootFlow : ProcessorFlow
-    {
-        public override void OnAddFlow()
-        {
-            base.OnAddFlow();
-
-            AddChild<NoneFlow>(Processor);
-            AddChild<AIFlow>(Processor);
-        }
-    }
-
-    public class NoneFlow : ProcessorFlow
-    {
-        
-    }
-
-    public class AIFlow : ProcessorFlow
-    {
-        public override void OnAddFlow()
-        {
-            base.OnAddFlow();
-
-            AddChild<IdleFlow>(Processor);
-            AddChild<MoveFlow>(Processor);
-        }
-    }
-
-    public class IdleFlow : ProcessorFlow
-    {
-        public float Duration { get; private set; } = 1;
-        
-        public override void OnUpdateFlow()
-        {
-            base.OnUpdateFlow();
-
-            if (elapsedTime >= Duration)
-            {
-                parent.ActivateChildFlow<MoveFlow>();
-            }
-        }
-
-        public void SetDuration(float duration)
-        {
-            Duration = duration;
-        }
-    }
-    
-    public class MoveFlow : ProcessorFlow
-    {
-        public float Duration { get; private set; } = 1;
-        
-        PlayerMoveAbility moveAbility;
-        Vector2 dir;
-
-        public override void OnEnterFlow()
-        {
-            base.OnEnterFlow();
-
-            var brain = Processor.Entity as Brain;
-            var entity = brain.Controll as Entity;
-            moveAbility = entity.GetAbility<PlayerMoveAbility>();
-            
-            dir = Random.insideUnitCircle;
-        }
-
-        public override void OnUpdateFlow()
-        {
-            base.OnUpdateFlow();
-
-            if (elapsedTime >= Duration)
-            {
-                parent.ActivateChildFlow<IdleFlow>();
-                return;
-            }
-
-            if (moveAbility == null)
-            {
-                return;
-            }
-
-            moveAbility.Move(new Vector2(dir.x, dir.y));
-        }
-
-        public void SetDuration(float duration)
-        {
-            Duration = duration;
-        }
     }
 }
