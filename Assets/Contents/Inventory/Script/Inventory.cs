@@ -27,7 +27,7 @@ public class Inventory : IMessageBus
         var item = items.FirstOrDefault(item => item.ItemKey == itemKey && !item.IsFull());
         if (item == null)
         {
-            item = new Item(itemKey, amount);
+            item = Item.Create(itemKey, amount);
             items.Add(item);
 
             return item;

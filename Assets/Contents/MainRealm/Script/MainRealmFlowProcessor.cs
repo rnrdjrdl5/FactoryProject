@@ -36,6 +36,9 @@ class LoadFlow : ProcessorFlow
         
         var gameData = Realm.LoadResources<TextAsset>("Core/GameData");
         DataLoader.LoadAllData(gameData.bytes);
+        Tables.EnumLogic.CachingTable();
+        
+        Debug.Log(Tables.Item.Table);
         
         Entity.AddEntity<MainStorage>(MainStorage.PrefabPath);
         Entity.AddEntity<GlobalRealm>(GlobalRealm.PrefabPath);

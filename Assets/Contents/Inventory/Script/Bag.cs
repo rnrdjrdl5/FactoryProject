@@ -10,7 +10,7 @@ public class Bag : IEntityData, IMessageBus
     public void Initialize(IInitData initData = null)
     {
         inventoryTab.Clear();
-        foreach (var itemType in Tables.Item.ItemTypes)
+        foreach (var itemType in Tables.EnumLogic.ItemTypes)
         {
             var inventory = Inventory.Create(itemType);
             inventory.MessageBus = MessageBus;

@@ -53,7 +53,6 @@ public class Item
 
     public static Item Create(string itemKey, int amount)
     {
-        var itemData = Tables.Item.Get(itemKey);
         return new Item(itemKey,amount);
     }
 }

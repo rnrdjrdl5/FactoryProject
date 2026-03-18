@@ -6,5 +6,7 @@ namespace Tables
         Str = 1,
         Int = 2,
         Dex = 3,
+        Physical = 4,
+        Magical = 5,
     }
 }

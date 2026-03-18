@@ -6,7 +6,7 @@ namespace Tables
         Gold = 1,
         Weapon = 2,
         Armor = 3,
-        Pants = 4,
+        Accessory = 4,
         Player = 5,
     }
 }
