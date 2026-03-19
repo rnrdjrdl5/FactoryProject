@@ -40,6 +40,7 @@ public class Team : IEntityData, IMessageBus
         teamFormation.OnSetMessageBus();
         
         teamFormations.Add(teamFormation);
+        
         MessageBus?.Publish(new EntityDataMsg.TeamFormationAddedMsg
         {
             Team = this,
@@ -63,6 +64,7 @@ public class Team : IEntityData, IMessageBus
         }
 
         teamFormations.Remove(teamFormation);
+        
         if (selectedFormation == teamFormation)
         {
             selectedFormation = null;

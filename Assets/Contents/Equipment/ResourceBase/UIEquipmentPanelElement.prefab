@@ -271,10 +271,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b940cb0c148d64954a1b0c4e8def54e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiPlayerItem: {fileID: 7918157416744607074}
-  uiWeaponItem: {fileID: 7745827854149982107}
-  uiArmorItem: {fileID: 1259058746592391252}
-  uiAccessoryItem: {fileID: 2593394656020451630}
+  slots:
+  - type: 2
+    ui: {fileID: 7745827854149982107}
+    clickable: 1
+  - type: 3
+    ui: {fileID: 1259058746592391252}
+    clickable: 1
+  - type: 4
+    ui: {fileID: 2593394656020451630}
+    clickable: 1
+  - type: 5
+    ui: {fileID: 7918157416744607074}
+    clickable: 0
 --- !u!1001 &821814496738885967
 PrefabInstance:
   m_ObjectHideFlags: 0

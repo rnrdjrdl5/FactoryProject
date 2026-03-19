@@ -7,13 +7,15 @@ public class EquipmentPopupProcessor : Processor
     EquipmentPopup equipmentPopup;
     UIEquipmentPanelElement uiEquipmentPanelElement;
     UIInventoryPanelElement uiInventoryPanelElement;
+
+    Item selectedPlayer;
     
     public override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);
         
         equipmentPopup = Entity as EquipmentPopup;
-        equipmentPopup.OnSetPanelDatas += OnSetPanelDatas;
+        equipmentPopup.OnSetPanelDatasAction += OnSetPanelDatasAction;
         uiEquipmentPanelElement = equipmentPopup.GetPanelElement<UIEquipmentPanelElement>();
         uiInventoryPanelElement = equipmentPopup.GetPanelElement<UIInventoryPanelElement>();
     }
@@ -29,7 +31,7 @@ public class EquipmentPopupProcessor : Processor
 
     public override void Uninitialize()
     {
-        equipmentPopup.OnSetPanelDatas -= OnSetPanelDatas;
+        equipmentPopup.OnSetPanelDatasAction -= OnSetPanelDatasAction;
         equipmentPopup.MessageBus.Unsubscribe<UIMsg.SelectEquipItemMsg>(SelectEquipItem);
         equipmentPopup.MessageBus.Unsubscribe<UIMsg.SelectTeamLineItemMsg>(SelectTeamLineItem);
         equipmentPopup.MessageBus.Unsubscribe<UIMsg.SelectInventoryItemMsg>(SelectInventoryItem);
@@ -37,7 +39,7 @@ public class EquipmentPopupProcessor : Processor
         base.Uninitialize();
     }
 
-    void OnSetPanelDatas()
+    void OnSetPanelDatasAction()
     {
         equipment = equipmentPopup.GetTargetPanelDatas<Equipment>();
     }
@@ -45,32 +47,16 @@ public class EquipmentPopupProcessor : Processor
     void SelectEquipItem(UIMsg.SelectEquipItemMsg msg)
     {
         equipment.TryUnequipItem(msg.Item);
-
-        if (msg.Item.ItemData.itemType == ItemType.Weapon)
-        {
-            uiEquipmentPanelElement.SetWeaponItem(msg.Item);
-        }
-        
-        else if (msg.Item.ItemData.itemType == ItemType.Armor)
-        {
-            uiEquipmentPanelElement.SetArmorItem(msg.Item);
-        }
-        
-        else if (msg.Item.ItemData.itemType == ItemType.Accessory)
-        {
-            uiEquipmentPanelElement.SetAccessoryItem(msg.Item);
-        }
     }
 
     void SelectTeamLineItem(UIMsg.SelectTeamLineItemMsg msg)
     {
-        equipmentPopup.GetPanelElement<UIEquipmentPanelElement>();
-        uiEquipmentPanelElement.SetPlayerItem(msg.Item);
+        selectedPlayer = msg.Item;
+        uiEquipmentPanelElement.SetEquip(msg.Item);
     }
 
     void SelectInventoryItem(UIMsg.SelectInventoryItemMsg msg)
     {
         equipment.TryEquipItem(msg.Item);
-        uiInventoryPanelElement.RefreshUI();
     }
 }

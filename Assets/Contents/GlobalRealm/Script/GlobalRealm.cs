@@ -20,5 +20,10 @@ public class GlobalRealm : Realm
         {
             globalTeamProcessor.OpenTeam();
         }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            globalTeamProcessor.OpenEquipment();
+        }
     }
 }

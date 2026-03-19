@@ -13,7 +13,7 @@ public class TeamPopupProcessor : Processor
         base.Initialize(initData);
 
         teamPopup = Entity as TeamPopup;
-        teamPopup.OnSetPanelDatas += OnSetPanelDatas;
+        teamPopup.OnSetPanelDatasAction += OnSetPanelDatasAction;
     }
 
     public override void Ready()
@@ -30,7 +30,7 @@ public class TeamPopupProcessor : Processor
 
     public override void Uninitialize()
     {
-        teamPopup.OnSetPanelDatas -= OnSetPanelDatas;
+        teamPopup.OnSetPanelDatasAction -= OnSetPanelDatasAction;
         teamPopup.MessageBus.Unsubscribe<UIMsg.SelectTeamFormationMsg>(SelectTeamFormation);
         teamPopup.MessageBus.Unsubscribe<UIMsg.RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
         teamPopup.MessageBus.Unsubscribe<UIMsg.RemoveTeamFormationMsg>(RemoveTeamFormation);
@@ -39,7 +39,7 @@ public class TeamPopupProcessor : Processor
         base.Uninitialize();
     }
 
-    void OnSetPanelDatas()
+    void OnSetPanelDatasAction()
     {
         team = teamPopup.GetTargetPanelDatas<Team>();
         

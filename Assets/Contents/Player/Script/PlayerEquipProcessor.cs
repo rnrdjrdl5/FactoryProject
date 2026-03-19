@@ -10,25 +10,25 @@ public class PlayerEquipProcessor : Processor
         stat = Entity.GetEntityData<Stat>();
         equipment = Entity.GetEntityData<Equipment>();
 
-        equipment.OnEquip += OnEquip;
-        equipment.OnUnequip += OnUnequip;
+        equipment.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
+        equipment.MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
     }
 
     public override void Uninitialize()
     {
-        equipment.OnEquip -= OnEquip;
-        equipment.OnUnequip -= OnUnequip;
+        equipment.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
+        equipment.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
         
         base.Uninitialize();
     }
 
-    void OnEquip(Item item)
+    void EquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
     {
-        stat.AddStats(item.ItemData);
+        stat.AddStats(msg.Item.ItemData);
     }
 
-    void OnUnequip(Item item)
+    void UnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
     {
-        stat.RemoveStats(item.ItemData);
+        stat.RemoveStats(msg.Item.ItemData);
     }
 }

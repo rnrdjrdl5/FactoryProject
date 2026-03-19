@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Equipment : IEntityData
+public class Equipment : IEntityData, IMessageBus
 {
-    public event Action<Item> OnEquip;
-    public event Action<Item> OnUnequip;
+    public MessageBus MessageBus { get; set; }
     
     Dictionary<Tables.ItemType, string> equipItems = new();
     
@@ -31,7 +30,12 @@ public class Equipment : IEntityData
         
         equipItems.Add(item.ItemData.itemType, item.ItemKey);
         item.SetEquip(true);
-        OnEquip?.Invoke(item);
+        
+        MessageBus?.Publish(new EntityDataMsg.EquipmentEquipMsg
+        {
+            Equipment = this,
+            Item = item
+        });
 
         return true;
     }
@@ -45,8 +49,35 @@ public class Equipment : IEntityData
 
         equipItems.Remove(item.ItemData.itemType);
         item.SetEquip(false);
-        OnUnequip?.Invoke(item);
+        
+        MessageBus?.Publish(new EntityDataMsg.UnequipmentEquipMsg
+        {
+            Equipment = this,
+            Item = item
+        });
 
         return true;
+    }
+    
+    public void OnSetMessageBus()
+    {
+        
+    }
+}
+
+public static partial class EntityDataMsg
+{
+    public struct EquipmentEquipMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Equipment Equipment;
+        public Item Item;
+    }
+
+    public struct UnequipmentEquipMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.EntityData;
+        public Equipment Equipment;
+        public Item Item;
     }
 }
