@@ -33,21 +33,25 @@ public class UIEquipmentPanelElement : PanelElement
     public void SetPlayerItem(Item item)
     {
         playerItem = item;
+        RefreshUI();
     }
 
     public void SetWeaponItem(Item item)
     {
         weaponItem = item;
+        RefreshUI();
     }
     
     public void SetArmorItem(Item item)
     {
         armorItem = item;
+        RefreshUI();
     }
     
     public void SetAccessoryItem(Item item)
     {
         accessoryItem = item;
+        RefreshUI();
     }
 
     void ClickItem(Item item)
@@ -63,6 +67,16 @@ public class UIEquipmentPanelElement : PanelElement
         };
 
         Panel.MessageBus.Publish(msg);
+    }
+
+    public override void RefreshUI()
+    {
+        base.RefreshUI();
+
+        uiWeaponItem.UpdateItemData(weaponItem);
+        uiArmorItem.UpdateItemData(armorItem);
+        uiAccessoryItem.UpdateItemData(accessoryItem);
+        uiPlayerItem.UpdateItemData(playerItem);
     }
 }
 
