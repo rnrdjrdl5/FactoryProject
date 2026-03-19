@@ -14,14 +14,13 @@ namespace Tables
             {
                 return false;
             }
-
-            result = CanEquip(itemData);
+            result = itemData.CanEquip();
             return true;
         }
         
-        public static bool CanEquip(Item item)
+        public bool CanEquip()
         {
-            return item.itemType is ItemType.Accessory or ItemType.Armor or ItemType.Weapon;
+            return itemType is ItemType.Accessory or ItemType.Armor or ItemType.Weapon;
         }
     }
 }
