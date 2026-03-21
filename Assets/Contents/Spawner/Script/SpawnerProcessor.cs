@@ -45,7 +45,7 @@ public class SpawnerProcessor : Processor
         var playerData = Tables.Player.Get(spawnedPlayerKey);
         var playerInitData = new PlayerInitData() { PlayerKey = spawnedPlayerKey, Position = position };
         
-        var tuple = realmProcessor.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
+        var tuple = realmProcessor.CreateBrainAndPlayer(Realm, Brain.PrefabPath, playerData.prefabPath, playerInitData);
         var brain = tuple.brain;
         brain.SetAI(true);
         

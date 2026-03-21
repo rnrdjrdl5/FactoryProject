@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class Inventory : IMessageBus
 {
     public IReadOnlyList<Item> Items => items;
-    public MessageBus MessageBus { get; set; }
+    [JsonIgnore] public MessageBus MessageBus { get; set; }
 
-    List<Item> items = new();
-    Tables.ItemType itemType;
+    [JsonProperty] List<Item> items = new();
+    [JsonProperty] Tables.ItemType itemType;
     
     public void Initialize(Tables.ItemType itemType)
     {
@@ -22,24 +23,24 @@ public class Inventory : IMessageBus
         
     }
     
-    public Item AddItem(string itemKey, int amount)
+    public Item AddItem(Item newItem)
     {
-        var item = items.FirstOrDefault(item => item.ItemKey == itemKey && !item.IsFull());
+        var item = items.FirstOrDefault(x => x.UniqueId == newItem.UniqueId && !x.IsFull());
         if (item == null)
         {
-            item = Item.Create(itemKey, amount);
-            items.Add(item);
-
-            return item;
+            items.Add(newItem);
+            item = newItem;
         }
-        
-        item.Acquire(amount);
-        
+        else
+        {
+            item.Acquire(newItem.Amount);
+        }
+
         MessageBus?.Publish(new EntityDataMsg.InventoryChangedMsg
         {
             Inventory = this
         });
-        
+
         return item;
     }
 

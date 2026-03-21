@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class Bag : IEntityData, IMessageBus
 {
-    public MessageBus MessageBus { get; set; }
+    [JsonIgnore] public MessageBus MessageBus { get; set; }
     
-    Dictionary<Tables.ItemType, Inventory> inventoryTab = new();
+    [JsonProperty] Dictionary<Tables.ItemType, Inventory> inventoryTab = new();
     
     public void Initialize(IInitData initData = null)
     {
@@ -39,47 +40,39 @@ public class Bag : IEntityData, IMessageBus
         return inventoryTab.GetValueOrDefault(itemType);
     }
 
-    public void AddItem(Tables.Item item, int amount)
+    public void AddItem(Item item)
     {
-        if (!inventoryTab.TryGetValue(item.itemType, out var inventory))
+        if (!inventoryTab.TryGetValue(item.ItemData.itemType, out var inventory))
         {
-            inventory = Inventory.Create(item.itemType);
+            inventory = Inventory.Create(item.ItemData.itemType);
             inventory.MessageBus = MessageBus;
             inventory.OnSetMessageBus();
-            inventoryTab.Add(item.itemType, inventory);
+            inventoryTab.Add(item.ItemData.itemType, inventory);
         }
 
-        inventory.AddItem(item.Key,amount);
+        inventory.AddItem(item);
         
         MessageBus?.Publish(new EntityDataMsg.BagItemAddedMsg
         {
             Bag = this,
             Item = item,
-            Amount = amount
         });
     }
 
-    public void AddItem(string itemKey, int amount)
+    public bool TryRemoveItem(Item item, int amount)
     {
-        var item = Tables.Item.Get(itemKey);
-        AddItem(item, amount);
-    }
-
-    public bool TryRemoveItem(Tables.Item item, int amount)
-    {
-        if (!inventoryTab.TryGetValue(item.itemType, out var inventory))
+        if (!inventoryTab.TryGetValue(item.ItemData.itemType, out var inventory))
         {
             return false;
         }
         
-        var result = inventory.TryRemoveItem(item.Key, amount);
+        var result = inventory.TryRemoveItem(item.ItemData.Key, amount);
         if (result)
         {
             MessageBus?.Publish(new EntityDataMsg.BagItemRemovedMsg
             {
                 Bag = this,
                 Item = item,
-                Amount = amount
             });
         }
 
@@ -93,15 +86,13 @@ public static partial class EntityDataMsg
     {
         public MessageOriginType Origin => MessageOriginType.EntityData;
         public Bag Bag;
-        public Tables.Item Item;
-        public int Amount;
+        public Item Item;
     }
 
     public struct BagItemRemovedMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.EntityData;
         public Bag Bag;
-        public Tables.Item Item;
-        public int Amount;
+        public Item Item;
     }
 }

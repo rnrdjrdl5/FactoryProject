@@ -7,6 +7,8 @@ public class MainRealmTeamProcessor : Processor
     List<Player> players = new();
     List<Brain> brains = new();
     Team team;
+    PlayerDataStorage playerDataStorage;
+    PlayerItemStorage playerItemStorage;
     
     public override void Ready()
     {
@@ -18,6 +20,9 @@ public class MainRealmTeamProcessor : Processor
             team.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
             team.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
         }
+
+        playerDataStorage = FactoryEntry.MainStorage.GetEntityData<PlayerDataStorage>();
+        playerItemStorage = FactoryEntry.MainStorage.GetEntityData<PlayerItemStorage>();
     }
 
     public override void Uninitialize()
@@ -72,12 +77,17 @@ public class MainRealmTeamProcessor : Processor
         Player prevPlayer = null; 
         for (int i = 0; i < teamFormation.Players.Count; i++)
         {
-            var item = teamFormation.Players[i];
-            var playerData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
-
-            var playerInitData = new PlayerInitData() { PlayerKey = playerData.Key, Position = Vector3.zero };
             var mainRealmProcessor = ProcessorAbility.GetProcessor<MainRealmProcessor>();
-            var tuple = mainRealmProcessor.CreateBrainAndEntity(Realm, Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
+            var item = teamFormation.Players[i];
+            var playerTableData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
+            
+            long playerId = 0;
+            if (playerItemStorage.TryGetPlayerId(item.UniqueId, out var id))
+            {
+                playerId = id;
+            }
+            var playerInitData = new PlayerInitData() { PlayerKey = playerTableData.Key, Position = Vector3.zero, UniqueId = playerId };
+            var tuple = mainRealmProcessor.CreateBrainAndPlayer(Realm, Brain.PrefabPath, playerTableData.prefabPath, playerInitData);
             var brain = tuple.brain;
             var player = tuple.player;
 
@@ -110,6 +120,7 @@ public class MainRealmTeamProcessor : Processor
             prevPlayer = player;
         }
     }
+    
     void RemovePlayerAndBrain()
     {
         foreach (var player in players)

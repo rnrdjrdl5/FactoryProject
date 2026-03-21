@@ -10,6 +10,6 @@ public class DropItemProcessor : Processor
             return;
         }
         
-        Realm.AddEntity<WorldItem>(WorldItem.PrefabPath, new ItemInitData{ItemKey = itemKey, Position = position});
+        Realm.AddEntity<WorldItem>(WorldItem.PrefabPath, new ItemInitData{ItemKey = itemKey, Position = position, itemAmount = 1});
     }
 }

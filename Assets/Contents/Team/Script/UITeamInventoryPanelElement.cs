@@ -11,23 +11,20 @@ public class UITeamInventoryPanelElement : PanelElement, IEnhancedScrollerDelega
     [SerializeField] int lowCount;
     [SerializeField] AllocGameObject allocGameObject;
 
-    TeamInventory teamInventory;
-    Inventory inventory;
+    PlayerItemStorage playerItemStorage;
     List<ExItemList> itemLists = new();
     
     protected override void OnSetPanelDatas()
     {
         base.OnSetPanelDatas();
-        teamInventory = GetTargetPanelDatas<TeamInventory>();
-        inventory = teamInventory?.Inventory; 
+        playerItemStorage = GetTargetPanelDatas<PlayerItemStorage>();
         
         RefreshUI();
     }
 
     protected override void OnUnsetPanelDatas()
     {
-        inventory = null;
-        teamInventory = null;
+        playerItemStorage = null;
         
         base.OnUnsetPanelDatas(); 
     }
@@ -37,16 +34,16 @@ public class UITeamInventoryPanelElement : PanelElement, IEnhancedScrollerDelega
         base.RefreshUI();
 
         itemLists.Clear();
-        if (inventory == null)
+        if (playerItemStorage == null)
         {
             scroller.Delegate ??= this;
             scroller.ReloadData();
             return;
         }
 
-        for (int i = 0; i < inventory.Items.Count; i += lowCount)
+        for (int i = 0; i < playerItemStorage.Items.Count; i += lowCount)
         {
-            var exItems = inventory.Items
+            var exItems = playerItemStorage.Items
                 .Skip(i)
                 .Take(lowCount)
                 .Select(ExItem.Create);
@@ -79,11 +76,20 @@ public class UITeamInventoryPanelElement : PanelElement, IEnhancedScrollerDelega
 
     void ClickItem(Item item)
     {
-        var msg = new UIMsg.SelectInventoryItemMsg
+        var msg = new UIMsg.SelectTeamInventoryItemMsg
         {
             Item = item
         };
 
         Panel.MessageBus.Publish(msg);
+    }
+}
+
+public static partial class UIMsg
+{
+    public struct SelectTeamInventoryItemMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+        public Item Item;
     }
 }

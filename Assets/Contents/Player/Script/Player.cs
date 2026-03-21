@@ -9,7 +9,20 @@ public class Player : Entity
     string playerKey;
     PlayerData playerData;
 
-    public override void Initialize(IInitData initData = null)
+    protected override void PreInitialize(IInitData initData = null)
+    {
+        base.PreInitialize(initData);
+        
+        var mainRealm = GetParent<MainRealm>();
+        var mainStorage = mainRealm.GetChild<MainStorage>();
+        var playerStorage = mainStorage.GetEntityData<PlayerDataStorage>();
+        if (playerStorage.PlayerDataByKey.TryGetValue(UniqueId, out playerData))
+        {
+            AddOverrideEntityData(playerData);
+        }
+    }
+
+    protected override void Initialize(IInitData initData = null)
     {
         initData ??= EmptyInitData.Instance;
         if (initData is PlayerInitData playerInitData)
@@ -53,8 +66,9 @@ public class Player : Entity
     }
 }
 
-public class PlayerInitData : IInitData
+public class PlayerInitData : IInitData , IUniqueId
 {
+    public long UniqueId { get; set; }
     public string PlayerKey;
     public Vector3 Position;
 }

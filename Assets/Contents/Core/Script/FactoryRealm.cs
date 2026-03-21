@@ -4,7 +4,7 @@ public class FactoryRealm : Realm
 {
     [SerializeField] string prefabPath = "Core/MainRealm";
     
-    public override void Initialize(IInitData initData = null)
+    protected override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);
 

@@ -1,11 +1,13 @@
-public class PlayerData : IEntityData, IMessageBus
-{
-    public Bag Bag { get; private set; }
-    public Stat Stat { get; private set; }
-    public Equipment Equipment { get; private set; }
-    public Faction Faction { get; private set; }
+using Newtonsoft.Json;
 
-    public MessageBus MessageBus { get; set; }
+public class PlayerData : IEntityData, IMessageBus, IUniqueId
+{
+    [JsonProperty] public Bag Bag { get; private set; }
+    [JsonProperty] public Stat Stat { get; private set; }
+    [JsonProperty] public Equipment Equipment { get; private set; }
+    [JsonProperty] public Faction Faction { get; private set; }
+    [JsonIgnore] public MessageBus MessageBus { get; set; }
+    [JsonProperty] public long UniqueId { get; set; }
 
     public void Initialize(IInitData initData = null)
     {
@@ -48,5 +50,14 @@ public class PlayerData : IEntityData, IMessageBus
             Equipment.MessageBus = MessageBus;
             Equipment.OnSetMessageBus();
         }
+    }
+
+    public static PlayerData Create(long uniqueId = 0)
+    {
+        var playerData = new PlayerData();
+        playerData.UniqueId = uniqueId == 0 ? IDLogic.NewUniqueId() : uniqueId;
+        playerData.Initialize();
+        
+        return playerData;
     }
 }

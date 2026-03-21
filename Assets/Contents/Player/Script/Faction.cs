@@ -1,8 +1,10 @@
+using Newtonsoft.Json;
+
 public class Faction : IEntityData
 {
     public Tables.FactionType FactionType => factionType;
     
-    Tables.FactionType factionType;
+    [JsonProperty] Tables.FactionType factionType;
     
     public void Initialize(IInitData initData = null)
     {

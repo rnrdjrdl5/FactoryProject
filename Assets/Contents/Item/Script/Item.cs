@@ -1,7 +1,10 @@
 // ItemType 과 ItemData 테이블을 필요로 한다
 
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using UnityEngine;
 
+[JsonObject(MemberSerialization.OptIn)]
 public class Item
 {
     public Tables.Item ItemData => itemData;
@@ -11,11 +14,11 @@ public class Item
     public int Amount => amount;
     public bool IsEquip => isEquip;
     
-    Tables.Item itemData;
-    long uniqueId;
-    string itemKey;
-    int amount;
-    bool isEquip;
+    [JsonIgnore] Tables.Item itemData;
+    [JsonProperty] long uniqueId;
+    [JsonProperty] string itemKey;
+    [JsonProperty] int amount;
+    [JsonProperty] bool isEquip;
 
     public Item(string itemKey, int amount)
     {
@@ -54,5 +57,11 @@ public class Item
     public static Item Create(string itemKey, int amount)
     {
         return new Item(itemKey,amount);
+    }
+
+    [OnDeserialized]
+    void OnDeserialized(StreamingContext context)
+    {
+        itemData = Tables.Item.Get(itemKey);
     }
 }

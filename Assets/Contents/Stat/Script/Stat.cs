@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class Stat : IEntityData
 {
-    EntityStat totalStat = new();
-    List<Tables.IStats> appliedStats = new();
+    [JsonProperty] EntityStat totalStat = new();
+    [JsonIgnore] List<Tables.IStats> appliedStats = new();
     
     public void Initialize(IInitData initData = null)
     {

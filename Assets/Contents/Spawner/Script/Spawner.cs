@@ -9,7 +9,7 @@ public class Spawner : Entity
     Tables.Spawner spawnerData;
     string spawnerKey;
 
-    public override void Initialize(IInitData initData = null)
+    protected override void Initialize(IInitData initData = null)
     {
         initData ??= EmptyInitData.Instance;
         if (initData is SpawnerInitData spawnerInitData)

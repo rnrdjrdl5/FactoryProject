@@ -1,28 +1,32 @@
 using UnityEngine;
 
 [EntityData(typeof(Team))]
-[EntityData(typeof(TeamInventory))]
+[EntityData(typeof(PlayerItemStorage))]
+[EntityData(typeof(PlayerDataStorage))]
 public class MainStorage : Storage
 {
     public static string PrefabPath = $"MainStorage/{typeof(MainStorage)}";
 
-    public override void Initialize(IInitData initData = null)
+    public override void Ready()
     {
-        base.Initialize(initData);
+        base.Ready();
         
         // 더미, 추후 수정 필요
-        var teamInventory = GetEntityData<TeamInventory>();
-        var inventory = teamInventory.Inventory;
-        var humanItem= inventory.AddItem(Tables.TablesKey.Item_Human, 1);
+        var processorAbility = GetAbility<ProcessorAbility>();
+        var mainStorageProcessor = processorAbility.GetProcessor<MainStorageProcessor>();
 
+        var humanItem = Item.Create(Tables.TablesKey.Item_Human, 1);
+        mainStorageProcessor.AddPlayerStorage(humanItem);
+        var eagleItem =  Item.Create(Tables.TablesKey.Item_Eagle, 1);
+        mainStorageProcessor.AddPlayerStorage(eagleItem);
+        var snakeItem = Item.Create(Tables.TablesKey.Item_Snake, 1);
+        mainStorageProcessor.AddPlayerStorage(snakeItem);
+        var dogItem =  Item.Create(Tables.TablesKey.Item_Dog, 1);
+        mainStorageProcessor.AddPlayerStorage(dogItem);
+        
         var team = GetEntityData<Team>();
         var teamFormation = team.AddTeamFormation();
-        
         teamFormation.TryAddPlayer(humanItem);
-        
-        var eagleItem = inventory.AddItem(Tables.TablesKey.Item_Eagle, 1);
-        var snakeItem = inventory.AddItem(Tables.TablesKey.Item_Snake, 1);
-        var dogItem = inventory.AddItem(Tables.TablesKey.Item_Dog, 1);
         teamFormation.TryAddPlayer(eagleItem);
         teamFormation.TryAddPlayer(snakeItem);
         teamFormation.TryAddPlayer(dogItem);

@@ -23,7 +23,7 @@ public class TeamPopupProcessor : Processor
         teamPopup.MessageBus.Subscribe<UIMsg.SelectTeamFormationMsg>(SelectTeamFormation);
         teamPopup.MessageBus.Subscribe<UIMsg.RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
         teamPopup.MessageBus.Subscribe<UIMsg.RemoveTeamFormationMsg>(RemoveTeamFormation);
-        teamPopup.MessageBus.Subscribe<UIMsg.SelectInventoryItemMsg>(AddTeamFormationItem);
+        teamPopup.MessageBus.Subscribe<UIMsg.SelectTeamInventoryItemMsg>(AddTeamFormationItem);
         teamPopup.MessageBus.Subscribe<UIMsg.ClickAddFormationMsg>(AddFormation);
         teamPopup.MessageBus.Subscribe<UIMsg.TeamFormationGoMsg>(GoFormation);
     }
@@ -34,7 +34,9 @@ public class TeamPopupProcessor : Processor
         teamPopup.MessageBus.Unsubscribe<UIMsg.SelectTeamFormationMsg>(SelectTeamFormation);
         teamPopup.MessageBus.Unsubscribe<UIMsg.RemoveTeamFormationItemMsg>(RemoveTeamFormationItem);
         teamPopup.MessageBus.Unsubscribe<UIMsg.RemoveTeamFormationMsg>(RemoveTeamFormation);
-        teamPopup.MessageBus.Unsubscribe<UIMsg.SelectInventoryItemMsg>(AddTeamFormationItem);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.SelectTeamInventoryItemMsg>(AddTeamFormationItem);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.ClickAddFormationMsg>(AddFormation);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.TeamFormationGoMsg>(GoFormation);
         
         base.Uninitialize();
     }
@@ -80,7 +82,7 @@ public class TeamPopupProcessor : Processor
         team.TryRemoveTeamFormation(msg.TeamFormation);
     }
 
-    void AddTeamFormationItem(UIMsg.SelectInventoryItemMsg msg)
+    void AddTeamFormationItem(UIMsg.SelectTeamInventoryItemMsg msg)
     { 
         if (team == null || team.SelectedTeamFormation.Players.Contains(msg.Item))
         {

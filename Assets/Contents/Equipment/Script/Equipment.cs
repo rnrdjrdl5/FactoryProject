@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class Equipment : IEntityData, IMessageBus
 {
-    public MessageBus MessageBus { get; set; }
+    [JsonIgnore] public MessageBus MessageBus { get; set; }
     
-    Dictionary<Tables.ItemType, string> equipItems = new();
+    [JsonProperty] Dictionary<Tables.ItemType, string> equipItems = new();
     
     public void Initialize(IInitData initData = null)
     {
