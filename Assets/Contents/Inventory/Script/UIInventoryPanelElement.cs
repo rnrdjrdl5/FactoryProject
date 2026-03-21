@@ -21,12 +21,18 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     {
         base.OnSetPanelDatas();
         
-        bag = GetTargetPanelDatas<Bag>();
+        var playerData = GetTargetPanelDatas<PlayerData>();
+        bag = playerData?.Bag;
     }
 
     public override void RefreshUI()
     {
         base.RefreshUI();
+
+        if (inventory == null)
+        {
+            return;
+        }
         
         itemLists.Clear();
         for (int i = 0; i < inventory.Items.Count; i+= lowCount)
@@ -45,6 +51,11 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     public void SetItemType(Tables.ItemType itemType)
     {
         this.itemType = itemType;
+        if (bag == null)
+        {
+            return;
+        }
+
         inventory = bag.GetInventory(itemType);
         RefreshUI();
     }

@@ -43,7 +43,8 @@ public class TeamPopupProcessor : Processor
     {
         team = teamPopup.GetTargetPanelDatas<Team>();
         
-        var bag = teamPopup.GetTargetPanelDatas<Bag>();
+        var playerData = teamPopup.GetTargetPanelDatas<PlayerData>();
+        var bag = playerData?.Bag;
         teamInventory = bag?.GetInventory(Tables.ItemType.Player);
     }
 

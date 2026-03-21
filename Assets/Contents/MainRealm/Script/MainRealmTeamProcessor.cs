@@ -81,8 +81,11 @@ public class MainRealmTeamProcessor : Processor
             var brain = tuple.brain;
             var player = tuple.player;
 
-            var faction = player.GetEntityData<Faction>();
-            faction.SetFactionType(Tables.FactionType.Hero);
+            var faction = player.GetEntityData<PlayerData>()?.Faction;
+            if (faction != null)
+            {
+                faction.SetFactionType(Tables.FactionType.Hero);
+            }
             
             players.Add(tuple.player);
             brains.Add(tuple.brain);

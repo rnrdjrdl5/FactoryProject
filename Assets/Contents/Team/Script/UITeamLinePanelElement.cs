@@ -11,12 +11,18 @@ public class UITeamLinePanelElement : PanelElement, IEnhancedScrollerDelegate
 
     protected override void OnSetPanelDatas()
     {
-        var bag = GetTargetPanelDatas<Bag>();
-        targetInventory = bag.GetInventory(itemType);
+        var playerData = GetTargetPanelDatas<PlayerData>();
+        var bag = playerData?.Bag;
+        targetInventory = bag?.GetInventory(itemType);
     }
     
     public int GetNumberOfCells(EnhancedScroller scroller)
     {
+        if (targetInventory == null)
+        {
+            return 0;
+        }
+
         return targetInventory.Items.Count;
     }
 

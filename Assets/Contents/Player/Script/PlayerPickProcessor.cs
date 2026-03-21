@@ -3,16 +3,14 @@ using UnityEngine;
 public class PlayerPickProcessor : Processor
 {
     MainStorage mainStorage;
-    Bag bag;
-    Inventory inventory; 
+    TeamInventory teamInventory;
     
     public override void Ready()
     {
         base.Ready();
 
         mainStorage = FactoryEntry.MainStorage;
-        bag = mainStorage.GetEntityData<Bag>();
-        inventory = bag.GetInventory(Tables.ItemType.Player);
+        teamInventory = mainStorage.GetEntityData<TeamInventory>();
     }
 
     public void PickItem()
@@ -34,7 +32,7 @@ public class PlayerPickProcessor : Processor
             return;
         }
         
-        inventory.AddItem(worldItem.ItemData.Key, 1);
+        teamInventory.Inventory.AddItem(worldItem.ItemData.Key, 1);
         Realm.RemoveChild(worldItem);
     }
 }

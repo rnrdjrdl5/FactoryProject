@@ -2,22 +2,30 @@ public class PlayerEquipProcessor : Processor
 {
     Equipment equipment;
     Stat stat;
+    PlayerData playerData;
     
     public override void Ready()
     {
         base.Ready();
 
-        stat = Entity.GetEntityData<Stat>();
-        equipment = Entity.GetEntityData<Equipment>();
+        playerData = Entity.GetEntityData<PlayerData>();
+        stat = playerData?.Stat;
+        equipment = playerData?.Equipment;
 
-        equipment.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
-        equipment.MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
+        if (equipment?.MessageBus != null)
+        {
+            equipment.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
+            equipment.MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
+        }
     }
 
     public override void Uninitialize()
     {
-        equipment.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
-        equipment.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
+        if (equipment?.MessageBus != null)
+        {
+            equipment.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
+            equipment.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
+        }
         
         base.Uninitialize();
     }

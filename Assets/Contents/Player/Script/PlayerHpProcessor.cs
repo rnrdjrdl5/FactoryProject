@@ -29,7 +29,7 @@ public class PlayerHpProcessor : Processor
         if (hp <= 0)
         {
             dropItemProcessor ??= ProcessorAbility.GetProcessor<DropItemProcessor>();
-            dropItemProcessor.TryDropItem(Entity.transform.position, player.PlayerData.dropPlayerPercent, player.PlayerData.dropPlayerKey);
+            dropItemProcessor.TryDropItem(Entity.transform.position, player.TableData.dropPlayerPercent, player.TableData.dropPlayerKey);
             
             DestroyPlayer();
         }

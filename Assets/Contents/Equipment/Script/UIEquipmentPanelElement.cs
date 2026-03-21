@@ -23,7 +23,8 @@ public class UIEquipmentPanelElement : PanelElement
     {
         base.OnSetPanelDatas();
 
-        equipment = GetTargetPanelDatas<Equipment>();
+        var playerData = GetTargetPanelDatas<PlayerData>();
+        equipment = playerData?.Equipment;
         if (equipment?.MessageBus != null)
         {
             equipment.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
@@ -148,5 +149,4 @@ public static partial class UIMsg
         public Item Item;
     }
 }
-
 

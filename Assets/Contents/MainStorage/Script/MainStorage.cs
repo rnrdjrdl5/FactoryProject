@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [EntityData(typeof(Team))]
-[EntityData(typeof(Bag))]
+[EntityData(typeof(TeamInventory))]
 public class MainStorage : Storage
 {
     public static string PrefabPath = $"MainStorage/{typeof(MainStorage)}";
@@ -11,8 +11,8 @@ public class MainStorage : Storage
         base.Initialize(initData);
         
         // 더미, 추후 수정 필요
-        var bag = GetEntityData<Bag>();
-        var inventory = bag.GetInventory(Tables.ItemType.Player);
+        var teamInventory = GetEntityData<TeamInventory>();
+        var inventory = teamInventory.Inventory;
         var humanItem= inventory.AddItem(Tables.TablesKey.Item_Human, 1);
 
         var team = GetEntityData<Team>();

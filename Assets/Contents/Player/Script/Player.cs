@@ -1,16 +1,13 @@
 using UnityEngine;
 
-[EntityData(typeof(Bag))]
-[EntityData(typeof(Faction))]
-[EntityData(typeof(Stat))]
-[EntityData(typeof(Equipment))]
+[EntityData(typeof(PlayerData))]
 public class Player : Entity
 {
-    public Tables.Player PlayerData => playerData;
+    public Tables.Player TableData => tableData;
     
-    Tables.Player playerData;
+    Tables.Player tableData;
     string playerKey;
-    Stat stat;
+    PlayerData playerData;
 
     public override void Initialize(IInitData initData = null)
     {
@@ -18,13 +15,13 @@ public class Player : Entity
         if (initData is PlayerInitData playerInitData)
         {
             playerKey = playerInitData.PlayerKey;
-            playerData = Tables.Player.Get(playerKey);
+            tableData = Tables.Player.Get(playerKey);
             transform.position = playerInitData.Position;
         }
         
         base.Initialize(initData);
 
-        stat = GetEntityData<Stat>();
+        playerData = GetEntityData<PlayerData>();
         AddStat();
     }
 
@@ -37,22 +34,22 @@ public class Player : Entity
 
     void AddStat()
     {
-        if (stat == null)
+        if (playerData?.Stat == null)
         {
             return;
         }
         
-        stat.AddStats(playerData);
+        playerData.Stat.AddStats(tableData);
     }
 
     void RemoveStat()
     {
-        if (stat == null)
+        if (playerData?.Stat == null)
         {
             return;
         }
 
-        stat.RemoveStats(playerData);
+        playerData.Stat.RemoveStats(tableData);
     }
 }
 

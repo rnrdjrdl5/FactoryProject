@@ -13,8 +13,6 @@ public class Bag : IEntityData, IMessageBus
         foreach (var itemType in Tables.EnumLogic.ItemTypes)
         {
             var inventory = Inventory.Create(itemType);
-            inventory.MessageBus = MessageBus;
-            inventory.OnSetMessageBus();
             inventoryTab.Add(itemType, inventory);
         }
     }

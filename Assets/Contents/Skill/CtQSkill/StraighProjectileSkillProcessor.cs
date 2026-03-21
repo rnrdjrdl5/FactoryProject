@@ -80,7 +80,15 @@ public class StraighProjectileSkillProcessor : SkillProcessor
 
         void DamageProcess()
         {
-            casterFaction ??= skillProcessor.SkillContext.Caster.GetEntityData<Faction>();
+            if (casterFaction == null)
+            {
+                var casterData = skillProcessor.SkillContext.Caster.GetEntityData<PlayerData>();
+                casterFaction = casterData?.Faction;
+            }
+            if (casterFaction == null)
+            {
+                return;
+            }
             
             var collider = Physics2D.OverlapCircle(Entity.transform.position, straightProjectileContext.Radius, Settings.LayerId.EntityMask);
             if (collider == null || collider.gameObject == skillProcessor.SkillContext.CasterObject)
@@ -89,7 +97,11 @@ public class StraighProjectileSkillProcessor : SkillProcessor
             }
 
             var targetEntity = collider.GetComponent<Entity>();
-            var targetFaction = targetEntity.GetEntityData<Faction>();
+            var targetFaction = targetEntity.GetEntityData<PlayerData>()?.Faction;
+            if (targetFaction == null)
+            {
+                return;
+            }
             if (Tables.FactionRelation.GetRelation(casterFaction.FactionType, targetFaction.FactionType) !=
                 Tables.FactionRelationType.Hostile)
             {
