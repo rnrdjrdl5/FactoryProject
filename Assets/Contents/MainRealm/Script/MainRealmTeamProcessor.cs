@@ -7,8 +7,7 @@ public class MainRealmTeamProcessor : Processor
     List<Player> players = new();
     List<Brain> brains = new();
     Team team;
-    PlayerDataStorage playerDataStorage;
-    PlayerItemStorage playerItemStorage;
+    PlayerStorage playerStorage;
     
     public override void Ready()
     {
@@ -21,8 +20,7 @@ public class MainRealmTeamProcessor : Processor
             team.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
         }
 
-        playerDataStorage = FactoryEntry.MainStorage.GetEntityData<PlayerDataStorage>();
-        playerItemStorage = FactoryEntry.MainStorage.GetEntityData<PlayerItemStorage>();
+        playerStorage = FactoryEntry.MainStorage.GetEntityData<PlayerStorage>();
     }
 
     public override void Uninitialize()
@@ -82,7 +80,7 @@ public class MainRealmTeamProcessor : Processor
             var playerTableData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
             
             long playerId = 0;
-            if (playerItemStorage.TryGetPlayerId(item.UniqueId, out var id))
+            if (playerStorage.TryGetPlayerId(item.UniqueId, out var id))
             {
                 playerId = id;
             }

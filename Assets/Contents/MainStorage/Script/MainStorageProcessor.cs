@@ -1,41 +1,39 @@
 public class MainStorageProcessor : Processor
 {
-    PlayerItemStorage playerItemStorage;
-    PlayerDataStorage playerDataStorage;
+    PlayerStorage playerStorage;
     
     public override void Ready()
     {
         base.Ready();
 
-        playerItemStorage = Entity.GetEntityData<PlayerItemStorage>();
-        playerDataStorage = Entity.GetEntityData<PlayerDataStorage>();
+        playerStorage = Entity.GetEntityData<PlayerStorage>();
     }
 
     public void AddPlayerStorage(Item item)
     {
-        playerItemStorage.AddItem(item);
-        if (playerItemStorage.ItemIdToPlayerId.ContainsKey(item.UniqueId))
+        playerStorage.AddItem(item);
+        if (playerStorage.ItemIdToPlayerId.ContainsKey(item.UniqueId))
         {
             return;
         }
         
         var playerKey = IDLogic.NewUniqueId();
-        playerDataStorage.CreateAndAddPlayerData(playerKey);
-        playerItemStorage.AddItemToPlayerId(item.UniqueId, playerKey);
+        playerStorage.CreateAndAddPlayerData(playerKey);
+        playerStorage.AddItemToPlayerId(item.UniqueId, playerKey);
     }
 
     public void RemovePlayerStorage(Item item)
     {
-        playerItemStorage.TryRemoveItem(item.ItemKey, item.Amount);
-        if (!playerItemStorage.ItemIdToPlayerId.ContainsKey(item.UniqueId))
+        playerStorage.TryRemoveItem(item.ItemKey, item.Amount);
+        if (!playerStorage.ItemIdToPlayerId.ContainsKey(item.UniqueId))
         {
             return;
         }
 
-        if (playerItemStorage.TryGetPlayerId(item.UniqueId, out var playerId))
+        if (playerStorage.TryGetPlayerId(item.UniqueId, out var playerId))
         {
-            playerDataStorage.RemovePlayerData(playerId);
+            playerStorage.RemovePlayerData(playerId);
         }
-        playerItemStorage.RemoveFromItemUid(item.UniqueId);
+        playerStorage.RemoveFromItemUid(item.UniqueId);
     }
 }

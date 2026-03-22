@@ -15,7 +15,7 @@ public class Player : Entity
         
         var mainRealm = GetParent<MainRealm>();
         var mainStorage = mainRealm.GetChild<MainStorage>();
-        var playerStorage = mainStorage.GetEntityData<PlayerDataStorage>();
+        var playerStorage = mainStorage.GetEntityData<PlayerStorage>();
         if (playerStorage.PlayerDataByKey.TryGetValue(UniqueId, out playerData))
         {
             AddOverrideEntityData(playerData);

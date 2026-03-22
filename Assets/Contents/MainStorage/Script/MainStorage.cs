@@ -1,8 +1,7 @@
 using UnityEngine;
 
 [EntityData(typeof(Team))]
-[EntityData(typeof(PlayerItemStorage))]
-[EntityData(typeof(PlayerDataStorage))]
+[EntityData(typeof(PlayerStorage))]
 public class MainStorage : Storage
 {
     public static string PrefabPath = $"MainStorage/{typeof(MainStorage)}";
