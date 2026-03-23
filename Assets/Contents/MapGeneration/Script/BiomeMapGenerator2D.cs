@@ -25,6 +25,11 @@ public class BiomeMapGenerator2D : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float heightPersistence = 0.5f;
     [SerializeField] float heightLacunarity = 2f;
 
+    [Header("Island Falloff")]
+    [SerializeField] bool useIslandFalloff = true;
+    [SerializeField, Range(0f, 2f)] float islandFalloffStrength = 0.85f;
+    [SerializeField, Min(0.1f)] float islandFalloffPower = 2.2f;
+
     [Header("Moisture Noise")]
     [SerializeField] float moistureScale = 0.03f;
     [SerializeField] int moistureOctaves = 3;
@@ -72,9 +77,7 @@ public class BiomeMapGenerator2D : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                float heightValue = BiomeNoiseUtility.SampleFractalNoise(
-                    x, y, heightScale, heightOctaves, heightPersistence, heightLacunarity, heightOffset);
-
+                float heightValue = SampleHeight(x, y, heightOffset);
                 float moistureValue = BiomeNoiseUtility.SampleFractalNoise(
                     x, y, moistureScale, moistureOctaves, moisturePersistence, moistureLacunarity, moistureOffset);
 
@@ -164,6 +167,33 @@ public class BiomeMapGenerator2D : MonoBehaviour
         }
 
         return generatedClusters.GetCells(clusterId);
+    }
+
+    float SampleHeight(int x, int y, Vector2 offset)
+    {
+        float heightValue = BiomeNoiseUtility.SampleFractalNoise(
+            x, y, heightScale, heightOctaves, heightPersistence, heightLacunarity, offset);
+
+        if (!useIslandFalloff)
+        {
+            return heightValue;
+        }
+
+        float falloff = CalculateIslandFalloff(x, y);
+        return Mathf.Clamp01(heightValue - (falloff * islandFalloffStrength));
+    }
+
+    float CalculateIslandFalloff(int x, int y)
+    {
+        if (width <= 1 || height <= 1)
+        {
+            return 0f;
+        }
+
+        float normalizedX = (x / (float)(width - 1)) * 2f - 1f;
+        float normalizedY = (y / (float)(height - 1)) * 2f - 1f;
+        float distance = Mathf.Max(Mathf.Abs(normalizedX), Mathf.Abs(normalizedY));
+        return Mathf.Pow(Mathf.Clamp01(distance), islandFalloffPower);
     }
 
     BiomeType ResolveBiome(float heightValue, float moistureValue, float temperatureValue)
@@ -287,6 +317,10 @@ public class BiomeMapGenerator2D : MonoBehaviour
 
     void Reset()
     {
+        useIslandFalloff = true;
+        islandFalloffStrength = 0.85f;
+        islandFalloffPower = 2.2f;
+
         biomeRules = new[]
         {
             new BiomeRule
