@@ -15,8 +15,7 @@ public class UIEquipmentPanelElement : PanelElement
     [SerializeField] List<Slot> slots = new();
 
     readonly Dictionary<ItemType, Slot> slotMap = new();
-
-    //PlayerStorage playerStorage;
+    
     Bag storageBag;
     PlayerData playerLocalData;
     Item playerItem;
@@ -24,7 +23,7 @@ public class UIEquipmentPanelElement : PanelElement
     public override void Initialize(Panel panel, IInitData initData = null)
     {
         base.Initialize(panel, initData);
-
+        
         slotMap.Clear();
         for (var i = 0; i < slots.Count; i++)
         {
@@ -36,6 +35,8 @@ public class UIEquipmentPanelElement : PanelElement
                 slot.ui.SetClickEvent(ClickItem);
             }
         }
+
+        RefreshUI();
     }
 
     public override void Uninitialize()
@@ -106,7 +107,7 @@ public class UIEquipmentPanelElement : PanelElement
         }
 
         var inventory = storageBag.GetInventory(slot.type);
-        return !inventory.TryGetItemByItemUid(equipUid, out var playerItem) ? null : playerItem;
+        return !inventory.TryGetItemByItemUid(equipUid.UniqueId, out var playerItem) ? null : playerItem;
     }
 
     public void SetStorageBag(Bag bag)

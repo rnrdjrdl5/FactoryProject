@@ -104,10 +104,12 @@ public class EquipmentPopupProcessor : Processor
     void EquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
     {
         uiEquipmentPanelElement.RefreshUI();
+        uiInventoryPanelElement.RefreshUI();
     }
     
     void UnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
     {
+        uiEquipmentPanelElement.RefreshUI();
         uiInventoryPanelElement.RefreshUI();
     }
 }

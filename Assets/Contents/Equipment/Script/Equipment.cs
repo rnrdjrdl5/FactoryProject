@@ -7,7 +7,7 @@ public class Equipment : IEntityData, IMessageBus
 {
     [JsonIgnore] public MessageBus MessageBus { get; set; }
     
-    [JsonProperty] Dictionary<Tables.ItemType, long> equipItems = new();
+    [JsonProperty] Dictionary<Tables.ItemType, Item> equipItems = new();
     
     public void Initialize(IInitData initData = null)
     {
@@ -27,9 +27,10 @@ public class Equipment : IEntityData, IMessageBus
             return false;
         }
 
-        TryUnequipItem(item);
+        equipItems.TryGetValue(item.ItemData.itemType, out var equipedItem);
+        TryUnequipItem(equipedItem);
         
-        equipItems.Add(item.ItemData.itemType, item.UniqueId);
+        equipItems.Add(item.ItemData.itemType, item);
         item.SetEquip(true);
         
         MessageBus?.Publish(new EntityDataMsg.EquipmentEquipMsg
@@ -43,7 +44,7 @@ public class Equipment : IEntityData, IMessageBus
 
     public bool TryUnequipItem(Item item)
     {
-        if (!equipItems.ContainsKey(item.ItemData.itemType))
+        if (item == null || !equipItems.ContainsKey(item.ItemData.itemType))
         {
             return false;
         }
@@ -60,9 +61,9 @@ public class Equipment : IEntityData, IMessageBus
         return true;
     }
 
-    public bool TryGetEquipUid(Tables.ItemType itemType, out long itemUid)
+    public bool TryGetEquipUid(Tables.ItemType itemType, out Item item)
     {
-        return equipItems.TryGetValue(itemType, out itemUid);
+        return equipItems.TryGetValue(itemType, out item);
     }
     
     public void OnSetMessageBus()
