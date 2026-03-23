@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [Processor(typeof(EquipmentPopupProcessor))]
-public class EquipmentPopupProcessorAbility : Ability
+public class EquipmentPopupProcessorAbility : ProcessorAbility
 {
     
 }

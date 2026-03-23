@@ -30,7 +30,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5849429218694555252}
+  - {fileID: 1253262470262454897}
   - {fileID: 3609602534639660816}
   - {fileID: 3549883839487505855}
   m_Father: {fileID: 435268777173318027}
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &2059728044378183857
+--- !u!1001 &6691430731569448116
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -89,10 +89,6 @@ PrefabInstance:
     - target: {fileID: 2921097992926710291, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
       propertyPath: m_Name
       value: UIInventoryPanelElement
-      objectReference: {fileID: 0}
-    - target: {fileID: 2921097992926710291, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5566813049843247330, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
       propertyPath: cellSize
@@ -124,7 +120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5600445350357122757, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -700
+      value: -800
       objectReference: {fileID: 0}
     - target: {fileID: 5600445350357122757, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -183,15 +179,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
---- !u!224 &5849429218694555252 stripped
+--- !u!224 &1253262470262454897 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5600445350357122757, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
-  m_PrefabInstance: {fileID: 2059728044378183857}
+  m_PrefabInstance: {fileID: 6691430731569448116}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5896572313825456211 stripped
+--- !u!114 &1269441378769579094 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5566813049843247330, guid: feffc43d9260f41ccb55dcc5822f0f0e, type: 3}
-  m_PrefabInstance: {fileID: 2059728044378183857}
+  m_PrefabInstance: {fileID: 6691430731569448116}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -290,6 +286,10 @@ PrefabInstance:
     - target: {fileID: 8523385101096329055, guid: 68413383191c84627b2e59c97f1e7be1, type: 3}
       propertyPath: m_Name
       value: UITeamLinePanelElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523385101096329055, guid: 68413383191c84627b2e59c97f1e7be1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelElements:
   - {fileID: 4173665584666964521}
-  - {fileID: 5896572313825456211}
+  - {fileID: 1269441378769579094}
   - {fileID: 5078441665260413821}
   canvas: {fileID: 5156919773925063554}
 --- !u!114 &26212891282952521
@@ -548,6 +548,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5920785421377011184, guid: fb6584133ca8f4656aba2d529da9ada4, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6201846552479071053, guid: fb6584133ca8f4656aba2d529da9ada4, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6565005464580429838, guid: fb6584133ca8f4656aba2d529da9ada4, type: 3}

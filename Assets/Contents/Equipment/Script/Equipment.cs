@@ -7,7 +7,7 @@ public class Equipment : IEntityData, IMessageBus
 {
     [JsonIgnore] public MessageBus MessageBus { get; set; }
     
-    [JsonProperty] Dictionary<Tables.ItemType, string> equipItems = new();
+    [JsonProperty] Dictionary<Tables.ItemType, long> equipItems = new();
     
     public void Initialize(IInitData initData = null)
     {
@@ -29,7 +29,7 @@ public class Equipment : IEntityData, IMessageBus
 
         TryUnequipItem(item);
         
-        equipItems.Add(item.ItemData.itemType, item.ItemKey);
+        equipItems.Add(item.ItemData.itemType, item.UniqueId);
         item.SetEquip(true);
         
         MessageBus?.Publish(new EntityDataMsg.EquipmentEquipMsg
@@ -58,6 +58,11 @@ public class Equipment : IEntityData, IMessageBus
         });
 
         return true;
+    }
+
+    public bool TryGetEquipUid(Tables.ItemType itemType, out long itemUid)
+    {
+        return equipItems.TryGetValue(itemType, out itemUid);
     }
     
     public void OnSetMessageBus()

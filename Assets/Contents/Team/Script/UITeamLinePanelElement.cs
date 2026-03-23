@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using EnhancedUI.EnhancedScroller;
 using UnityEngine;
 
@@ -6,24 +7,51 @@ public class UITeamLinePanelElement : PanelElement, IEnhancedScrollerDelegate
     [SerializeField] EnhancedScroller scroller;
     [SerializeField] float cellSize;
     [SerializeField] AllocGameObject allocGameObject;
-    Tables.ItemType itemType => Tables.ItemType.Player;
-    Inventory targetInventory;
+
+    List<ExItem> itemLists = new();
+    PlayerStorage playerStorage;
+
+    public override void Initialize(Panel panel, IInitData initData = null)
+    {
+        base.Initialize(panel, initData);
+        
+        scroller.Delegate ??= this;
+        scroller.ReloadData();
+    }
 
     protected override void OnSetPanelDatas()
     {
-        var playerData = GetTargetPanelDatas<PlayerData>();
-        var bag = playerData?.Bag;
-        targetInventory = bag?.GetInventory(itemType);
+        playerStorage = GetTargetPanelDatas<PlayerStorage>();
+        RefreshUI();
     }
-    
+
+    public override void RefreshUI()
+    {
+        base.RefreshUI();
+        
+        if (playerStorage == null)
+        {
+            return;
+        }
+        
+        itemLists.Clear();
+        for (int i = 0; i < playerStorage.PlayerItem.Count; i++)
+        {
+            var exItem = ExItem.Create(playerStorage.PlayerItem[i]);
+            itemLists.Add(exItem);
+        }
+        
+        scroller.ReloadData();
+    }
+
     public int GetNumberOfCells(EnhancedScroller scroller)
     {
-        if (targetInventory == null)
+        if (playerStorage == null)
         {
             return 0;
         }
 
-        return targetInventory.Items.Count;
+        return playerStorage.PlayerItem.Count;
     }
 
     public float GetCellViewSize(EnhancedScroller scroller, int dataIndex)
@@ -35,7 +63,7 @@ public class UITeamLinePanelElement : PanelElement, IEnhancedScrollerDelegate
     {
         var cellObject = allocGameObject.AllocateObject();
         var cellView = cellObject.GetComponent<UITeamLineCellView>();
-        var item = targetInventory.Items[dataIndex];
+        var item = playerStorage.PlayerItem[dataIndex];
         cellView.UpdateItem(item, ClickItem);
         
         return cellView;

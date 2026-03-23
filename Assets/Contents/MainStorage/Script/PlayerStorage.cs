@@ -12,7 +12,9 @@ public class PlayerStorage : IEntityData, IMessageBus
 
     public IReadOnlyDictionary<long, PlayerData> PlayerDataByKey => playerDataByKey;
     public IReadOnlyDictionary<long, long> ItemIdToPlayerId => itemIdToPlayerId;
-    public IReadOnlyList<Item> Items => inventory?.Items;
+    public IReadOnlyList<Item> PlayerItem => inventory?.Items;
+    public Inventory PlayerInventory => inventory;
+    
 
     public void Initialize(IInitData initData = null)
     {
@@ -93,12 +95,7 @@ public class PlayerStorage : IEntityData, IMessageBus
 
     public void CreateAndAddPlayerData(long playerKey)
     {
-        playerDataByKey.TryAdd(playerKey, PlayerData.Create(playerKey));
-    }
-
-    public bool TryGetPlayerData(long playerKey, out PlayerData playerData)
-    {
-        return playerDataByKey.TryGetValue(playerKey, out playerData);
+        playerDataByKey.TryAdd(playerKey, PlayerData.Create(MessageBus, playerKey));
     }
 
     public bool RemovePlayerData(long playerKey)
@@ -112,7 +109,7 @@ public class PlayerStorage : IEntityData, IMessageBus
         return playerDataByKey.Remove(playerKey);
     }
 
-    public bool TryGetPlayerId(long itemUid, out long playerId)
+    public bool TryGetPlayerIdByItemId(long itemUid, out long playerId)
     {
         playerId = 0;
         return itemIdToPlayerId.TryGetValue(itemUid, out playerId);
@@ -126,5 +123,21 @@ public class PlayerStorage : IEntityData, IMessageBus
     public void RemoveFromItemUid(long itemUid)
     {
         itemIdToPlayerId.Remove(itemUid);
+    }
+
+    public bool TryGetPlayerDataByPlayerUid(long playerUid, out PlayerData playerData)
+    {
+        return playerDataByKey.TryGetValue(playerUid, out playerData);
+    }
+
+    public bool TryGetPlayerDataByItemUid(long itemUid, out PlayerData playerData)
+    {
+        playerData = null;
+        if (!TryGetPlayerIdByItemId(itemUid, out var playerId))
+        {
+            return false;
+        }
+
+        return TryGetPlayerDataByPlayerUid(playerId, out playerData);
     }
 }

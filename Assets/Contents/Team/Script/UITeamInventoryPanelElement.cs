@@ -41,9 +41,9 @@ public class UITeamInventoryPanelElement : PanelElement, IEnhancedScrollerDelega
             return;
         }
 
-        for (int i = 0; i < playerStorage.Items.Count; i += lowCount)
+        for (int i = 0; i < playerStorage.PlayerItem.Count; i += lowCount)
         {
-            var exItems = playerStorage.Items
+            var exItems = playerStorage.PlayerItem
                 .Skip(i)
                 .Take(lowCount)
                 .Select(ExItem.Create);

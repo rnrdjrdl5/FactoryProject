@@ -52,11 +52,13 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
     }
 
-    public static PlayerData Create(long uniqueId = 0)
+    public static PlayerData Create(MessageBus messageBus, long uniqueId = 0)
     {
         var playerData = new PlayerData();
         playerData.UniqueId = uniqueId == 0 ? IDLogic.NewUniqueId() : uniqueId;
         playerData.Initialize();
+        playerData.MessageBus = messageBus;
+        playerData.OnSetMessageBus();
         
         return playerData;
     }

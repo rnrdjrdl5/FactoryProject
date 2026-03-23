@@ -30,7 +30,7 @@ public class MainStorageProcessor : Processor
             return;
         }
 
-        if (playerStorage.TryGetPlayerId(item.UniqueId, out var playerId))
+        if (playerStorage.TryGetPlayerIdByItemId(item.UniqueId, out var playerId))
         {
             playerStorage.RemovePlayerData(playerId);
         }

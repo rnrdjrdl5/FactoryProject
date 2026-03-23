@@ -94,6 +94,12 @@ public class Inventory : IMessageBus
         });
     }
 
+    public bool TryGetItemByItemUid(long itemUid, out Item item)
+    {
+        item = items.FirstOrDefault(item => item.UniqueId == itemUid);
+        return item != null;
+    }
+
 
     public static Inventory Create(Tables.ItemType itemType)
     {

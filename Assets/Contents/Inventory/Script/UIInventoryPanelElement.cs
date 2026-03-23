@@ -17,12 +17,12 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     List<ExItemList> itemLists = new();
     Tables.ItemType itemType;
 
-    protected override void OnSetPanelDatas()
+    public override void Initialize(Panel panel, IInitData initData = null)
     {
-        base.OnSetPanelDatas();
+        base.Initialize(panel, initData);
         
-        var playerData = GetTargetPanelDatas<PlayerData>();
-        bag = playerData?.Bag;
+        scroller.Delegate ??= this;
+        scroller.ReloadData();
     }
 
     public override void RefreshUI()
@@ -43,19 +43,15 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
                 .Select(ExItem.Create);
             itemLists.Add(ExItemList.Create(exItems));
         }
-
-        scroller.Delegate ??= this;
+        
         scroller.ReloadData();
     }
-
-    public void SetItemType(Tables.ItemType itemType)
+    
+    public void SetData(Bag bag, Tables.ItemType itemType)
     {
+        this.bag = bag;
         this.itemType = itemType;
-        if (bag == null)
-        {
-            return;
-        }
-
+        
         inventory = bag.GetInventory(itemType);
         RefreshUI();
     }

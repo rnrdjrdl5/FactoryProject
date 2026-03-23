@@ -15,33 +15,11 @@ public class UIEquipmentPanelElement : PanelElement
     [SerializeField] List<Slot> slots = new();
 
     readonly Dictionary<ItemType, Slot> slotMap = new();
-    readonly Dictionary<ItemType, Item> itemMap = new();
-    
-    Equipment equipment;
-    
-    protected override void OnSetPanelDatas()
-    {
-        base.OnSetPanelDatas();
 
-        var playerData = GetTargetPanelDatas<PlayerData>();
-        equipment = playerData?.Equipment;
-        if (equipment?.MessageBus != null)
-        {
-            equipment.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
-            equipment.MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
-        }
-    }
-
-    protected override void OnUnsetPanelDatas()
-    {
-        if (equipment != null && equipment.MessageBus != null)
-        {
-            equipment.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
-            equipment.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
-        }
-        
-        base.OnUnsetPanelDatas();
-    }
+    //PlayerStorage playerStorage;
+    Bag storageBag;
+    PlayerData playerLocalData;
+    Item playerItem;
 
     public override void Initialize(Panel panel, IInitData initData = null)
     {
@@ -74,6 +52,118 @@ public class UIEquipmentPanelElement : PanelElement
         base.Uninitialize();
     }
 
+    public override void RefreshUI()
+    {
+        base.RefreshUI();
+
+        for (int i = 0; i < slots.Count; i++)
+        {
+            var slot = slots[i];
+            if (slot == null || slot.ui == null)
+            {
+                continue;
+            }
+
+            if (slot.type == ItemType.Player)
+            {
+                if (playerItem != null)
+                {
+                    slot.ui.gameObject.SetActive(true);
+                    slot.ui.UpdateItemData(playerItem);
+                }
+
+                else
+                {
+                    slot.ui.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                var item = GetItem(slot);
+                if (item != null)
+                {
+                    slot.ui.gameObject.SetActive(true);
+                    slot.ui.UpdateItemData(item);
+                }
+                else
+                {
+                    slot.ui.gameObject.SetActive(false);
+                }
+            }
+        }
+    }
+
+    Item GetItem(Slot slot)
+    {
+        if (playerLocalData == null)
+        {
+            return null;
+        }
+
+        if (!playerLocalData.Equipment.TryGetEquipUid(slot.type, out var equipUid))
+        {
+            return null;
+        }
+
+        var inventory = storageBag.GetInventory(slot.type);
+        return !inventory.TryGetItemByItemUid(equipUid, out var playerItem) ? null : playerItem;
+    }
+
+    public void SetStorageBag(Bag bag)
+    {
+        storageBag = bag;
+    }
+    
+    public void SetPlayerData(PlayerData data, Item playerItem)
+    {
+        if (playerLocalData != null)
+        {
+            var equipment = playerLocalData?.Equipment;
+            if (equipment?.MessageBus != null)
+            {
+                equipment.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
+                equipment.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
+            }
+        }
+
+        this.playerItem = playerItem; 
+        playerLocalData = data;
+
+        if (playerLocalData != null)
+        {
+            var equipment = playerLocalData?.Equipment;
+            if (equipment?.MessageBus != null)
+            {
+                equipment.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
+                equipment.MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
+            }
+        }
+        
+        RefreshUI();
+    }
+
+    void EquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
+    {
+        var type = msg.Item.ItemData.itemType;
+        if (!slotMap.ContainsKey(type))
+        {
+            return;
+        }
+        
+        RefreshUI();
+    }
+    
+    void UnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
+    {
+        var type = msg.Item.ItemData.itemType;
+        if (!slotMap.ContainsKey(type))
+        {
+            return;
+        }
+        
+        RefreshUI();
+    }
+    
     void ClickItem(Item item)
     {
         if (!item.ItemData.CanEquip())
@@ -87,57 +177,6 @@ public class UIEquipmentPanelElement : PanelElement
         };
 
         Panel.MessageBus.Publish(msg);
-    }
-
-    public override void RefreshUI()
-    {
-        base.RefreshUI();
-
-        for (int i = 0; i < slots.Count; i++)
-        {
-            var slot = slots[i];
-            if (slot == null || slot.ui == null)
-            {
-                continue;
-            }
-
-            itemMap.TryGetValue(slot.type, out var item);
-            
-            if (item != null)
-            {
-                slot.ui.UpdateItemData(item);
-            }
-        }
-    }
-
-    public void SetEquip(Item item)
-    {
-        itemMap[item.ItemData.itemType] = item;
-        RefreshUI();
-    }
-
-    void EquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
-    {
-        var type = msg.Item.ItemData.itemType;
-        if (!slotMap.ContainsKey(type))
-        {
-            return;
-        }
-
-        itemMap[type] = msg.Item;
-        RefreshUI();
-    }
-    
-    void UnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
-    {
-        var type = msg.Item.ItemData.itemType;
-        if (!slotMap.ContainsKey(type))
-        {
-            return;
-        }
-
-        itemMap[type] = null;
-        RefreshUI();
     }
 }
 

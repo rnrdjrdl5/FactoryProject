@@ -80,7 +80,7 @@ public class MainRealmTeamProcessor : Processor
             var playerTableData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
             
             long playerId = 0;
-            if (playerStorage.TryGetPlayerId(item.UniqueId, out var id))
+            if (playerStorage.TryGetPlayerIdByItemId(item.UniqueId, out var id))
             {
                 playerId = id;
             }

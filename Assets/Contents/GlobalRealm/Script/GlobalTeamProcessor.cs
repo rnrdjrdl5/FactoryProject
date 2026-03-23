@@ -24,8 +24,7 @@ public class GlobalTeamProcessor : Processor
     public void OpenEquipment()
     {
         var panelAbility = Realm.GetAbility<PanelAbility>();
-        var teamPopup = panelAbility.CreatePanel<EquipmentPopup>(EquipmentPopup.PrefabPath);
-        
-        teamPopup.SetTargetData(mainStorage, mainStorage.MessageBus);
+        var equipmentPopup = panelAbility.CreatePanel<EquipmentPopup>(EquipmentPopup.PrefabPath);
+        equipmentPopup.SetTargetData(mainStorage, mainStorage.MessageBus);
     }
 }

@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Player_BuiltIn
   m_GUID: e2007ca2f52ea4ae396c2e8cb854dbb5
   m_SerializeEntries:
+  - m_GUID: 348405e42c714414abda2a6633f66042
+    m_Address: Player/icon_player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3674a0dc7abc24e38bfc211fa445ec06
     m_Address: Player/Player
     m_ReadOnly: 0
