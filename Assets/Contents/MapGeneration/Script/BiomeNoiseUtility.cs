@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-// 맵 생성에 사용할 부드러운 프랙탈 노이즈 값을 샘플링한다.
+// 맵 생성에 사용할 프랙탈 노이즈 값을 계산하는 유틸리티이다.
 public static class BiomeNoiseUtility
 {
     public static float SampleFractalNoise(

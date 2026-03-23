@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Tables;
 using UnityEngine;
 
-// 높이, 습도, 온도 노이즈를 기반으로 2D 셀 맵의 Biome을 생성한다.
+// 높이, 습도, 온도 노이즈를 이용해 2D 바이옴 맵을 생성한다.
 public class BiomeMapGenerator2D : MonoBehaviour
 {
     [Header("Map Size")]
@@ -41,12 +41,17 @@ public class BiomeMapGenerator2D : MonoBehaviour
     [SerializeField, Min(0)] int cleanupPasses = 2;
     [SerializeField, Range(0, 8)] int minimumSameBiomeNeighbors = 3;
 
+    [Header("Clusters")]
+    [SerializeField] bool clusterIncludesDiagonals;
+
     [Header("Biome Rules")]
-    [SerializeField] BiomeRule[] biomeRules = Array.Empty<BiomeRule>();
+    [SerializeField] BiomeRule[] biomeRules = new BiomeRule[0];
 
     BiomeMapData generatedMap;
+    BiomeClusterMapData generatedClusters;
 
     public BiomeMapData GeneratedMap => generatedMap;
+    public BiomeClusterMapData GeneratedClusters => generatedClusters;
 
     [ContextMenu("Generate Map")]
     public void GenerateMap()
@@ -58,10 +63,10 @@ public class BiomeMapGenerator2D : MonoBehaviour
 
         generatedMap = new BiomeMapData(width, height, seed, defaultLandBiome);
 
-        var random = new System.Random(seed);
-        var heightOffset = CreateOffset(random);
-        var moistureOffset = CreateOffset(random);
-        var temperatureOffset = CreateOffset(random);
+        System.Random random = new System.Random(seed);
+        Vector2 heightOffset = CreateOffset(random);
+        Vector2 moistureOffset = CreateOffset(random);
+        Vector2 temperatureOffset = CreateOffset(random);
 
         for (int y = 0; y < height; y++)
         {
@@ -85,6 +90,14 @@ public class BiomeMapGenerator2D : MonoBehaviour
         {
             CleanupSmallBiomeChunks();
         }
+
+        BuildClusters();
+    }
+
+    [ContextMenu("Build Clusters")]
+    public void BuildClusters()
+    {
+        generatedClusters = BiomeClusterBuilder.Build(generatedMap, clusterIncludesDiagonals);
     }
 
     public BiomeType GetBiomeAtWorldPosition(Vector3 worldPosition)
@@ -97,6 +110,60 @@ public class BiomeMapGenerator2D : MonoBehaviour
         Vector3 localPosition = transform.InverseTransformPoint(worldPosition);
         Vector2Int cell = generatedMap.ToCell(localPosition, cellSize);
         return generatedMap.GetBiome(cell.x, cell.y);
+    }
+
+    public int GetClusterIdAtCell(Vector2Int cell)
+    {
+        if (generatedClusters == null)
+        {
+            return -1;
+        }
+
+        return generatedClusters.GetClusterId(cell.x, cell.y);
+    }
+
+    public int GetClusterIdAtWorldPosition(Vector3 worldPosition)
+    {
+        if (generatedMap == null || generatedClusters == null)
+        {
+            return -1;
+        }
+
+        Vector3 localPosition = transform.InverseTransformPoint(worldPosition);
+        Vector2Int cell = generatedMap.ToCell(localPosition, cellSize);
+        return generatedClusters.GetClusterId(cell.x, cell.y);
+    }
+
+    public bool TryGetClusterAtCell(Vector2Int cell, out BiomeCluster cluster)
+    {
+        if (generatedClusters == null)
+        {
+            cluster = null;
+            return false;
+        }
+
+        return generatedClusters.TryGetCluster(cell.x, cell.y, out cluster);
+    }
+
+    public bool TryGetCluster(int clusterId, out BiomeCluster cluster)
+    {
+        if (generatedClusters == null)
+        {
+            cluster = null;
+            return false;
+        }
+
+        return generatedClusters.TryGetCluster(clusterId, out cluster);
+    }
+
+    public IReadOnlyList<Vector2Int> GetCellsInCluster(int clusterId)
+    {
+        if (generatedClusters == null)
+        {
+            return new Vector2Int[0];
+        }
+
+        return generatedClusters.GetCells(clusterId);
     }
 
     BiomeType ResolveBiome(float heightValue, float moistureValue, float temperatureValue)
@@ -145,7 +212,7 @@ public class BiomeMapGenerator2D : MonoBehaviour
             {
                 BiomeType current = generatedMap.GetBiome(x, y);
                 int sameCount = 0;
-                var counts = new Dictionary<BiomeType, int>();
+                Dictionary<BiomeType, int> counts = new Dictionary<BiomeType, int>();
 
                 for (int offsetY = -1; offsetY <= 1; offsetY++)
                 {
@@ -157,7 +224,11 @@ public class BiomeMapGenerator2D : MonoBehaviour
                         }
 
                         BiomeType neighbor = generatedMap.GetBiome(x + offsetX, y + offsetY);
-                        if (!counts.TryAdd(neighbor, 1))
+                        if (!counts.ContainsKey(neighbor))
+                        {
+                            counts.Add(neighbor, 1);
+                        }
+                        else
                         {
                             counts[neighbor]++;
                         }
@@ -193,7 +264,7 @@ public class BiomeMapGenerator2D : MonoBehaviour
         int highestCount = -1;
         BiomeType selectedBiome = fallback;
 
-        foreach (var pair in counts)
+        foreach (KeyValuePair<BiomeType, int> pair in counts)
         {
             if (pair.Value <= highestCount)
             {

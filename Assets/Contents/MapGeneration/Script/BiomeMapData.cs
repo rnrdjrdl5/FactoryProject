@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using Tables;
 using UnityEngine;
 
-// 생성된 맵의 셀별 Biome 결과를 저장하고 좌표 조회 기능을 제공한다.
+// 생성된 셀별 바이옴 결과를 저장하고 조회하는 데이터이다.
 [Serializable]
 public class BiomeMapData
 {

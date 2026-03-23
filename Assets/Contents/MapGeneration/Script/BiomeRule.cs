@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using Tables;
 
-// 노이즈로 계산된 값이 어떤 조건일 때 특정 Biome으로 판정되는지 정의한다.
+// 노이즈 조건에 따라 특정 바이옴으로 판정하는 규칙이다.
 [Serializable]
 public class BiomeRule
 {
