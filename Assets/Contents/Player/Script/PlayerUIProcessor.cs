@@ -2,7 +2,8 @@ public class PlayerUIProcessor : Processor
 {
     public void OpenInventory()
     {
-        var bag = Entity.GetEntityData<Bag>();
+        var playerData = Entity.GetEntityData<PlayerData>();
+        var bag = playerData.Bag;
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);
         var uiInventoryPanelElement = inventoryPopup.GetPanelElement<UIInventoryPanelElement>();

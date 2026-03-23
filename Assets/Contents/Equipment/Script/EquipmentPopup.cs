@@ -8,4 +8,9 @@ public class EquipmentPopup : Panel , IPanelOrderType
     {
         base.Initialize(initData);
     }
+
+    public void OnClickClose()
+    {
+        Close();
+    }
 }

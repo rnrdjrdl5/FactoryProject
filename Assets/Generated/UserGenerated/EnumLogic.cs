@@ -12,10 +12,12 @@ namespace Tables
         #region CacheEnum
         
         static string[] statNames;
+        static string[] itemNames;
         
         public static void CachingTable()
         {
             CachingStat();
+            CachingItem();
         }
 
         static void CachingStat()
@@ -29,8 +31,21 @@ namespace Tables
                 statNames[(int)v] = v.ToString();
             }
         }
+
+        static void CachingItem()
+        {
+            var max = ItemTypes.Max(v => (int)v);
+            
+            itemNames = new string[max + 1];
+
+            foreach (var v in ItemTypes)
+            {
+                itemNames[(int)v] = v.ToString();
+            }
+        }
         
         public static string GetStatName(StatType statType) => statNames[(int)statType];
+        public static string GetItemName(ItemType itemType) => itemNames[(int)itemType];
         
         #endregion
     }
