@@ -9,7 +9,7 @@ public class MainStorageProcessor : Processor
         playerStorage = Entity.GetEntityData<PlayerStorage>();
     }
 
-    public void AddPlayerStorage(Item item)
+    public void AddPlayer(Item item)
     {
         playerStorage.AddItem(item);
         if (playerStorage.ItemIdToPlayerId.ContainsKey(item.UniqueId))
@@ -17,9 +17,10 @@ public class MainStorageProcessor : Processor
             return;
         }
         
-        var playerKey = IDLogic.NewUniqueId();
-        playerStorage.CreateAndAddPlayerData(playerKey);
-        playerStorage.AddItemToPlayerId(item.UniqueId, playerKey);
+        var playerUid = IDLogic.NewUniqueId();
+        var playerKey = Tables.Player.GetPlayerByItemKey(item.ItemKey).Key;
+        playerStorage.CreateAndAddPlayerData(playerUid, playerKey);
+        playerStorage.AddItemToPlayerId(item.UniqueId, playerUid);
     }
 
     public void RemovePlayerStorage(Item item)

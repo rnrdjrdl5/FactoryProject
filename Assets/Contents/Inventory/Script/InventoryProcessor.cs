@@ -23,6 +23,7 @@ public class InventoryProcessor : Processor
         panel.OnSetPanelDatasAction += OnSetPanelData;
         
         activateTabType = ItemType.Weapon;
+        RefreshInventoryPanel();
     }
 
     public override void Uninitialize()

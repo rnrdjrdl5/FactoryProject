@@ -93,9 +93,9 @@ public class PlayerStorage : IEntityData, IMessageBus
         inventory.Unequip(item);
     }
 
-    public void CreateAndAddPlayerData(long playerKey)
+    public void CreateAndAddPlayerData(long playerUid, string playerKey)
     {
-        playerDataByKey.TryAdd(playerKey, PlayerData.Create(MessageBus, playerKey));
+        playerDataByKey.TryAdd(playerUid, PlayerData.Create(MessageBus, playerKey, playerUid));
     }
 
     public bool RemovePlayerData(long playerKey)

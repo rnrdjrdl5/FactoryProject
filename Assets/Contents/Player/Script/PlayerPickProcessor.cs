@@ -33,7 +33,7 @@ public class PlayerPickProcessor : Processor
             return;
         }
 
-        mainStorageProcessor.AddPlayerStorage(worldItem.Item);
+        mainStorageProcessor.AddPlayer(worldItem.Item);
         Realm.RemoveChild(worldItem);
     }
 }

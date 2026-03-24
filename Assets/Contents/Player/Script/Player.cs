@@ -35,34 +35,7 @@ public class Player : Entity
         base.Initialize(initData);
 
         playerData = GetEntityData<PlayerData>();
-        AddStat();
-    }
-
-    public override void Uninitialize()
-    {
-        RemoveStat();
-        
-        base.Uninitialize();
-    }
-
-    void AddStat()
-    {
-        if (playerData?.Stat == null)
-        {
-            return;
-        }
-        
-        playerData.Stat.AddStats(tableData);
-    }
-
-    void RemoveStat()
-    {
-        if (playerData?.Stat == null)
-        {
-            return;
-        }
-
-        playerData.Stat.RemoveStats(tableData);
+        playerData.UniqueId = UniqueId;
     }
 }
 

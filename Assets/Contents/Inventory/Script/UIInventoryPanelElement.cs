@@ -52,12 +52,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         base.OnSetPanelDatas();
 
         bag = GetTargetPanelDatas<Bag>();
-        if (bag != null)
-        {
-            inventory = bag.GetInventory(itemType);
-        }
-
-        RefreshUI(); 
+        SetItemType(itemType);
     }
 
     protected override void OnUnsetPanelDatas()
@@ -71,7 +66,17 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     public void SetItemType(Tables.ItemType itemType)
     {
         this.itemType = itemType;
+        
+        RefreshInventory();
         RefreshUI();
+    }
+
+    void RefreshInventory()
+    {
+        if (bag != null)
+        {
+            inventory = bag.GetInventory(itemType);
+        }
     }
     
     public int GetNumberOfCells(EnhancedScroller scroller)

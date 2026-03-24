@@ -17,13 +17,13 @@ public class MainStorage : Storage
         var mainStorageProcessor = processorAbility.GetProcessor<MainStorageProcessor>();
 
         var humanItem = Item.Create(Tables.TablesKey.Item_Human, 1);
-        mainStorageProcessor.AddPlayerStorage(humanItem);
+        mainStorageProcessor.AddPlayer(humanItem);
         var eagleItem =  Item.Create(Tables.TablesKey.Item_Eagle, 1);
-        mainStorageProcessor.AddPlayerStorage(eagleItem);
+        mainStorageProcessor.AddPlayer(eagleItem);
         var snakeItem = Item.Create(Tables.TablesKey.Item_Snake, 1);
-        mainStorageProcessor.AddPlayerStorage(snakeItem);
+        mainStorageProcessor.AddPlayer(snakeItem);
         var dogItem =  Item.Create(Tables.TablesKey.Item_Dog, 1);
-        mainStorageProcessor.AddPlayerStorage(dogItem);
+        mainStorageProcessor.AddPlayer(dogItem);
 
 
         var bag = GetEntityData<Bag>();
