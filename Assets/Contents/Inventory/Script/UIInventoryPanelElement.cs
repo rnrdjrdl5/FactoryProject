@@ -27,12 +27,12 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
 
     public override void RefreshUI()
     {
-        base.RefreshUI();
-
-        if (inventory == null)
+        if (bag == null || inventory == null)
         {
             return;
         }
+        
+        base.RefreshUI();
         
         itemLists.Clear();
         for (int i = 0; i < inventory.Items.Count; i+= lowCount)
@@ -46,13 +46,31 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         
         scroller.ReloadData();
     }
-    
-    public void SetData(Bag bag, Tables.ItemType itemType)
+
+    protected override void OnSetPanelDatas()
     {
-        this.bag = bag;
-        this.itemType = itemType;
+        base.OnSetPanelDatas();
+
+        bag = GetTargetPanelDatas<Bag>();
+        if (bag != null)
+        {
+            inventory = bag.GetInventory(itemType);
+        }
+
+        RefreshUI(); 
+    }
+
+    protected override void OnUnsetPanelDatas()
+    {
+        bag = null;
+        inventory = null;
         
-        inventory = bag.GetInventory(itemType);
+        base.OnUnsetPanelDatas();
+    }
+
+    public void SetItemType(Tables.ItemType itemType)
+    {
+        this.itemType = itemType;
         RefreshUI();
     }
     

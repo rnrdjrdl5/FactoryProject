@@ -5,6 +5,7 @@ public class EquipmentPopupProcessor : Processor
     EquipmentPopup equipmentPopup;
     UIEquipmentPanelElement uiEquipmentPanelElement;
     UIInventoryPanelElement uiInventoryPanelElement;
+    UIStatPanelElement uiStatPanelElement;
     PlayerStorage playerStorage;
     PlayerData targetPlayerData;
     Item selectedPlayer;
@@ -20,6 +21,7 @@ public class EquipmentPopupProcessor : Processor
         
         uiEquipmentPanelElement = equipmentPopup.GetPanelElement<UIEquipmentPanelElement>();
         uiInventoryPanelElement = equipmentPopup.GetPanelElement<UIInventoryPanelElement>();
+        uiStatPanelElement = equipmentPopup.GetPanelElement<UIStatPanelElement>();
     }
 
     public override void Ready()
@@ -46,7 +48,7 @@ public class EquipmentPopupProcessor : Processor
     {
         playerStorage = equipmentPopup.GetTargetPanelDatas<PlayerStorage>();
         bag = equipmentPopup.GetTargetPanelDatas<Bag>();
-        uiInventoryPanelElement.SetData(bag, ItemType.Weapon);
+        uiInventoryPanelElement.SetItemType(ItemType.Weapon);
         
         uiEquipmentPanelElement.SetStorageBag(bag);
     }
@@ -89,6 +91,7 @@ public class EquipmentPopupProcessor : Processor
         }
         
         uiEquipmentPanelElement.SetPlayerData(targetPlayerData, msg.Item);
+        uiStatPanelElement.SetTargetPanelDatas(new []{targetPlayerData});
     }
 
     void SelectInventoryItem(UIMsg.SelectInventoryItemMsg msg)

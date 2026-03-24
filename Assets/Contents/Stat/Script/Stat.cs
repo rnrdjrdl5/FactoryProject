@@ -38,6 +38,11 @@ public class Stat : IEntityData
         RefreshStats();
     }
 
+    public bool TryGetStat(Tables.StatType statType, out int value)
+    {
+        return totalStat.TryGetStatValue(statType, out value);
+    }
+
     void RefreshStats()
     {
         foreach (var appliedStat in appliedStats)
@@ -51,4 +56,18 @@ public class EntityStat : Tables.IStats
 {
     public List<Tables.StatType> statTypes { get; set; } = new();
     public List<int> statValues { get; set; } = new();
+
+    public bool TryGetStatValue(Tables.StatType statType, out int value)
+    {
+        value = 0;
+        
+        var index = statTypes.IndexOf(statType);
+        if (index < 0)
+        {
+            return false;
+        }
+
+        value = statValues[index];
+        return true;
+    }
 }

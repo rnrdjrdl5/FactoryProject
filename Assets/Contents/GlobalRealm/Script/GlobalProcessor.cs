@@ -25,6 +25,10 @@ public class GlobalProcessor : Processor
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var equipmentPopup = panelAbility.CreatePanel<EquipmentPopup>(EquipmentPopup.PrefabPath);
         equipmentPopup.SetTargetData(mainStorage, mainStorage.MessageBus);
+        
+        var uiInventoryPanelElement = equipmentPopup.GetPanelElement<UIInventoryPanelElement>();
+        var bag = mainStorage.GetEntityData<Bag>();
+        uiInventoryPanelElement.SetTargetPanelDatas(new []{bag});
     }
 
     public void OpenInventory()
@@ -32,5 +36,9 @@ public class GlobalProcessor : Processor
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);
         inventoryPopup.SetTargetData(mainStorage, mainStorage.MessageBus);
+        
+        var uiInventoryPanelElement = inventoryPopup.GetPanelElement<UIInventoryPanelElement>();
+        var bag = mainStorage.GetEntityData<Bag>();
+        uiInventoryPanelElement.SetTargetPanelDatas(new []{bag});
     }
 }

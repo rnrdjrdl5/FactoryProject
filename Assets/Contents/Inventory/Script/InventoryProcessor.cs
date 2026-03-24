@@ -47,6 +47,6 @@ public class InventoryProcessor : Processor
 
     void RefreshInventoryPanel()
     {
-        uiInventoryPanelElement.SetData(bag, activateTabType);
+        uiInventoryPanelElement.SetItemType(activateTabType);
     }
 }
