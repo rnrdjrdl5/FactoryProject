@@ -35,9 +35,7 @@ public class InventoryProcessor : Processor
 
     void OnSetPanelData()
     {
-        var playerData = panel.GetTargetPanelDatas<PlayerData>();
-        bag = playerData.Bag;
-        
+        bag = panel.GetTargetPanelDatas<Bag>();
         RefreshInventoryPanel();
     }
 

@@ -4,26 +4,31 @@ public class GlobalRealm : Realm
 {
     public static string PrefabPath = $"GlobalRealm/{typeof(GlobalRealm)}";
 
-    GlobalTeamProcessor globalTeamProcessor;
+    GlobalProcessor globalProcessor;
 
     public override void Ready()
     {
         base.Ready();
 
         var processorAbility = GetAbility<ProcessorAbility>();
-        globalTeamProcessor = processorAbility.GetProcessor<GlobalTeamProcessor>();
+        globalProcessor = processorAbility.GetProcessor<GlobalProcessor>();
     }
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            globalTeamProcessor.OpenTeam();
+            globalProcessor.OpenTeam();
         }
 
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            globalTeamProcessor.OpenEquipment();
+            globalProcessor.OpenEquipment();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            globalProcessor?.OpenInventory();
         }
     }
 }
