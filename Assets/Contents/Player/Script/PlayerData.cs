@@ -6,14 +6,23 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     [JsonProperty] public Stat Stat { get; private set; }
     [JsonProperty] public Equipment Equipment { get; private set; }
     [JsonProperty] public Faction Faction { get; private set; }
+    [JsonProperty] public string PlayerKey { get; private set; }
     [JsonIgnore] public MessageBus MessageBus { get; set; }
     [JsonProperty] public long UniqueId { get; set; }
-    
-    // [JsonProperty] public string PlayerKey { get; set; }
-    // [JsonIgnore] public Tables.Player TableData => Tables.Player.Get(PlayerKey);
+    [JsonIgnore] public Tables.Player TableData => string.IsNullOrEmpty(PlayerKey) ? null : Tables.Player.Get(PlayerKey);
 
     public void Initialize(IInitData initData = null)
     {
+        if (initData is IUniqueId uniqueIdData)
+        {
+            UniqueId = uniqueIdData.UniqueId;
+        }
+
+        if (initData is PlayerInitData playerInitData)
+        {
+            PlayerKey = playerInitData.PlayerKey;
+        }
+
         Bag = new Bag();
         Bag.Initialize(initData);
 
@@ -25,8 +34,8 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
 
         Faction = new Faction();
         Faction.Initialize(initData);
-        
-        //Stat.AddStats(TableData);
+
+        RebuildStats();
     }
 
     public void Uninitialize()
@@ -36,8 +45,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(OnEquipmentEquip);
             MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
         }
-        
-        //Stat.RemoveStats(TableData);
 
         Bag?.Uninitialize();
         Stat?.Uninitialize();
@@ -70,19 +77,63 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     
     void OnEquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
     {
+        if (msg.Equipment != Equipment)
+        {
+            return;
+        }
+
+        RebuildStats();
     }
     
     void OnUnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
     {
-        
+        if (msg.Equipment != Equipment)
+        {
+            return;
+        }
+
+        RebuildStats();
+    }
+
+    void RebuildStats()
+    {
+        if (Stat == null)
+        {
+            return;
+        }
+
+        Stat.ClearStats();
+
+        if (TableData != null)
+        {
+            Stat.AddStats(TableData);
+        }
+
+        if (Equipment == null)
+        {
+            return;
+        }
+
+        foreach (var equipItem in Equipment.EquipItems)
+        {
+            if (equipItem?.ItemData == null)
+            {
+                continue;
+            }
+
+            Stat.AddStats(equipItem.ItemData);
+        }
     }
 
     public static PlayerData Create(MessageBus messageBus, string playerKey, long uniqueId = 0)
     {
         var playerData = new PlayerData();
-        playerData.UniqueId = uniqueId == 0 ? IDLogic.NewUniqueId() : uniqueId;
-        //playerData.PlayerKey = playerKey;
-        playerData.Initialize();
+        var resolvedUniqueId = uniqueId == 0 ? IDLogic.NewUniqueId() : uniqueId;
+        playerData.Initialize(new PlayerInitData
+        {
+            UniqueId = resolvedUniqueId,
+            PlayerKey = playerKey
+        });
         playerData.MessageBus = messageBus;
         playerData.OnSetMessageBus();
         

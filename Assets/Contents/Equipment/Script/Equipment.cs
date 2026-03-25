@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using UnityEngine;
 
 public class Equipment : IEntityData, IMessageBus
 {
     [JsonIgnore] public MessageBus MessageBus { get; set; }
+    [JsonIgnore] public IEnumerable<Item> EquipItems => equipItems.Values;
     
     [JsonProperty] Dictionary<Tables.ItemType, Item> equipItems = new();
     
@@ -30,7 +29,7 @@ public class Equipment : IEntityData, IMessageBus
         equipItems.TryGetValue(item.ItemData.itemType, out var equipedItem);
         TryUnequipItem(equipedItem);
         
-        equipItems.Add(item.ItemData.itemType, item);
+        equipItems[item.ItemData.itemType] = item;
         item.SetEquip(true);
         
         MessageBus?.Publish(new EntityDataMsg.EquipmentEquipMsg

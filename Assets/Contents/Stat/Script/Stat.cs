@@ -16,9 +16,15 @@ public class Stat : IEntityData
         
     }
 
+    public void ClearStats()
+    {
+        appliedStats.Clear();
+        RefreshStats();
+    }
+
     public void AddStats(Tables.IStats stats)
     {
-        if (appliedStats.Contains(stats))
+        if (stats == null || appliedStats.Contains(stats))
         {
             return;
         }
@@ -42,9 +48,14 @@ public class Stat : IEntityData
     {
         return totalStat.TryGetStatValue(statType, out value);
     }
-
+    
     void RefreshStats()
     {
+        totalStat.statTypes ??= new List<Tables.StatType>();
+        totalStat.statValues ??= new List<int>();
+        totalStat.statTypes.Clear();
+        totalStat.statValues.Clear();
+
         foreach (var appliedStat in appliedStats)
         {
             totalStat.MergeStat(appliedStat);
