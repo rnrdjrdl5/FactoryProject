@@ -63,8 +63,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             Equipment.MessageBus = MessageBus;
             Equipment.OnSetMessageBus();
 
-            MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(OnEquipmentEquip);
-            MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
             MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(OnEquipmentEquip);
             MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
         }
