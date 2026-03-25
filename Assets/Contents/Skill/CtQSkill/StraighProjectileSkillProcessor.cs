@@ -109,7 +109,8 @@ public class StraighProjectileSkillProcessor : SkillProcessor
             }
             
             var hpAbility = targetEntity.GetAbility<HpAbility>();
-            hpAbility.TryApplyDamage(skillProcessor.SkillContext.Caster,5);
+            var casterData = skillProcessor.SkillContext.Caster.GetEntityData<PlayerData>();
+            hpAbility.TryApplyDamage(skillProcessor.SkillContext.Caster, DamageLogic.GetDamage(casterData));
             Realm.RemoveChild(Entity);
         }
     }
