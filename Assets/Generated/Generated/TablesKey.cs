@@ -24,6 +24,8 @@ namespace Tables
         public static string Player_Eagle = "Player_Eagle";
         public static string Player_Human = "Player_Human";
         public static string Player_Snake = "Player_Snake";
+        public static string Skill_Human_Projectile_1 = "Skill_Human_Projectile_1";
+        public static string Skill_Projectile_Hit_1 = "Skill_Projectile_Hit_1";
         public static string Spawner_Test = "Spawner_Test";
         public static string SynergeBiome_Test = "SynergeBiome_Test";
         public static string SynergeElement_Test = "SynergeElement_Test";
