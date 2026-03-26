@@ -15,11 +15,11 @@ namespace Tables
         public string iconAtlasPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
         public SkillTimeType SkillTimeType { get; set; }
-        public string parameter { get; set; } = string.Empty;
+        public List<string> skillTimeParam { get; set; } = new System.Collections.Generic.List<string>();
         public SkillAreaType skillAreaType { get; set; }
-        public string parameter1 { get; set; } = string.Empty;
+        public List<string> skillAreaParam { get; set; } = new System.Collections.Generic.List<string>();
         public SkillActionType skillActionType { get; set; }
-        public string parameter2 { get; set; } = string.Empty;
+        public List<string> skillActionParam { get; set; } = new System.Collections.Generic.List<string>();
 
         private static readonly System.Collections.Generic.Dictionary<string, Skill> _table = new System.Collections.Generic.Dictionary<string, Skill>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, Skill> Table => _table;
@@ -43,11 +43,11 @@ namespace Tables
                     foreach (var kvp in data)
                     {
                         // Coalesce null lists and strings on each deserialized instance
+                        kvp.Value.skillTimeParam = kvp.Value.skillTimeParam ?? new System.Collections.Generic.List<string>();
+                        kvp.Value.skillAreaParam = kvp.Value.skillAreaParam ?? new System.Collections.Generic.List<string>();
+                        kvp.Value.skillActionParam = kvp.Value.skillActionParam ?? new System.Collections.Generic.List<string>();
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
-                        kvp.Value.parameter = kvp.Value.parameter ?? string.Empty;
-                        kvp.Value.parameter1 = kvp.Value.parameter1 ?? string.Empty;
-                        kvp.Value.parameter2 = kvp.Value.parameter2 ?? string.Empty;
                         // Ensure Key property matches dictionary key
                         kvp.Value.Key = kvp.Key;
                         _table[kvp.Key] = kvp.Value;
