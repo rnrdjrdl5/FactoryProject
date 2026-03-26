@@ -2,54 +2,24 @@ namespace Tables
 {
     public partial class Skill
     {
-        public ISkillTimeParam ParsedTimeParam
-        {
-            get
-            {
-                EnsureParsedParams();
-                return parsedTimeParam;
-            }
-        }
-
-        public ISkillAreaParam ParsedAreaParam
-        {
-            get
-            {
-                EnsureParsedParams();
-                return parsedAreaParam;
-            }
-        }
-
-        public ISkillActionParam ParsedActionParam
-        {
-            get
-            {
-                EnsureParsedParams();
-                return parsedActionParam;
-            }
-        }
+        public ISkillTimeParam ParsedTimeParam => parsedTimeParam;
+        public ISkillAreaParam ParsedAreaParam => parsedAreaParam;
+        public ISkillActionParam ParsedActionParam => parsedActionParam;
 
         ISkillTimeParam parsedTimeParam;
         ISkillAreaParam parsedAreaParam;
         ISkillActionParam parsedActionParam;
-        bool hasParsedParams;
 
-        public void InvalidateParsedParams()
+        public void ClearParsedParams()
         {
-            hasParsedParams = false;
             parsedTimeParam = null;
             parsedAreaParam = null;
             parsedActionParam = null;
         }
 
-        void EnsureParsedParams()
+        public void BuildParsedParams()
         {
-            if (hasParsedParams)
-            {
-                return;
-            }
-
-            hasParsedParams = true;
+            ClearParsedParams();
             parsedTimeParam = SkillTimeParamParser.Parse(SkillTimeType, skillTimeParam, Key);
             parsedAreaParam = SkillAreaParamParser.Parse(skillAreaType, skillAreaParam, Key);
             parsedActionParam = SkillActionParamParser.Parse(skillActionType, skillActionParam, Key);
