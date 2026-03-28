@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [EntityData(typeof(PlayerData))]

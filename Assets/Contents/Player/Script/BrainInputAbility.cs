@@ -8,7 +8,6 @@ public class BrainInputAbility : Ability
     PlayerMoveAbility playerMoveAbility;
     PlayerPickProcessor playerPickProcessor;
     SkillAbility skillAbility;
-    
     public override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);
@@ -55,7 +54,13 @@ public class BrainInputAbility : Ability
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            skillAbility.UseSkill();            
+            var player = brain.Controll as Player;
+            if (player == null)
+            {
+                return;
+            }
+
+            skillAbility.TryUseSkill(player.TableData.uniqueSkillKey);
         }
     }
 

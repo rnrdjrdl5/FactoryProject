@@ -20,7 +20,7 @@ namespace Tables
         public void BuildParsedParams()
         {
             ClearParsedParams();
-            parsedTimeParam = SkillTimeParamParser.Parse(SkillTimeType, skillTimeParam, Key);
+            parsedTimeParam = SkillTimeParamParser.Parse(skillTimeType, skillTimeParam, Key);
             parsedAreaParam = SkillAreaParamParser.Parse(skillAreaType, skillAreaParam, Key);
             parsedActionParam = SkillActionParamParser.Parse(skillActionType, skillActionParam, Key);
         }

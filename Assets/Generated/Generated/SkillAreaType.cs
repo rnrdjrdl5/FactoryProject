@@ -3,6 +3,7 @@ namespace Tables
 {
     public enum SkillAreaType
     {
-        Circle = 1,
+        None = 1,
+        Circle = 2,
     }
 }

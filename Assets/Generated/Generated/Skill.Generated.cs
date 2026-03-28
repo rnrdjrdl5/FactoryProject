@@ -12,9 +12,10 @@ namespace Tables
     public partial class Skill
     {
         public string Key { get; set; } = string.Empty;
+        public float range { get; set; }
         public string iconAtlasPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
-        public SkillTimeType SkillTimeType { get; set; }
+        public SkillTimeType skillTimeType { get; set; }
         public List<string> skillTimeParam { get; set; } = new System.Collections.Generic.List<string>();
         public SkillAreaType skillAreaType { get; set; }
         public List<string> skillAreaParam { get; set; } = new System.Collections.Generic.List<string>();

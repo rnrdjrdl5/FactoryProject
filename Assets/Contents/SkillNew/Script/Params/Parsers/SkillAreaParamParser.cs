@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Tables;
 using UnityEngine;
 
 public static class SkillAreaParamParser
@@ -17,6 +18,11 @@ public static class SkillAreaParamParser
 
                 param.Radius = radius;
                 return param;
+            }
+            
+            case SkillAreaType.None:
+            {
+                return null;
             }
 
             default:

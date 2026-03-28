@@ -158,9 +158,6 @@ PrefabInstance:
       addedObject: {fileID: 257205668888087734}
     - targetCorrespondingSourceObject: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5094851720396938345}
-    - targetCorrespondingSourceObject: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 784842658488440774}
     - targetCorrespondingSourceObject: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
       insertIndex: -1
@@ -168,6 +165,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4680328282195646202}
+    - targetCorrespondingSourceObject: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6693041319024099437}
     - targetCorrespondingSourceObject: {fileID: 4105607686330439248, guid: 7c789a2100b524aa48aeaddfc52481fc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6705612036161930933}
@@ -211,18 +211,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody2D: {fileID: 6705612036161930933}
   moveSpeed: 5
---- !u!114 &5094851720396938345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9187818609255137603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 813283b2b0eb4541b10abcd8318ad806, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &784842658488440774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +250,18 @@ MonoBehaviour:
   rigidbody2D: {fileID: 6705612036161930933}
   followDistance: 0.4
   followSpeed: 7
+--- !u!114 &6693041319024099437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9187818609255137603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 793d6d859f18482fa5e58f24de8b8a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &6705612036161930933
 Rigidbody2D:
   serializedVersion: 5
