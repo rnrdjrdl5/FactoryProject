@@ -1,4 +1,5 @@
 using Tables;
+using UnityEngine;
 
 public static class SkillActionLogic
 {
@@ -13,6 +14,10 @@ public static class SkillActionLogic
         {
             case SkillActionDamageParam damageParam:
                 ExecuteDamage(skillContext, damageParam);
+                break;
+
+            case SkillActionProjectileParam projectileParam:
+                ExecuteProjectile(skillContext, projectileParam);
                 break;
         }
     }
@@ -46,5 +51,29 @@ public static class SkillActionLogic
 
         var casterPlayerData = skillContext.Caster?.GetEntityData<PlayerData>();
         return DamageLogic.GetDamage(casterPlayerData);
+    }
+
+    static void ExecuteProjectile(SkillContext skillContext, SkillActionProjectileParam projectileParam)
+    {
+        if (skillContext?.Caster == null || string.IsNullOrWhiteSpace(projectileParam?.PrefabPath))
+        {
+            return;
+        }
+
+        var realm = skillContext.Caster.GetParent<Realm>();
+        if (realm == null)
+        {
+            return;
+        }
+
+        var projectileEntity = realm.AddEntity<ProjectileEntity>(projectileParam.PrefabPath, new ProjectileInitData
+        {
+            SkillContext = skillContext,
+            Position = skillContext.Caster.transform.position
+        });
+        if (projectileEntity == null)
+        {
+            return;
+        }
     }
 }

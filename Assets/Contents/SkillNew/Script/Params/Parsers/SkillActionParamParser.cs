@@ -22,17 +22,17 @@ public static class SkillActionParamParser
             case Tables.SkillActionType.Projectile:
             {
                 var param = new SkillActionProjectileParam();
-                if (!SkillParamParseUtility.TryGetOptionalString(rawParams, 0, out var prefabPath))
+                if (!SkillParamParseUtility.TryGetOptionalFloat(rawParams, 0, skillKey, "speed", out var speed))
                 {
                     return null;
                 }
 
-                if (!SkillParamParseUtility.TryGetOptionalFloat(rawParams, 1, skillKey, "speed", out var speed))
+                if (!SkillParamParseUtility.TryGetOptionalFloat(rawParams, 1, skillKey, "duration", out var duration))
                 {
                     return null;
                 }
-
-                if (!SkillParamParseUtility.TryGetOptionalFloat(rawParams, 2, skillKey, "duration", out var duration))
+                
+                if (!SkillParamParseUtility.TryGetOptionalString(rawParams, 2, out var prefabPath))
                 {
                     return null;
                 }

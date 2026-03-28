@@ -30,7 +30,6 @@ public class Player : Entity
         {
             playerKey = playerInitData.PlayerKey;
             tableData = Tables.Player.Get(playerKey);
-            transform.position = playerInitData.Position;
         }
         
         base.Initialize(initData);
@@ -40,9 +39,9 @@ public class Player : Entity
     }
 }
 
-public class PlayerInitData : IInitData , IUniqueId
+public class PlayerInitData : IInitData , IUniqueId, IPositionData
 {
     public long UniqueId { get; set; }
     public string PlayerKey;
-    public Vector3 Position;
+    public Vector3 Position { get; set; }
 }
