@@ -5,7 +5,7 @@ public static class SkillAreaLogic
 {
     public static List<Entity> GetTargetEntities(SkillContext skillContext, MainRealmProcessor mainRealmProcessor)
     {
-        if (skillContext?.Caster is not Player caster || skillContext.SkillData == null)
+        if (skillContext?.OriginCaster is not Player originCaster || skillContext.SkillData == null)
         {
             return new List<Entity>();
         }
@@ -13,7 +13,7 @@ public static class SkillAreaLogic
         switch (skillContext.SkillData.ParsedAreaParam)
         {
             case SkillAreaCircleParam circleParam:
-                return GetCircleTargetEntities(caster, skillContext.TargetPosition, circleParam, mainRealmProcessor);
+                return GetCircleTargetEntities(originCaster, skillContext.TargetPosition, circleParam, mainRealmProcessor);
 
             default:
                 return new List<Entity>();
@@ -21,7 +21,7 @@ public static class SkillAreaLogic
     }
 
     static List<Entity> GetCircleTargetEntities(
-        Player caster,
+        Player originCaster,
         Vector3? targetPosition,
         SkillAreaCircleParam circleParam,
         MainRealmProcessor mainRealmProcessor)
@@ -31,7 +31,7 @@ public static class SkillAreaLogic
             return new List<Entity>();
         }
 
-        var targetPlayers = mainRealmProcessor?.GetHostilePlayersInRange(caster, targetPosition.Value, circleParam.Radius.Value);
+        var targetPlayers = mainRealmProcessor?.GetHostilePlayersInRange(originCaster, targetPosition.Value, circleParam.Radius.Value);
         if (targetPlayers == null || targetPlayers.Count == 0)
         {
             return new List<Entity>();

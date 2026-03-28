@@ -1,19 +1,12 @@
 public static class SkillParamTableInitializer
 {
-    static bool isInitialized;
-
     public static void Initialize()
     {
-        if (isInitialized)
-        {
-            return;
-        }
-
-        Rebuild();
-        isInitialized = true;
+        Reset();
+        Build();
     }
 
-    public static void Rebuild()
+    public static void Build()
     {
         foreach (var skill in Tables.Skill.Table.Values)
         {
@@ -23,8 +16,6 @@ public static class SkillParamTableInitializer
 
     public static void Reset()
     {
-        isInitialized = false;
-
         foreach (var skill in Tables.Skill.Table.Values)
         {
             skill.ClearParsedParams();

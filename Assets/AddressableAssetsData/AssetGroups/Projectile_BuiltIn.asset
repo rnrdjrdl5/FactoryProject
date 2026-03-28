@@ -15,13 +15,13 @@ MonoBehaviour:
   m_GroupName: Projectile_BuiltIn
   m_GUID: b28248cb45568465283ed84e543004ee
   m_SerializeEntries:
-  - m_GUID: 134ac01a2f0f8410cad654170b3c577b
-    m_Address: Projectile/CtQProjectile
+  - m_GUID: 75d4d26433eb145cd971e2ac489499aa
+    m_Address: Projectile/Projectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 75d4d26433eb145cd971e2ac489499aa
-    m_Address: Projectile/Projectile
+  - m_GUID: a45cc48b481314188bfbd0b53384f9c2
+    m_Address: Projectile/HumanProjectile
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

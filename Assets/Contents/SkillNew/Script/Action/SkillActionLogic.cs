@@ -38,7 +38,7 @@ public static class SkillActionLogic
             }
 
             var hpAbility = targetEntity.GetAbility<HpAbility>();
-            hpAbility?.TryApplyDamage(skillContext.Caster, damage);
+            hpAbility?.TryApplyDamage(skillContext.OriginCaster, damage);
         }
     }
 
@@ -49,13 +49,19 @@ public static class SkillActionLogic
             return damageParam.Amount.Value;
         }
 
-        var casterPlayerData = skillContext.Caster?.GetEntityData<PlayerData>();
+        var casterPlayerData = skillContext.OriginCaster?.GetEntityData<PlayerData>();
         return DamageLogic.GetDamage(casterPlayerData);
     }
 
     static void ExecuteProjectile(SkillContext skillContext, SkillActionProjectileParam projectileParam)
     {
-        if (skillContext?.Caster == null || string.IsNullOrWhiteSpace(projectileParam?.PrefabPath))
+        if (skillContext?.Caster == null || string.IsNullOrWhiteSpace(projectileParam?.ProjectileKey))
+        {
+            return;
+        }
+
+        var projectileData = Tables.Projectile.Get(projectileParam.ProjectileKey);
+        if (projectileData == null || string.IsNullOrWhiteSpace(projectileData.prefabPath))
         {
             return;
         }
@@ -66,8 +72,9 @@ public static class SkillActionLogic
             return;
         }
 
-        var projectileEntity = realm.AddEntity<ProjectileEntity>(projectileParam.PrefabPath, new ProjectileInitData
+        var projectileEntity = realm.AddEntity<ProjectileEntity>(projectileData.prefabPath, new ProjectileInitData
         {
+            ProjectileKey = projectileParam.ProjectileKey,
             SkillContext = skillContext,
             Position = skillContext.Caster.transform.position
         });

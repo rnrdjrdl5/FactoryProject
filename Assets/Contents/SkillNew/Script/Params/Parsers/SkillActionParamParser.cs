@@ -32,12 +32,12 @@ public static class SkillActionParamParser
                     return null;
                 }
                 
-                if (!SkillParamParseUtility.TryGetOptionalString(rawParams, 2, out var prefabPath))
+                if (!SkillParamParseUtility.TryGetOptionalString(rawParams, 2, out var projectileKey))
                 {
                     return null;
                 }
 
-                param.PrefabPath = prefabPath;
+                param.ProjectileKey = projectileKey;
                 param.Speed = speed;
                 param.Duration = duration;
                 return param;

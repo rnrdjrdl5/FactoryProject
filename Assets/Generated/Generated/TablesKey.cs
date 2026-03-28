@@ -24,6 +24,7 @@ namespace Tables
         public static string Player_Eagle = "Player_Eagle";
         public static string Player_Human = "Player_Human";
         public static string Player_Snake = "Player_Snake";
+        public static string Projectile_Human = "Projectile_Human";
         public static string Skill_Human_MeleeAttack_1 = "Skill_Human_MeleeAttack_1";
         public static string Skill_Human_Projectile_1 = "Skill_Human_Projectile_1";
         public static string Skill_Projectile_Hit_1 = "Skill_Projectile_Hit_1";

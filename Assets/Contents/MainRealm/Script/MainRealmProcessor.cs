@@ -12,7 +12,7 @@ public class MainRealmProcessor : Processor
         return (brain, player);
     }
 
-    public Player GetClosestHostilePlayer(Player player, float range)
+    public Player GetClosestHostilePlayer(Player player, Vector3 centerPosition, float range)
     {
         if (player == null)
         {
@@ -33,7 +33,7 @@ public class MainRealmProcessor : Processor
                 continue;
             }
 
-            var distanceSqr = ((Vector2)targetPlayer.transform.position - (Vector2)player.transform.position).sqrMagnitude;
+            var distanceSqr = ((Vector2)targetPlayer.transform.position - (Vector2)centerPosition).sqrMagnitude;
             if (distanceSqr > closestDistanceSqr)
             {
                 continue;
