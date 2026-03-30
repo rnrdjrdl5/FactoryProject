@@ -11,5 +11,6 @@ public class BuffAbility : Ability
 
     public void UseBuff(string buffKey)
     {
+        buffContainer.AddBuff(this, buffKey);
     }
 }

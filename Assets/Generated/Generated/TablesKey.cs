@@ -3,6 +3,7 @@ namespace Tables
 {
     public static class TablesKey
     {
+        public static string Buff_1 = "Buff_1";
         public static string FactionRelation_Faction2 = "FactionRelation_Faction2";
         public static string FactionRelation_Faction3 = "FactionRelation_Faction3";
         public static string FactionRelation_Faction4 = "FactionRelation_Faction4";

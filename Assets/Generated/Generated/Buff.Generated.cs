@@ -17,9 +17,7 @@ namespace Tables
         public int maxStack { get; set; }
         public string iconAtlasPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
-        public float tickInterval { get; set; }
         public string startSkillKey { get; set; } = string.Empty;
-        public string tickSkillKey { get; set; } = string.Empty;
         public string endSkillKey { get; set; } = string.Empty;
 
         private static readonly System.Collections.Generic.Dictionary<string, Buff> _table = new System.Collections.Generic.Dictionary<string, Buff>();
@@ -43,11 +41,12 @@ namespace Tables
                 {
                     foreach (var kvp in data)
                     {
+                        // Coalesce null lists and strings on each deserialized instance
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
                         kvp.Value.startSkillKey = kvp.Value.startSkillKey ?? string.Empty;
-                        kvp.Value.tickSkillKey = kvp.Value.tickSkillKey ?? string.Empty;
                         kvp.Value.endSkillKey = kvp.Value.endSkillKey ?? string.Empty;
+                        // Ensure Key property matches dictionary key
                         kvp.Value.Key = kvp.Key;
                         _table[kvp.Key] = kvp.Value;
                     }

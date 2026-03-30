@@ -4,9 +4,9 @@ public class BuffContainer
 {
     Dictionary<string, ActiveBuff> activeBuffs = new();
 
-    public void AddBuff(string buffKey)
+    public void AddBuff(BuffAbility buffAbility, string buffKey)
     {
-        activeBuffs[buffKey] = ActiveBuff.Create(buffKey);
+        activeBuffs[buffKey] = ActiveBuff.Create(buffAbility, buffKey);
     }
 
     public void Update(float deltaTime)
