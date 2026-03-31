@@ -5,6 +5,9 @@ namespace Tables
 {
     public partial class Item : IStats , IIconSprite, IGradeType , IDescription
     {
+        public Skill AttackSkill => Skill.Get(attackSkillKey);
+        public Skill UniqueSkill => Skill.Get(uniqueSkillKey);
+
         public static bool TryCanEquip(string itemKey, out bool result)
         {
             result = false;
