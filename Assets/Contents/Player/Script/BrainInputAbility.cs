@@ -1,29 +1,18 @@
-using System;
 using UnityEngine;
 
 public class BrainInputAbility : Ability
 {
     Brain brain;
-    
-    PlayerMoveAbility playerMoveAbility;
-    PlayerPickProcessor playerPickProcessor;
-    SkillAbility skillAbility;
+    BrainActionProcessor brainActionProcessor;
+
     public override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);
 
         brain = Entity as Brain;
-
-        brain.OnAttachControll += OnControll;
+        var processorAbility = Entity.GetAbility<BrainProcessorAbility>();
+        brainActionProcessor = processorAbility?.GetProcessor<BrainActionProcessor>();
     }
-
-    public override void Uninitialize()
-    {
-        brain.OnAttachControll -= OnControll;
-        
-        base.Uninitialize();
-    }
-
     private void Update()
     {
         if (brain.IsAI)
@@ -36,45 +25,17 @@ public class BrainInputAbility : Ability
 
         if (horizontal != 0f || vertical != 0f)
         {
-            if (playerMoveAbility == null)
-            {
-                return;
-            }
-
-            playerMoveAbility.Move(new Vector2(horizontal, vertical));
+            brainActionProcessor?.Move(new Vector2(horizontal, vertical));
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (playerPickProcessor != null)
-            {
-                playerPickProcessor.PickItem();
-            }
+            brainActionProcessor?.TryPick();
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var player = brain.Controll as Player;
-            if (player == null)
-            {
-                return;
-            }
-
-            skillAbility.TryUseSkill(player.TableData.uniqueSkillKey);
-        }
-    }
-
-    void OnControll(IControlled controlled)
-    {
-        var controlledEntity = controlled as Entity;
-        
-        playerMoveAbility = controlledEntity.GetAbility<PlayerMoveAbility>();
-        skillAbility = controlledEntity.GetAbility<SkillAbility>();
-        
-        var processorAbility = controlledEntity.GetAbility<PlayerProcessorAbility>();
-        if (processorAbility != null)
-        {
-            playerPickProcessor = processorAbility.GetProcessor<PlayerPickProcessor>();
+            brainActionProcessor?.TryUseUniqueSkill();
         }
     }
 }
