@@ -13,7 +13,41 @@ public static class TeamSynergeLogic
 
         var biomeCounts = new Dictionary<BiomeType, int>();
         var elementCounts = new Dictionary<ElementType, int>();
+        CollectCounts(teamFormation, biomeCounts, elementCounts);
+        AddActiveBiomeSynerges(synerges, biomeCounts);
+        AddActiveElementSynerges(synerges, elementCounts);
 
+        return synerges;
+    }
+
+    public static List<Skill> GetAllSynergeSkills(TeamFormation teamFormation)
+    {
+        var skills = new List<Skill>();
+
+        foreach (var synerge in GetAllSynerges(teamFormation))
+        {
+            if (string.IsNullOrWhiteSpace(synerge.synergeSkillKey))
+            {
+                continue;
+            }
+
+            var skillData = Skill.Get(synerge.synergeSkillKey);
+            if (skillData == null)
+            {
+                continue;
+            }
+
+            skills.Add(skillData);
+        }
+
+        return skills;
+    }
+
+    static void CollectCounts(
+        TeamFormation teamFormation,
+        Dictionary<BiomeType, int> biomeCounts,
+        Dictionary<ElementType, int> elementCounts)
+    {
         foreach (var playerItem in teamFormation.Players)
         {
             if (playerItem == null)
@@ -21,7 +55,7 @@ public static class TeamSynergeLogic
                 continue;
             }
 
-            var playerTable = Player.GetPlayerByItemKey(playerItem.ItemKey);
+            var playerTable = Tables.Player.GetPlayerByItemKey(playerItem.ItemKey);
             if (playerTable == null)
             {
                 continue;
@@ -33,7 +67,10 @@ public static class TeamSynergeLogic
             elementCounts.TryGetValue(playerTable.elementType, out var elementCount);
             elementCounts[playerTable.elementType] = elementCount + 1;
         }
+    }
 
+    static void AddActiveBiomeSynerges(List<ISynerge> synerges, Dictionary<BiomeType, int> biomeCounts)
+    {
         foreach (var synergeBiome in SynergeBiome.Table.Values)
         {
             if (!biomeCounts.TryGetValue(synergeBiome.biomeType, out var currentCount))
@@ -48,7 +85,10 @@ public static class TeamSynergeLogic
 
             synerges.Add(synergeBiome);
         }
+    }
 
+    static void AddActiveElementSynerges(List<ISynerge> synerges, Dictionary<ElementType, int> elementCounts)
+    {
         foreach (var synergeElement in SynergeElement.Table.Values)
         {
             if (!elementCounts.TryGetValue(synergeElement.elementType, out var currentCount))
@@ -63,7 +103,5 @@ public static class TeamSynergeLogic
 
             synerges.Add(synergeElement);
         }
-
-        return synerges;
     }
 }

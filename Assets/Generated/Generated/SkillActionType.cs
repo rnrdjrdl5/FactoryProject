@@ -7,5 +7,6 @@ namespace Tables
         Projectile = 2,
         Casting = 3,
         UseSkill = 4,
+        ApplyStat = 5,
     }
 }

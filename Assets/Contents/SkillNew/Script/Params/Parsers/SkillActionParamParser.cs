@@ -67,6 +67,24 @@ public static class SkillActionParamParser
                 return param;
             }
 
+            case Tables.SkillActionType.ApplyStat:
+            {
+                var param = new SkillActionApplyStatParam();
+                if (!SkillParamParseUtility.TryGetOptionalEnum<Tables.StatType>(rawParams, 0, skillKey, "statType", out var statType))
+                {
+                    return null;
+                }
+
+                if (!SkillParamParseUtility.TryGetOptionalInt(rawParams, 1, skillKey, "value", out var value))
+                {
+                    return null;
+                }
+
+                param.StatType = statType;
+                param.Value = value;
+                return param;
+            }
+
             default:
                 Debug.LogError($"[SkillActionParamParser] Unsupported SkillActionType. skillKey={skillKey}, type={type}");
                 return null;

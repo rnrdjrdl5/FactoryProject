@@ -65,6 +65,29 @@ public static class SkillParamParseUtility
         return true;
     }
 
+    public static bool TryGetOptionalEnum<TEnum>(
+        IReadOnlyList<string> rawParams,
+        int index,
+        string skillKey,
+        string paramName,
+        out TEnum? value) where TEnum : struct
+    {
+        value = null;
+        if (!TryGetValue(rawParams, index, out var rawValue))
+        {
+            return true;
+        }
+
+        if (!System.Enum.TryParse<TEnum>(rawValue, true, out var parsedValue))
+        {
+            Debug.LogError($"[SkillParamParser] Invalid enum value. skillKey={skillKey}, param={paramName}, value={rawValue}, enumType={typeof(TEnum).Name}");
+            return false;
+        }
+
+        value = parsedValue;
+        return true;
+    }
+
     static bool TryGetValue(IReadOnlyList<string> rawParams, int index, out string value)
     {
         value = null;

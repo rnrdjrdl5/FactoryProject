@@ -23,6 +23,8 @@ namespace Tables
         public string dropPlayerKey { get; set; } = string.Empty;
         public float dropPlayerPercent { get; set; }
         public FactionType factionType { get; set; }
+        public BiomeType biomeType { get; set; }
+        public ElementType elementType { get; set; }
 
         private static readonly System.Collections.Generic.Dictionary<string, Player> _table = new System.Collections.Generic.Dictionary<string, Player>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, Player> Table => _table;
