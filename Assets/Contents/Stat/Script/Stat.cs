@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 public class Stat : IEntityData, IMessageBus
 {
     [JsonIgnore] public MessageBus MessageBus { get; set; }
-    [JsonProperty] EntityStat totalStat = new();
+    [JsonProperty] StatModifier totalStat = new();
     [JsonIgnore] Dictionary<StatSourceKey, Tables.IStats> appliedStats = new();
     
     public void Initialize(IInitData initData = null)
@@ -78,26 +78,6 @@ public class Stat : IEntityData, IMessageBus
             Stat = this,
             SourceKey = sourceKey
         });
-    }
-}
-
-public class EntityStat : Tables.IStats
-{
-    public List<Tables.StatType> statTypes { get; set; } = new();
-    public List<int> statValues { get; set; } = new();
-
-    public bool TryGetStatValue(Tables.StatType statType, out int value)
-    {
-        value = 0;
-        
-        var index = statTypes.IndexOf(statType);
-        if (index < 0)
-        {
-            return false;
-        }
-
-        value = statValues[index];
-        return true;
     }
 }
 
