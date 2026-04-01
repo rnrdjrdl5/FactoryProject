@@ -86,6 +86,13 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         {
             return;
         }
+
+        if (Stat == null || msg.Item?.ItemData == null)
+        {
+            return;
+        }
+
+        Stat.AddStats(GetEquipmentStatSourceKey(msg.Item), msg.Item.ItemData);
     }
     
     void OnUnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
@@ -94,6 +101,13 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         {
             return;
         }
+
+        if (Stat == null || msg.Item == null)
+        {
+            return;
+        }
+
+        Stat.RemoveStats(GetEquipmentStatSourceKey(msg.Item));
     }
 
     void RefreshBaseStats()
@@ -110,6 +124,11 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
 
         Stat.AddStats(new StatSourceKey(StatSourceType.Player, PlayerKey), tableData);
+    }
+
+    StatSourceKey GetEquipmentStatSourceKey(Item item)
+    {
+        return new StatSourceKey(StatSourceType.Equipment, item.UniqueId.ToString());
     }
 
     public static PlayerData Create(MessageBus messageBus, string playerKey, long uniqueId = 0)
