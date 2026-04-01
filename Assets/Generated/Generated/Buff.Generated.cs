@@ -15,12 +15,10 @@ namespace Tables
         public float duration { get; set; }
         public int level { get; set; }
         public int maxStack { get; set; }
-        public BuffEffectType buffEffectType { get; set; }
-        public List<string> buffEffectParam { get; set; } = new System.Collections.Generic.List<string>();
         public string iconAtlasPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
-        public string startSkillKey { get; set; } = string.Empty;
-        public string endSkillKey { get; set; } = string.Empty;
+        public BuffEffectType buffEffectType { get; set; }
+        public List<string> buffEffectParam { get; set; } = new System.Collections.Generic.List<string>();
 
         private static readonly System.Collections.Generic.Dictionary<string, Buff> _table = new System.Collections.Generic.Dictionary<string, Buff>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, Buff> Table => _table;
@@ -47,8 +45,6 @@ namespace Tables
                         kvp.Value.buffEffectParam = kvp.Value.buffEffectParam ?? new System.Collections.Generic.List<string>();
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
-                        kvp.Value.startSkillKey = kvp.Value.startSkillKey ?? string.Empty;
-                        kvp.Value.endSkillKey = kvp.Value.endSkillKey ?? string.Empty;
                         // Ensure Key property matches dictionary key
                         kvp.Value.Key = kvp.Key;
                         _table[kvp.Key] = kvp.Value;
