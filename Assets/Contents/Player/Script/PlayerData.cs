@@ -28,6 +28,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
 
         Stat = new Stat();
         Stat.Initialize(initData);
+        RefreshBaseStats();
 
         Equipment = new Equipment();
         Equipment.Initialize(initData);
@@ -93,6 +94,22 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         {
             return;
         }
+    }
+
+    void RefreshBaseStats()
+    {
+        if (Stat == null || string.IsNullOrEmpty(PlayerKey))
+        {
+            return;
+        }
+
+        var tableData = TableData;
+        if (tableData == null)
+        {
+            return;
+        }
+
+        Stat.AddStats(new StatSourceKey(StatSourceType.Player, PlayerKey), tableData);
     }
 
     public static PlayerData Create(MessageBus messageBus, string playerKey, long uniqueId = 0)

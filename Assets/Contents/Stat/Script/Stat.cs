@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 public class Stat : IEntityData, IMessageBus
 {
     [JsonIgnore] public MessageBus MessageBus { get; set; }
-    [JsonProperty] StatModifier totalStat = new();
+    [JsonIgnore] StatModifier totalStat = new();
     [JsonIgnore] Dictionary<StatSourceKey, Tables.IStats> appliedStats = new();
     
     public void Initialize(IInitData initData = null)
