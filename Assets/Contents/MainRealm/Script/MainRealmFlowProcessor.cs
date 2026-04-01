@@ -37,6 +37,7 @@ class LoadFlow : ProcessorFlow
         var gameData = Realm.LoadResources<TextAsset>("Core/GameData");
         DataLoader.LoadAllData(gameData.bytes);
         SkillParamTableInitializer.Initialize();
+        BuffParamTableInitializer.Initialize();
         Tables.EnumLogic.CachingTable();
         
         Entity.AddEntity<MainStorage>(MainStorage.PrefabPath);

@@ -1,9 +1,6 @@
-using UnityEngine;
-
 public class ActiveBuff
 {
     BuffAbility buffAbility;
-    SkillAbility skillAbility;
     string buffKey;
     Tables.Buff buffData => Tables.Buff.Get(buffKey);
     float remainDuration;
@@ -21,15 +18,9 @@ public class ActiveBuff
     {
         this.buffAbility = buffAbility;
         this.buffKey = buffKey;
-        skillAbility = buffAbility?.Entity?.GetAbility<SkillAbility>();
         remainDuration = buffData?.duration ?? 0f;
         stack = 1;
         tickTimer = 0f;
-
-        if (!string.IsNullOrWhiteSpace(buffData?.startSkillKey))
-        {
-            skillAbility?.TryUseSkill(buffData.startSkillKey);
-        }
     }
 
     public bool Update(float deltaTime)
@@ -40,9 +31,5 @@ public class ActiveBuff
 
     public void Uninitialize()
     {
-        if (!string.IsNullOrWhiteSpace(buffData?.endSkillKey))
-        {
-            skillAbility?.TryUseSkill(buffData.endSkillKey);
-        }
     }
 }

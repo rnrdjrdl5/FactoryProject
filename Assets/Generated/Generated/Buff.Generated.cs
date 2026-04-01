@@ -15,6 +15,8 @@ namespace Tables
         public float duration { get; set; }
         public int level { get; set; }
         public int maxStack { get; set; }
+        public BuffEffectType buffEffectType { get; set; }
+        public List<string> buffEffectParam { get; set; } = new System.Collections.Generic.List<string>();
         public string iconAtlasPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
         public string startSkillKey { get; set; } = string.Empty;
@@ -42,6 +44,7 @@ namespace Tables
                     foreach (var kvp in data)
                     {
                         // Coalesce null lists and strings on each deserialized instance
+                        kvp.Value.buffEffectParam = kvp.Value.buffEffectParam ?? new System.Collections.Generic.List<string>();
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
                         kvp.Value.startSkillKey = kvp.Value.startSkillKey ?? string.Empty;

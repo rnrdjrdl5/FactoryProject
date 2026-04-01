@@ -34,8 +34,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
 
         Faction = new Faction();
         Faction.Initialize(initData);
-
-        RebuildStats();
     }
 
     public void Uninitialize()
@@ -65,6 +63,12 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             Bag.OnSetMessageBus();
         }
 
+        if (Stat != null)
+        {
+            Stat.MessageBus = MessageBus;
+            Stat.OnSetMessageBus();
+        }
+
         if (Equipment != null)
         {
             Equipment.MessageBus = MessageBus;
@@ -81,8 +85,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         {
             return;
         }
-
-        RebuildStats();
     }
     
     void OnUnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
@@ -90,38 +92,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         if (msg.Equipment != Equipment)
         {
             return;
-        }
-
-        RebuildStats();
-    }
-
-    void RebuildStats()
-    {
-        if (Stat == null)
-        {
-            return;
-        }
-
-        Stat.ClearStats();
-
-        if (TableData != null)
-        {
-            Stat.AddStats(TableData);
-        }
-
-        if (Equipment == null)
-        {
-            return;
-        }
-
-        foreach (var equipItem in Equipment.EquipItems)
-        {
-            if (equipItem?.ItemData == null)
-            {
-                continue;
-            }
-
-            Stat.AddStats(equipItem.ItemData);
         }
     }
 
