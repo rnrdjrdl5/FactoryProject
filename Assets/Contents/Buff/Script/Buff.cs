@@ -25,7 +25,6 @@ public class Buff : IEntityData, IMessageBus
     public void SetBuff(
         string buffKey,
         string sourceKey,
-        float remainTime = -1f,
         BuffLifetimeType buffLifetimeType = BuffLifetimeType.Runtime)
     {
         if (string.IsNullOrWhiteSpace(sourceKey) || string.IsNullOrWhiteSpace(buffKey))
@@ -37,10 +36,9 @@ public class Buff : IEntityData, IMessageBus
         {
             BuffKey = buffKey,
             SourceKey = sourceKey,
-            RemainTime = remainTime,
             BuffLifetimeType = buffLifetimeType
         };
-        PublishBuffChanged(buffKey, sourceKey, remainTime, buffLifetimeType, false);
+        PublishBuffChanged(buffKey, sourceKey, buffLifetimeType, false);
     }
 
     public bool RemoveBuff(string buffKey)
@@ -58,7 +56,7 @@ public class Buff : IEntityData, IMessageBus
         var removed = buffValuesByKey.Remove(buffKey);
         if (removed)
         {
-            PublishBuffChanged(buffKey, buffValue.SourceKey, buffValue.RemainTime, buffValue.BuffLifetimeType, true);
+            PublishBuffChanged(buffKey, buffValue.SourceKey, buffValue.BuffLifetimeType, true);
         }
 
         return removed;
@@ -78,7 +76,6 @@ public class Buff : IEntityData, IMessageBus
     void PublishBuffChanged(
         string buffKey,
         string sourceKey,
-        float remainTime,
         BuffLifetimeType buffLifetimeType,
         bool isRemoved)
     {
@@ -87,7 +84,6 @@ public class Buff : IEntityData, IMessageBus
             Buff = this,
             BuffKey = buffKey,
             SourceKey = sourceKey,
-            RemainTime = remainTime,
             BuffLifetimeType = buffLifetimeType,
             IsRemoved = isRemoved
         });
@@ -104,7 +100,6 @@ public struct BuffValue
 {
     public string BuffKey;
     public string SourceKey;
-    public float RemainTime;
     public BuffLifetimeType BuffLifetimeType;
 }
 
@@ -116,7 +111,6 @@ public static partial class EntityDataMsg
         public Buff Buff;
         public string BuffKey;
         public string SourceKey;
-        public float RemainTime;
         public BuffLifetimeType BuffLifetimeType;
         public bool IsRemoved;
     }
