@@ -1,9 +1,12 @@
+using System;
+
 public enum StatSourceType
 {
     None = 0,
     Player = 1,
     Equipment = 2,
     Skill = 3,
+    Buff = 4,
 }
 
 public readonly struct StatSourceKey : IEquatable<StatSourceKey>

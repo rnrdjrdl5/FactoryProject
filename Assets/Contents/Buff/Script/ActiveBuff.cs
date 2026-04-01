@@ -14,6 +14,10 @@ public class ActiveBuff
         return activeBuff;
     }
 
+    public BuffAbility BuffAbility => buffAbility;
+    public string BuffKey => buffKey;
+    public Tables.Buff BuffData => buffData;
+
     public void Initialize(BuffAbility buffAbility, string buffKey)
     {
         this.buffAbility = buffAbility;
@@ -21,6 +25,8 @@ public class ActiveBuff
         remainDuration = buffData?.duration ?? 0f;
         stack = 1;
         tickTimer = 0f;
+
+        BuffLogic.ApplyOnStart(this);
     }
 
     public bool Update(float deltaTime)
@@ -31,5 +37,6 @@ public class ActiveBuff
 
     public void Uninitialize()
     {
+        BuffLogic.ApplyOnEnd(this);
     }
 }

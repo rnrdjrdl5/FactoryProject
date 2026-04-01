@@ -13,4 +13,9 @@ public class BuffAbility : Ability
     {
         buffContainer.AddBuff(this, buffKey);
     }
+
+    void Update()
+    {
+        buffContainer.Update(Time.deltaTime);
+    }
 }
