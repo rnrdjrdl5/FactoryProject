@@ -1,5 +1,6 @@
 public interface ISynerge
 {
     int needCount { get; set; }
-    string synergeSkillKey { get; set; }
+    string synergeBuffKey { get; set; }
+    string Key { get; set; }
 }

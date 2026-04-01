@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class BuffEffectParamParser
-{
+{ 
     public static IBuffEffectParam Parse(Tables.BuffEffectType type, IReadOnlyList<string> rawParams, string buffKey)
     {
         switch (type)

@@ -3,6 +3,14 @@ using Tables;
 
 public static class TeamSynergeLogic
 {
+    public static List<ISynerge> GetAllSynerges()
+    {
+        var synerges = new List<ISynerge>();
+        synerges.AddRange(SynergeBiome.Table.Values);
+        synerges.AddRange(SynergeElement.Table.Values);
+        return synerges;
+    }
+
     public static List<ISynerge> GetAllSynerges(TeamFormation teamFormation)
     {
         var synerges = new List<ISynerge>();
@@ -19,30 +27,7 @@ public static class TeamSynergeLogic
 
         return synerges;
     }
-
-    public static List<Skill> GetAllSynergeSkills(TeamFormation teamFormation)
-    {
-        var skills = new List<Skill>();
-
-        foreach (var synerge in GetAllSynerges(teamFormation))
-        {
-            if (string.IsNullOrWhiteSpace(synerge.synergeSkillKey))
-            {
-                continue;
-            }
-
-            var skillData = Skill.Get(synerge.synergeSkillKey);
-            if (skillData == null)
-            {
-                continue;
-            }
-
-            skills.Add(skillData);
-        }
-
-        return skills;
-    }
-
+    
     static void CollectCounts(
         TeamFormation teamFormation,
         Dictionary<BiomeType, int> biomeCounts,

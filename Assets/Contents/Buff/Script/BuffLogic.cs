@@ -64,13 +64,13 @@ public static class BuffLogic
             return;
         }
 
-        var skillAbility = activeBuff.BuffAbility?.Entity?.GetAbility<SkillAbility>();
+        var skillAbility = activeBuff.BuffRunnerAbility?.Entity?.GetAbility<SkillAbility>();
         skillAbility?.TryUseSkill(useSkillOnEndParam.SkillKey);
     }
 
     static Stat GetStat(ActiveBuff activeBuff)
     {
-        return activeBuff?.BuffAbility?.Entity?.GetEntityData<PlayerData>()?.Stat;
+        return activeBuff?.BuffRunnerAbility?.Entity?.GetEntityData<PlayerData>()?.Stat;
     }
 
     static StatSourceKey GetSourceKey(ActiveBuff activeBuff)

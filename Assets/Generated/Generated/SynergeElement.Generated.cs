@@ -14,7 +14,7 @@ namespace Tables
         public string Key { get; set; } = string.Empty;
         public ElementType elementType { get; set; }
         public int needCount { get; set; }
-        public string synergeSkillKey { get; set; } = string.Empty;
+        public string synergeBuffKey { get; set; } = string.Empty;
 
         private static readonly System.Collections.Generic.Dictionary<string, SynergeElement> _table = new System.Collections.Generic.Dictionary<string, SynergeElement>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, SynergeElement> Table => _table;
@@ -38,7 +38,7 @@ namespace Tables
                     foreach (var kvp in data)
                     {
                         // Coalesce null lists and strings on each deserialized instance
-                        kvp.Value.synergeSkillKey = kvp.Value.synergeSkillKey ?? string.Empty;
+                        kvp.Value.synergeBuffKey = kvp.Value.synergeBuffKey ?? string.Empty;
                         // Ensure Key property matches dictionary key
                         kvp.Value.Key = kvp.Key;
                         _table[kvp.Key] = kvp.Value;
