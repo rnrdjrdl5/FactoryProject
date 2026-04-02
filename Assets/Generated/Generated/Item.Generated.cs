@@ -18,7 +18,6 @@ namespace Tables
         public string iconSpritePath { get; set; } = string.Empty;
         public List<StatType> statTypes { get; set; } = new System.Collections.Generic.List<StatType>();
         public List<int> statValues { get; set; } = new System.Collections.Generic.List<int>();
-        public string attackSkillKey { get; set; } = string.Empty;
         public string uniqueSkillKey { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
         public int maxAmount { get; set; }
@@ -49,7 +48,6 @@ namespace Tables
                         kvp.Value.statValues = kvp.Value.statValues ?? new System.Collections.Generic.List<int>();
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
-                        kvp.Value.attackSkillKey = kvp.Value.attackSkillKey ?? string.Empty;
                         kvp.Value.uniqueSkillKey = kvp.Value.uniqueSkillKey ?? string.Empty;
                         kvp.Value.description = kvp.Value.description ?? string.Empty;
                         // Ensure Key property matches dictionary key
