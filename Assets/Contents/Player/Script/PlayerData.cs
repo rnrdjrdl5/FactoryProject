@@ -117,6 +117,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
 
         Stat.AddStats(GetEquipmentStatSourceKey(msg.Item), msg.Item.ItemData);
+        RefreshEquippedWeaponSkillSlot(msg.Item);
     }
     
     void OnUnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
@@ -132,6 +133,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
 
         Stat.RemoveStats(GetEquipmentStatSourceKey(msg.Item));
+        ClearEquippedWeaponSkillSlot(msg.Item);
     }
 
     void RefreshBaseStats()
@@ -164,6 +166,26 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
 
         SkillSlotLogic.TrySetSkillKey(this, SkillSlotType.MainAttack, tableData.uniqueSkillKey);
+    }
+
+    void RefreshEquippedWeaponSkillSlot(Item item)
+    {
+        if (item?.ItemData == null || item.ItemData.itemType != Tables.ItemType.Weapon)
+        {
+            return;
+        }
+
+        SkillSlotLogic.TrySetSkillKey(this, SkillSlotType.SubAttack, item.ItemData.uniqueSkillKey);
+    }
+
+    void ClearEquippedWeaponSkillSlot(Item item)
+    {
+        if (item?.ItemData == null || item.ItemData.itemType != Tables.ItemType.Weapon)
+        {
+            return;
+        }
+
+        SkillSlotLogic.TryClearSkillKey(this, SkillSlotType.SubAttack);
     }
 
     StatSourceKey GetEquipmentStatSourceKey(Item item)

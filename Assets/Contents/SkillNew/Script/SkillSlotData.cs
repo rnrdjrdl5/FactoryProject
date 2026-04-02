@@ -46,4 +46,9 @@ public class SkillSlotData : IEntityData, IMessageBus
     {
         skillKeyBySlot[slotType] = string.Empty;
     }
+
+    public IReadOnlyDictionary<SkillSlotType, string> GetAllSkillKeys()
+    {
+        return skillKeyBySlot;
+    }
 }
