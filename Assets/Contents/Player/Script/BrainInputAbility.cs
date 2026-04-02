@@ -1,21 +1,25 @@
 using UnityEngine;
 
-public class BrainInputAbility : Ability
+public class BrainInputAbility : Ability, IBrainActionRequestSource
 {
     Brain brain;
-    BrainActionProcessor brainActionProcessor;
+    IBrainActionRequester actionRequester;
 
     public override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);
 
         brain = Entity as Brain;
-        var processorAbility = Entity.GetAbility<BrainProcessorAbility>();
-        brainActionProcessor = processorAbility?.GetProcessor<BrainActionProcessor>();
     }
+
+    public void SetActionRequester(IBrainActionRequester actionRequester)
+    {
+        this.actionRequester = actionRequester;
+    }
+
     private void Update()
     {
-        if (brain.IsAI)
+        if (brain == null || brain.IsAI || actionRequester == null)
         {
             return;
         }
@@ -25,17 +29,20 @@ public class BrainInputAbility : Ability
 
         if (horizontal != 0f || vertical != 0f)
         {
-            brainActionProcessor?.Move(new Vector2(horizontal, vertical));
+            actionRequester.RequestAction(new MoveActionRequest
+            {
+                Direction = new Vector2(horizontal, vertical)
+            });
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            brainActionProcessor?.TryPick();
+            actionRequester.RequestAction(new PickActionRequest());
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            brainActionProcessor?.TryUseUniqueSkill();
+            actionRequester.RequestAction(new UseUniqueSkillActionRequest());
         }
     }
 }

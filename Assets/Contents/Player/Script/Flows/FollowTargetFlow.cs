@@ -1,18 +1,18 @@
 public class FollowTargetFlow : ProcessorFlow
 {
-    BrainActionProcessor brainActionProcessor;
+    IBrainActionRequester actionRequester;
     
     public override void OnEnterFlow()
     {
         base.OnEnterFlow();
 
-        brainActionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
+        actionRequester = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
     }
 
     public override void OnUpdateFlow()
     {
         base.OnUpdateFlow();
 
-        brainActionProcessor?.FollowTarget();
+        actionRequester?.RequestAction(new FollowTargetActionRequest());
     }
 }

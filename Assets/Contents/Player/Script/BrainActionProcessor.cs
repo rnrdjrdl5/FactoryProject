@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class BrainActionProcessor : Processor
+public class BrainActionProcessor : Processor, IBrainActionRequester
 {
     Brain brain;
     Entity controlledEntity;
+    IBrainActionRequestSource actionRequestSource;
     PlayerMoveAbility moveAbility;
     PlayerFollowAbility followAbility;
     SkillAbility skillAbility;
@@ -25,8 +26,19 @@ public class BrainActionProcessor : Processor
         RefreshControlledCache(brain.Controll);
     }
 
+    public override void Ready()
+    {
+        base.Ready();
+
+        actionRequestSource = Entity.GetAbility<BrainInputAbility>();
+        actionRequestSource?.SetActionRequester(this);
+    }
+
     public override void Uninitialize()
     {
+        actionRequestSource?.SetActionRequester(null);
+        actionRequestSource = null;
+
         if (brain != null)
         {
             brain.OnAttachControll -= RefreshControlledCache;
@@ -38,7 +50,29 @@ public class BrainActionProcessor : Processor
         base.Uninitialize();
     }
 
-    public void Move(Vector2 direction)
+    public void RequestAction(IBrainActionRequest request)
+    {
+        switch (request)
+        {
+            case MoveActionRequest moveRequest:
+                Move(moveRequest.Direction);
+                break;
+
+            case PickActionRequest:
+                TryPick();
+                break;
+
+            case UseUniqueSkillActionRequest:
+                TryUseUniqueSkill();
+                break;
+
+            case FollowTargetActionRequest:
+                FollowTarget();
+                break;
+        }
+    }
+
+    void Move(Vector2 direction)
     {
         if (moveAbility == null)
         {
@@ -48,7 +82,7 @@ public class BrainActionProcessor : Processor
         moveAbility.Move(direction);
     }
 
-    public void FollowTarget()
+    void FollowTarget()
     {
         if (followAbility == null)
         {
@@ -58,7 +92,7 @@ public class BrainActionProcessor : Processor
         followAbility.Move();
     }
 
-    public void TryPick()
+    void TryPick()
     {
         if (pickProcessor == null)
         {
@@ -68,7 +102,7 @@ public class BrainActionProcessor : Processor
         pickProcessor.PickItem();
     }
 
-    public bool TryUseSkill(string skillKey)
+    bool TryUseSkill(string skillKey)
     {
         if (skillAbility == null)
         {
@@ -78,7 +112,7 @@ public class BrainActionProcessor : Processor
         return skillAbility.TryUseSkill(skillKey);
     }
 
-    public bool TryUseUniqueSkill()
+    bool TryUseUniqueSkill()
     {
         var player = controlledEntity as Player;
         if (player?.TableData == null)
