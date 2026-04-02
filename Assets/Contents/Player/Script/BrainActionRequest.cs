@@ -23,8 +23,9 @@ public struct PickActionRequest : IBrainActionRequest
 {
 }
 
-public struct UseUniqueSkillActionRequest : IBrainActionRequest
+public struct UseSkillSlotActionRequest : IBrainActionRequest
 {
+    public SkillSlotType SkillSlotType { get; set; }
 }
 
 public struct FollowTargetActionRequest : IBrainActionRequest

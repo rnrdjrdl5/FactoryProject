@@ -4,6 +4,7 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
 {
     Brain brain;
     IBrainActionRequester actionRequester;
+    InputBindingData inputBindingData;
 
     public override void Initialize(IInitData initData = null)
     {
@@ -17,9 +18,14 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
         this.actionRequester = actionRequester;
     }
 
+    public void SetInputBindingData(InputBindingData inputBindingData)
+    {
+        this.inputBindingData = inputBindingData;
+    }
+
     private void Update()
     {
-        if (brain == null || brain.IsAI || actionRequester == null)
+        if (brain == null || brain.IsAI || actionRequester == null || inputBindingData == null)
         {
             return;
         }
@@ -40,9 +46,30 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
             actionRequester.RequestAction(new PickActionRequest());
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        TryRequestSkillSlot(KeyCode.Mouse0);
+        TryRequestSkillSlot(KeyCode.Mouse1);
+        TryRequestSkillSlot(KeyCode.Q);
+        TryRequestSkillSlot(KeyCode.E);
+        TryRequestSkillSlot(KeyCode.R);
+        TryRequestSkillSlot(KeyCode.Space);
+        TryRequestSkillSlot(KeyCode.LeftShift);
+    }
+
+    void TryRequestSkillSlot(KeyCode keyCode)
+    {
+        if (!Input.GetKeyDown(keyCode))
         {
-            actionRequester.RequestAction(new UseUniqueSkillActionRequest());
+            return;
         }
+
+        if (!inputBindingData.TryGetSkillSlotType(keyCode, out var skillSlotType))
+        {
+            return;
+        }
+
+        actionRequester.RequestAction(new UseSkillSlotActionRequest
+        {
+            SkillSlotType = skillSlotType
+        });
     }
 }

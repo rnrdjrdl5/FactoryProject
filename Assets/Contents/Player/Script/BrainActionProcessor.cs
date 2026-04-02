@@ -62,8 +62,8 @@ public class BrainActionProcessor : Processor, IBrainActionRequester
                 TryPick();
                 break;
 
-            case UseUniqueSkillActionRequest:
-                TryUseUniqueSkill();
+            case UseSkillSlotActionRequest useSkillSlotRequest:
+                TryUseSkillSlot(useSkillSlotRequest.SkillSlotType);
                 break;
 
             case FollowTargetActionRequest:
@@ -112,15 +112,15 @@ public class BrainActionProcessor : Processor, IBrainActionRequester
         return skillAbility.TryUseSkill(skillKey);
     }
 
-    bool TryUseUniqueSkill()
+    bool TryUseSkillSlot(SkillSlotType skillSlotType)
     {
-        var player = controlledEntity as Player;
-        if (player?.TableData == null)
+        var playerData = controlledEntity?.GetEntityData<PlayerData>();
+        if (!SkillSlotLogic.TryGetSkillKey(playerData, skillSlotType, out var skillKey))
         {
             return false;
         }
 
-        return TryUseSkill(player.TableData.uniqueSkillKey);
+        return TryUseSkill(skillKey);
     }
 
     void RefreshControlledCache(IControlled controlled)
