@@ -1,6 +1,6 @@
 
 [Processor(typeof(PlayerProcessor))]
-[Processor(typeof(PlayerBuffProcessor))]
+[UpdateProcessor(typeof(PlayerBuffProcessor))]
 [Processor(typeof(PlayerHpProcessor))]
 [Processor(typeof(DropItemProcessor))]
 [Processor(typeof(PlayerPickProcessor))]
@@ -9,3 +9,4 @@ public class PlayerProcessorAbility : ProcessorAbility
 {
     
 }
+

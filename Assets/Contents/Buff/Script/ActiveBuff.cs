@@ -1,43 +1,26 @@
 public class ActiveBuff
 {
-    BuffRunnerAbility buffRunnerAbility;
+    BuffAbility buffAbility;
     string buffKey;
     Tables.Buff buffData => Tables.Buff.Get(buffKey);
-    float remainDuration;
-    int stack;
-    float tickTimer;
 
-    public static ActiveBuff Create(BuffRunnerAbility buffRunnerAbility, string buffKey)
+    public static ActiveBuff Create(BuffAbility buffAbility, string buffKey)
     {
         var activeBuff = new ActiveBuff();
-        activeBuff.Initialize(buffRunnerAbility, buffKey);
+        activeBuff.Initialize(buffAbility, buffKey);
         return activeBuff;
     }
 
-    public BuffRunnerAbility BuffRunnerAbility => buffRunnerAbility;
+    public BuffAbility BuffAbility => buffAbility;
     public string BuffKey => buffKey;
     public Tables.Buff BuffData => buffData;
 
-    public void Initialize(BuffRunnerAbility buffRunnerAbility, string buffKey)
+    public void Initialize(BuffAbility buffAbility, string buffKey)
     {
-        this.buffRunnerAbility = buffRunnerAbility;
+        this.buffAbility = buffAbility;
         this.buffKey = buffKey;
-        remainDuration = buffData?.duration ?? 0f;
-        stack = 1;
-        tickTimer = 0f;
 
         BuffLogic.ApplyOnStart(this);
-    }
-
-    public bool Update(float deltaTime)
-    {
-        if (buffData != null && buffData.IsInfiniteDuration)
-        {
-            return false;
-        }
-
-        remainDuration -= deltaTime;
-        return remainDuration <= 0f;
     }
 
     public void Uninitialize()

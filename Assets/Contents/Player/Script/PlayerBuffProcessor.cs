@@ -1,18 +1,19 @@
 using System.Collections.Generic;
+using UnityEngine;
 
-public class PlayerBuffProcessor : Processor
+public class PlayerBuffProcessor : UpdateProcessor
 {
     PlayerData playerData;
-    BuffRunnerAbility buffRunnerAbility;
+    BuffAbility buffAbility;
+    readonly List<string> expiredBuffKeys = new();
 
     public override void Ready()
     {
         base.Ready();
 
         playerData = Entity.GetEntityData<PlayerData>();
-        buffRunnerAbility = Entity.GetAbility<BuffRunnerAbility>();
+        buffAbility = Entity.GetAbility<BuffAbility>();
         playerData?.MessageBus?.Subscribe<EntityDataMsg.BuffChangedMsg>(OnBuffChanged);
-        playerData?.MessageBus?.Subscribe<EntityDataMsg.BuffExpiredMsg>(OnBuffExpired);
         InitializeBuffs();
     }
 
@@ -20,60 +21,59 @@ public class PlayerBuffProcessor : Processor
     {
         ClearRuntimeBuffs();
         playerData?.MessageBus?.Unsubscribe<EntityDataMsg.BuffChangedMsg>(OnBuffChanged);
-        playerData?.MessageBus?.Unsubscribe<EntityDataMsg.BuffExpiredMsg>(OnBuffExpired);
 
         base.Uninitialize();
     }
 
+    public override void Update()
+    {
+        base.Update();
+
+        if (playerData?.Buff == null)
+        {
+            return;
+        }
+
+        expiredBuffKeys.Clear();
+        playerData.Buff.UpdateRuntimeBuffs(Time.deltaTime, expiredBuffKeys);
+        foreach (var buffKey in expiredBuffKeys)
+        {
+            playerData.Buff.RemoveBuff(buffKey);
+        }
+    }
+
     void InitializeBuffs()
     {
-        if (playerData?.Buff == null || buffRunnerAbility == null)
+        if (playerData?.Buff == null || buffAbility == null)
         {
             return;
         }
 
         foreach (var buffKey in playerData.Buff.BuffValuesByKey.Keys)
         {
-            buffRunnerAbility.UseBuff(buffKey);
+            if (!playerData.Buff.TryGetBuffValue(buffKey, out var buffValue))
+            {
+                continue;
+            }
+
+            buffAbility.UseBuff(buffKey);
         }
     }
 
     void OnBuffChanged(EntityDataMsg.BuffChangedMsg msg)
     {
-        if (playerData?.Buff == null || buffRunnerAbility == null || msg.Buff != playerData.Buff)
+        if (playerData?.Buff == null || buffAbility == null || msg.Buff != playerData.Buff)
         {
             return;
         }
 
         if (msg.IsRemoved)
         {
-            buffRunnerAbility.RemoveBuff(msg.BuffKey);
+            buffAbility.RemoveBuff(msg.BuffKey);
             return;
         }
 
-        buffRunnerAbility.UseBuff(msg.BuffKey);
-    }
-
-    void OnBuffExpired(EntityDataMsg.BuffExpiredMsg msg)
-    {
-        if (playerData?.Buff == null || buffRunnerAbility == null || msg.BuffRunnerAbility != buffRunnerAbility)
-        {
-            return;
-        }
-
-        if (!playerData.Buff.TryGetBuffValue(msg.BuffKey, out var buffValue))
-        {
-            buffRunnerAbility.RemoveBuff(msg.BuffKey);
-            return;
-        }
-
-        if (buffValue.BuffLifetimeType == BuffLifetimeType.Runtime)
-        {
-            playerData.Buff.RemoveBuff(msg.BuffKey);
-            return;
-        }
-
-        buffRunnerAbility.RemoveBuff(msg.BuffKey);
+        buffAbility.UseBuff(msg.BuffKey);
     }
 
     void ClearRuntimeBuffs()
