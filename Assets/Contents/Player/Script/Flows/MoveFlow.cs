@@ -25,8 +25,9 @@ public class MoveFlow : ProcessorFlow
             return;
         }
 
-        actionRequester?.RequestAction(new MoveActionRequest
+        actionRequester?.RequestAction(new PerformCustomActionRequest
         {
+            CustomActionType = CustomActionType.Move,
             Direction = new Vector2(dir.x, dir.y)
         });
     }

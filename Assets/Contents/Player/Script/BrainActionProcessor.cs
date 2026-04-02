@@ -52,23 +52,44 @@ public class BrainActionProcessor : Processor, IBrainActionRequester
 
     public void RequestAction(IBrainActionRequest request)
     {
+        if (TryResolveActionRequest(request))
+        {
+            return;
+        }
+
+        TryExecuteActionRequest(request);
+    }
+
+    bool TryResolveActionRequest(IBrainActionRequest request)
+    {
         switch (request)
         {
-            case MoveActionRequest moveRequest:
-                Move(moveRequest.Direction);
-                break;
+            case PerformInputActionRequest inputActionRequest:
+                return TryResolveInputAction(inputActionRequest.InputActionType);
 
-            case PickActionRequest:
-                TryPick();
-                break;
+            case PerformIntentActionRequest intentActionRequest:
+                return TryResolveIntentAction(intentActionRequest.IntentActionType);
 
-            case UseSkillSlotActionRequest useSkillSlotRequest:
-                TryUseSkillSlot(useSkillSlotRequest.SkillSlotType);
-                break;
+            default:
+                return false;
+        }
+    }
 
-            case FollowTargetActionRequest:
-                FollowTarget();
-                break;
+    bool TryExecuteActionRequest(IBrainActionRequest request)
+    {
+        switch (request)
+        {
+            case PerformCustomActionRequest customActionRequest:
+                return TryPerformCustomAction(customActionRequest);
+
+            case PerformSystemActionRequest systemActionRequest:
+                return TryPerformSystemAction(systemActionRequest.SystemActionType);
+
+            case UseSkillRequest useSkillRequest:
+                return TryUseSkill(useSkillRequest.SkillKey);
+
+            default:
+                return false;
         }
     }
 
@@ -112,10 +133,63 @@ public class BrainActionProcessor : Processor, IBrainActionRequester
         return skillAbility.TryUseSkill(skillKey);
     }
 
-    bool TryUseSkillSlot(SkillSlotType skillSlotType)
+    bool TryResolveInputAction(InputActionType inputActionType)
+    {
+        if (InputActionSystemLogic.TryGetSystemActionType(inputActionType, out var systemActionType))
+        {
+            return TryPerformSystemAction(systemActionType);
+        }
+
+        return TryRequestSkillFromInputAction(inputActionType);
+    }
+
+    bool TryResolveIntentAction(IntentActionType intentActionType)
+    {
+        switch (intentActionType)
+        {
+            case IntentActionType.FollowTarget:
+                return TryPerformCustomAction(new PerformCustomActionRequest
+                {
+                    CustomActionType = CustomActionType.FollowTarget
+                });
+            case IntentActionType.UseMainAttackSkill:
+                return TryRequestSkillFromInputAction(InputActionType.MainAttack);
+            default:
+                return false;
+        }
+    }
+
+    bool TryPerformSystemAction(SystemActionType systemActionType)
+    {
+        switch (systemActionType)
+        {
+            case SystemActionType.Pick:
+                TryPick();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    bool TryPerformCustomAction(PerformCustomActionRequest customActionRequest)
+    {
+        switch (customActionRequest.CustomActionType)
+        {
+            case CustomActionType.Move:
+                Move(customActionRequest.Direction);
+                return true;
+            case CustomActionType.FollowTarget:
+                FollowTarget();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    bool TryRequestSkillFromInputAction(InputActionType inputActionType)
     {
         var playerData = controlledEntity?.GetEntityData<PlayerData>();
-        if (!SkillSlotLogic.TryGetSkillKey(playerData, skillSlotType, out var skillKey))
+        if (!InputActionSkillLogic.TryGetSkillKey(playerData, inputActionType, out var skillKey))
         {
             return false;
         }

@@ -13,6 +13,9 @@ public class FollowTargetFlow : ProcessorFlow
     {
         base.OnUpdateFlow();
 
-        actionRequester?.RequestAction(new FollowTargetActionRequest());
+        actionRequester?.RequestAction(new PerformIntentActionRequest
+        {
+            IntentActionType = IntentActionType.FollowTarget
+        });
     }
 }

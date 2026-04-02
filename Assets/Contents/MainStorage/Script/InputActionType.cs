@@ -1,5 +1,6 @@
-public enum SkillSlotType
+public enum InputActionType
 {
+    Pick,
     MainAttack,
     SubAttack,
     Skill1,

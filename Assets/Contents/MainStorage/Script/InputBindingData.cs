@@ -6,37 +6,38 @@ public class InputBindingData : IEntityData, IMessageBus
 {
     [JsonIgnore] public MessageBus MessageBus { get; set; }
 
-    [JsonProperty] Dictionary<KeyCode, SkillSlotType> skillSlotTypeByKeyCode = new();
+    [JsonProperty] Dictionary<KeyCode, InputActionType> inputActionTypeByKeyCode = new();
 
     public void Initialize(IInitData initData = null)
     {
-        skillSlotTypeByKeyCode.Clear();
+        inputActionTypeByKeyCode.Clear();
 
-        SetSkillSlotType(KeyCode.Mouse0, SkillSlotType.MainAttack);
-        SetSkillSlotType(KeyCode.Mouse1, SkillSlotType.SubAttack);
-        SetSkillSlotType(KeyCode.Q, SkillSlotType.Skill1);
-        SetSkillSlotType(KeyCode.E, SkillSlotType.Skill2);
-        SetSkillSlotType(KeyCode.R, SkillSlotType.Skill3);
-        SetSkillSlotType(KeyCode.Space, SkillSlotType.MainUtility);
-        SetSkillSlotType(KeyCode.LeftShift, SkillSlotType.SubUtility);
+        SetInputActionType(KeyCode.Z, InputActionType.Pick);
+        SetInputActionType(KeyCode.Mouse0, InputActionType.MainAttack);
+        SetInputActionType(KeyCode.Mouse1, InputActionType.SubAttack);
+        SetInputActionType(KeyCode.Q, InputActionType.Skill1);
+        SetInputActionType(KeyCode.E, InputActionType.Skill2);
+        SetInputActionType(KeyCode.R, InputActionType.Skill3);
+        SetInputActionType(KeyCode.Space, InputActionType.MainUtility);
+        SetInputActionType(KeyCode.LeftShift, InputActionType.SubUtility);
     }
 
     public void Uninitialize()
     {
-        skillSlotTypeByKeyCode.Clear();
+        inputActionTypeByKeyCode.Clear();
     }
 
     public void OnSetMessageBus()
     {
     }
 
-    public void SetSkillSlotType(KeyCode keyCode, SkillSlotType skillSlotType)
+    public void SetInputActionType(KeyCode keyCode, InputActionType inputActionType)
     {
-        skillSlotTypeByKeyCode[keyCode] = skillSlotType;
+        inputActionTypeByKeyCode[keyCode] = inputActionType;
     }
 
-    public bool TryGetSkillSlotType(KeyCode keyCode, out SkillSlotType skillSlotType)
+    public bool TryGetInputActionType(KeyCode keyCode, out InputActionType inputActionType)
     {
-        return skillSlotTypeByKeyCode.TryGetValue(keyCode, out skillSlotType);
+        return inputActionTypeByKeyCode.TryGetValue(keyCode, out inputActionType);
     }
 }

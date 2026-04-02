@@ -85,6 +85,24 @@ public static class SkillActionParamParser
                 return param;
             }
 
+            case Tables.SkillActionType.AddBuff:
+            {
+                var param = new SkillActionAddBuffParam();
+                if (!SkillParamParseUtility.TryGetOptionalString(rawParams, 0, out var buffKey))
+                {
+                    return null;
+                }
+
+                if (Tables.Buff.Get(buffKey) == null)
+                {
+                    Debug.LogError($"[SkillActionParamParser] Invalid buffKey. skillKey={skillKey}, buffKey={buffKey}");
+                    return null;
+                }
+
+                param.BuffKey = buffKey;
+                return param;
+            }
+
             default:
                 Debug.LogError($"[SkillActionParamParser] Unsupported SkillActionType. skillKey={skillKey}, type={type}");
                 return null;

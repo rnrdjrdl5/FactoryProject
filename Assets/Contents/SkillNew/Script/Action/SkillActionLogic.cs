@@ -19,6 +19,10 @@ public static class SkillActionLogic
             case SkillActionProjectileParam projectileParam:
                 ExecuteProjectile(skillContext, projectileParam);
                 break;
+
+            case SkillActionAddBuffParam addBuffParam:
+                ExecuteAddBuff(skillContext, addBuffParam);
+                break;
         }
     }
 
@@ -81,6 +85,32 @@ public static class SkillActionLogic
         if (projectileEntity == null)
         {
             return;
+        }
+    }
+
+    static void ExecuteAddBuff(SkillContext skillContext, SkillActionAddBuffParam addBuffParam)
+    {
+        if (skillContext?.TargetEntities == null || skillContext.TargetEntities.Count == 0 || string.IsNullOrWhiteSpace(addBuffParam?.BuffKey))
+        {
+            return;
+        }
+
+        var buffData = Tables.Buff.Get(addBuffParam.BuffKey);
+        if (buffData == null)
+        {
+            return;
+        }
+
+        var sourceKey = skillContext.SkillData?.Key;
+        if (string.IsNullOrWhiteSpace(sourceKey))
+        {
+            return;
+        }
+
+        foreach (var targetEntity in skillContext.TargetEntities)
+        {
+            var targetPlayerData = targetEntity?.GetEntityData<PlayerData>();
+            targetPlayerData?.Buff?.SetBuff(addBuffParam.BuffKey, sourceKey);
         }
     }
 }

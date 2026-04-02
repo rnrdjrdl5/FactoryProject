@@ -35,41 +35,43 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
 
         if (horizontal != 0f || vertical != 0f)
         {
-            actionRequester.RequestAction(new MoveActionRequest
+            actionRequester.RequestAction(new PerformCustomActionRequest
             {
+                CustomActionType = CustomActionType.Move,
                 Direction = new Vector2(horizontal, vertical)
             });
         }
 
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            actionRequester.RequestAction(new PickActionRequest());
-        }
-
-        TryRequestSkillSlot(KeyCode.Mouse0);
-        TryRequestSkillSlot(KeyCode.Mouse1);
-        TryRequestSkillSlot(KeyCode.Q);
-        TryRequestSkillSlot(KeyCode.E);
-        TryRequestSkillSlot(KeyCode.R);
-        TryRequestSkillSlot(KeyCode.Space);
-        TryRequestSkillSlot(KeyCode.LeftShift);
+        TryRequestAction(KeyCode.Z);
+        TryRequestAction(KeyCode.Mouse0);
+        TryRequestAction(KeyCode.Mouse1);
+        TryRequestAction(KeyCode.Q);
+        TryRequestAction(KeyCode.E);
+        TryRequestAction(KeyCode.R);
+        TryRequestAction(KeyCode.Space);
+        TryRequestAction(KeyCode.LeftShift);
     }
 
-    void TryRequestSkillSlot(KeyCode keyCode)
+    void TryRequestAction(KeyCode keyCode)
     {
         if (!Input.GetKeyDown(keyCode))
         {
             return;
         }
 
-        if (!inputBindingData.TryGetSkillSlotType(keyCode, out var skillSlotType))
+        if (!inputBindingData.TryGetInputActionType(keyCode, out var inputActionType))
         {
             return;
         }
 
-        actionRequester.RequestAction(new UseSkillSlotActionRequest
+        RequestInputAction(inputActionType);
+    }
+
+    void RequestInputAction(InputActionType inputActionType)
+    {
+        actionRequester.RequestAction(new PerformInputActionRequest
         {
-            SkillSlotType = skillSlotType
+            InputActionType = inputActionType
         });
     }
 }

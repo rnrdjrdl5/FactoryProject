@@ -8,5 +8,6 @@ namespace Tables
         Casting = 3,
         UseSkill = 4,
         ApplyStat = 5,
+        AddBuff = 6,
     }
 }

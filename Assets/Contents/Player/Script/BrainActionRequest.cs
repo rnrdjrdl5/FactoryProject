@@ -14,20 +14,28 @@ public interface IBrainActionRequestSource
     void SetActionRequester(IBrainActionRequester actionRequester);
 }
 
-public struct MoveActionRequest : IBrainActionRequest
+public struct PerformInputActionRequest : IBrainActionRequest
 {
+    public InputActionType InputActionType { get; set; }
+}
+
+public struct PerformIntentActionRequest : IBrainActionRequest
+{
+    public IntentActionType IntentActionType { get; set; }
+}
+
+public struct PerformCustomActionRequest : IBrainActionRequest
+{
+    public CustomActionType CustomActionType { get; set; }
     public Vector2 Direction { get; set; }
 }
 
-public struct PickActionRequest : IBrainActionRequest
+public struct PerformSystemActionRequest : IBrainActionRequest
 {
+    public SystemActionType SystemActionType { get; set; }
 }
 
-public struct UseSkillSlotActionRequest : IBrainActionRequest
+public struct UseSkillRequest : IBrainActionRequest
 {
-    public SkillSlotType SkillSlotType { get; set; }
-}
-
-public struct FollowTargetActionRequest : IBrainActionRequest
-{
+    public string SkillKey { get; set; }
 }

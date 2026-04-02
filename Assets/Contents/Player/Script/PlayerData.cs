@@ -7,7 +7,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     [JsonProperty] public Stat Stat { get; private set; }
     [JsonProperty] public Equipment Equipment { get; private set; }
     [JsonProperty] public Faction Faction { get; private set; }
-    [JsonProperty] public SkillSlotData SkillSlotData { get; private set; }
+    [JsonProperty] public InputActionSkillData InputActionSkillData { get; private set; }
     [JsonProperty] public string PlayerKey { get; private set; }
     [JsonIgnore] public MessageBus MessageBus { get; set; }
     [JsonProperty] public long UniqueId { get; set; }
@@ -41,10 +41,10 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Faction = new Faction();
         Faction.Initialize(initData);
 
-        SkillSlotData = new SkillSlotData();
-        SkillSlotData.Initialize(initData);
+        InputActionSkillData = new InputActionSkillData();
+        InputActionSkillData.Initialize(initData);
 
-        RefreshDefaultSkillSlots();
+        RefreshDefaultInputActionSkills();
     }
 
     public void Uninitialize()
@@ -60,7 +60,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Stat?.Uninitialize();
         Equipment?.Uninitialize();
         Faction?.Uninitialize();
-        SkillSlotData?.Uninitialize();
+        InputActionSkillData?.Uninitialize();
     }
 
     public void OnSetMessageBus()
@@ -97,10 +97,10 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
         }
 
-        if (SkillSlotData != null)
+        if (InputActionSkillData != null)
         {
-            SkillSlotData.MessageBus = MessageBus;
-            SkillSlotData.OnSetMessageBus();
+            InputActionSkillData.MessageBus = MessageBus;
+            InputActionSkillData.OnSetMessageBus();
         }
     }
     
@@ -117,7 +117,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
 
         Stat.AddStats(GetEquipmentStatSourceKey(msg.Item), msg.Item.ItemData);
-        RefreshEquippedWeaponSkillSlot(msg.Item);
+        RefreshEquippedWeaponInputAction(msg.Item);
     }
     
     void OnUnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
@@ -133,7 +133,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
 
         Stat.RemoveStats(GetEquipmentStatSourceKey(msg.Item));
-        ClearEquippedWeaponSkillSlot(msg.Item);
+        ClearEquippedWeaponInputAction(msg.Item);
     }
 
     void RefreshBaseStats()
@@ -152,9 +152,9 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Stat.AddStats(new StatSourceKey(StatSourceType.Player, PlayerKey), tableData);
     }
 
-    void RefreshDefaultSkillSlots()
+    void RefreshDefaultInputActionSkills()
     {
-        if (SkillSlotData == null)
+        if (InputActionSkillData == null)
         {
             return;
         }
@@ -165,27 +165,27 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             return;
         }
 
-        SkillSlotLogic.TrySetSkillKey(this, SkillSlotType.MainAttack, tableData.uniqueSkillKey);
+        InputActionSkillLogic.TrySetSkillKey(this, InputActionType.MainAttack, tableData.uniqueSkillKey);
     }
 
-    void RefreshEquippedWeaponSkillSlot(Item item)
+    void RefreshEquippedWeaponInputAction(Item item)
     {
         if (item?.ItemData == null || item.ItemData.itemType != Tables.ItemType.Weapon)
         {
             return;
         }
 
-        SkillSlotLogic.TrySetSkillKey(this, SkillSlotType.SubAttack, item.ItemData.uniqueSkillKey);
+        InputActionSkillLogic.TrySetSkillKey(this, InputActionType.SubAttack, item.ItemData.uniqueSkillKey);
     }
 
-    void ClearEquippedWeaponSkillSlot(Item item)
+    void ClearEquippedWeaponInputAction(Item item)
     {
         if (item?.ItemData == null || item.ItemData.itemType != Tables.ItemType.Weapon)
         {
             return;
         }
 
-        SkillSlotLogic.TryClearSkillKey(this, SkillSlotType.SubAttack);
+        InputActionSkillLogic.TryClearSkillKey(this, InputActionType.SubAttack);
     }
 
     StatSourceKey GetEquipmentStatSourceKey(Item item)
