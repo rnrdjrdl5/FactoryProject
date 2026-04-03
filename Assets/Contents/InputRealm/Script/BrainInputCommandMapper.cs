@@ -1,13 +1,13 @@
-public class BrainInputActionMapper : Processor, IPhysicalInputTokenRequester
+public class BrainInputCommandMapper : Processor, IPhysicalInputTokenRequester
 {
-    BrainInputProcessor brainInputProcessor;
+    BrainInputCommandProcessor brainInputProcessor;
 
     public override void Ready()
     {
         base.Ready();
 
         var processorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
-        brainInputProcessor = processorAbility?.GetProcessor<BrainInputProcessor>();
+        brainInputProcessor = processorAbility?.GetProcessor<BrainInputCommandProcessor>();
     }
 
     public override void Uninitialize()
@@ -31,6 +31,9 @@ public class BrainInputActionMapper : Processor, IPhysicalInputTokenRequester
     {
         switch (tokenType)
         {
+            case PhysicalInputTokenType.MoveInputChanged:
+                inputActionType = InputActionType.Move;
+                return true;
             case PhysicalInputTokenType.Pick:
                 inputActionType = InputActionType.Pick;
                 return true;

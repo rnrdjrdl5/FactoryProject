@@ -8,4 +8,5 @@ public enum InputActionType
     Skill3,
     MainUtility,
     SubUtility,
+    Move,
 }

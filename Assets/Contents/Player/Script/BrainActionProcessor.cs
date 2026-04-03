@@ -4,7 +4,6 @@ public class BrainActionProcessor : Processor
 {
     Brain brain;
     Entity controlledEntity;
-    BrainInputAbility actionRequestSource;
     PlayerMoveAbility moveAbility;
     PlayerFollowAbility followAbility;
     SkillAbility skillAbility;
@@ -29,16 +28,10 @@ public class BrainActionProcessor : Processor
     public override void Ready()
     {
         base.Ready();
-
-        actionRequestSource = Entity.GetAbility<BrainInputAbility>();
-        actionRequestSource?.SetActionProcessor(this);
     }
 
     public override void Uninitialize()
     {
-        actionRequestSource?.SetActionProcessor(null);
-        actionRequestSource = null;
-
         if (brain != null)
         {
             brain.OnAttachControll -= RefreshControlledCache;
@@ -50,44 +43,29 @@ public class BrainActionProcessor : Processor
         base.Uninitialize();
     }
 
-    public void RequestAction(IBrainActionRequest request)
+    public void RequestAction(BrainActionRequest request)
     {
-        if (TryResolveActionRequest(request))
+        switch (request.RequestType)
         {
-            return;
-        }
-
-        TryExecuteActionRequest(request);
-    }
-
-    bool TryResolveActionRequest(IBrainActionRequest request)
-    {
-        switch (request)
-        {
-            case PerformInputActionRequest inputActionRequest:
-                return TryResolveInputAction(inputActionRequest.InputActionType);
-
-            case PerformIntentActionRequest intentActionRequest:
-                return TryResolveIntentAction(intentActionRequest.IntentActionType);
-
-            default:
-                return false;
+            case BrainActionRequestType.Input:
+                TryResolveInputAction(request);
+                return;
+            case BrainActionRequestType.Intent:
+                TryResolveIntentAction(request.IntentActionType);
+                return;
         }
     }
 
-    bool TryExecuteActionRequest(IBrainActionRequest request)
+    bool TryExecuteActionRequest(PerformCustomActionRequest request)
     {
-        switch (request)
+        switch (request.CustomActionType)
         {
-            case PerformCustomActionRequest customActionRequest:
-                return TryPerformCustomAction(customActionRequest);
-
-            case PerformSystemActionRequest systemActionRequest:
-                return TryPerformSystemAction(systemActionRequest.SystemActionType);
-
-            case UseSkillRequest useSkillRequest:
-                return TryUseSkill(useSkillRequest.SkillKey);
-
+            case CustomActionType.Move:
+                Move(request.Direction);
+                return true;
+            case CustomActionType.FollowTarget:
+                FollowTarget();
+                return true;
             default:
                 return false;
         }
@@ -133,8 +111,18 @@ public class BrainActionProcessor : Processor
         return skillAbility.TryUseSkill(skillKey);
     }
 
-    bool TryResolveInputAction(InputActionType inputActionType)
+    bool TryResolveInputAction(BrainActionRequest inputActionRequest)
     {
+        if (inputActionRequest.InputActionType == InputActionType.Move)
+        {
+            return TryExecuteActionRequest(new PerformCustomActionRequest
+            {
+                CustomActionType = CustomActionType.Move,
+                Direction = inputActionRequest.Direction
+            });
+        }
+
+        var inputActionType = inputActionRequest.InputActionType;
         if (InputActionSystemLogic.TryGetSystemActionType(inputActionType, out var systemActionType))
         {
             return TryPerformSystemAction(systemActionType);
@@ -148,7 +136,7 @@ public class BrainActionProcessor : Processor
         switch (intentActionType)
         {
             case IntentActionType.FollowTarget:
-                return TryPerformCustomAction(new PerformCustomActionRequest
+                return TryExecuteActionRequest(new PerformCustomActionRequest
                 {
                     CustomActionType = CustomActionType.FollowTarget
                 });
@@ -165,21 +153,6 @@ public class BrainActionProcessor : Processor
         {
             case SystemActionType.Pick:
                 TryPick();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    bool TryPerformCustomAction(PerformCustomActionRequest customActionRequest)
-    {
-        switch (customActionRequest.CustomActionType)
-        {
-            case CustomActionType.Move:
-                Move(customActionRequest.Direction);
-                return true;
-            case CustomActionType.FollowTarget:
-                FollowTarget();
                 return true;
             default:
                 return false;

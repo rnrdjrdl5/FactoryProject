@@ -1,8 +1,8 @@
 public class PhysicalTokenRouterProcessor : Processor, IPhysicalInputTokenRequester
 {
     PhysicalTokenEmitterAbility physicalTokenEmitterAbility;
-    GlobalInputActionMapper globalInputActionMapper;
-    BrainInputActionMapper brainInputActionMapper;
+    GlobalInputCommandMapper globalInputActionMapper;
+    BrainInputCommandMapper brainInputActionMapper;
 
     public override void Ready()
     {
@@ -18,16 +18,18 @@ public class PhysicalTokenRouterProcessor : Processor, IPhysicalInputTokenReques
 
         var physicalInputBindingData = Entity.GetEntityData<PhysicalInputBindingData>();
         physicalTokenEmitterAbility.SetInputBindingData(physicalInputBindingData);
+        physicalTokenEmitterAbility.SetInputStateData(Entity.GetEntityData<PhysicalInputStateData>());
 
         var processorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
-        globalInputActionMapper = processorAbility?.GetProcessor<GlobalInputActionMapper>();
-        brainInputActionMapper = processorAbility?.GetProcessor<BrainInputActionMapper>();
+        globalInputActionMapper = processorAbility?.GetProcessor<GlobalInputCommandMapper>();
+        brainInputActionMapper = processorAbility?.GetProcessor<BrainInputCommandMapper>();
     }
 
     public override void Uninitialize()
     {
         physicalTokenEmitterAbility?.SetTokenRequester(null);
         physicalTokenEmitterAbility?.SetInputBindingData(null);
+        physicalTokenEmitterAbility?.SetInputStateData(null);
 
         physicalTokenEmitterAbility = null;
         globalInputActionMapper = null;

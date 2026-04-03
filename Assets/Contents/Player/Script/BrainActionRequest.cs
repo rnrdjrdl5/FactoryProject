@@ -1,31 +1,40 @@
 using UnityEngine;
 
-public interface IBrainActionRequest
+public enum BrainActionRequestType
 {
+    Input,
+    Intent,
 }
 
-public struct PerformInputActionRequest : IBrainActionRequest
+public struct BrainActionRequest
 {
-    public InputActionType InputActionType { get; set; }
+    public BrainActionRequestType RequestType { get; private set; }
+    public InputActionType InputActionType { get; private set; }
+    public IntentActionType IntentActionType { get; private set; }
+    public Vector2 Direction { get; private set; }
+
+    public static BrainActionRequest Input(InputActionType inputActionType, Vector2 direction = default)
+    {
+        return new BrainActionRequest
+        {
+            RequestType = BrainActionRequestType.Input,
+            InputActionType = inputActionType,
+            Direction = direction
+        };
+    }
+
+    public static BrainActionRequest Intent(IntentActionType intentActionType)
+    {
+        return new BrainActionRequest
+        {
+            RequestType = BrainActionRequestType.Intent,
+            IntentActionType = intentActionType
+        };
+    }
 }
 
-public struct PerformIntentActionRequest : IBrainActionRequest
-{
-    public IntentActionType IntentActionType { get; set; }
-}
-
-public struct PerformCustomActionRequest : IBrainActionRequest
+public struct PerformCustomActionRequest
 {
     public CustomActionType CustomActionType { get; set; }
     public Vector2 Direction { get; set; }
-}
-
-public struct PerformSystemActionRequest : IBrainActionRequest
-{
-    public SystemActionType SystemActionType { get; set; }
-}
-
-public struct UseSkillRequest : IBrainActionRequest
-{
-    public string SkillKey { get; set; }
 }

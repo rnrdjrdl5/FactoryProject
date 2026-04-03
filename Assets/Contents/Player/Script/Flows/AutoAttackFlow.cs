@@ -15,10 +15,7 @@ public class AutoAttackFlow : ProcessorFlow
     {
         base.OnUpdateFlow();
 
-        actionProcessor?.RequestAction(new PerformIntentActionRequest
-        {
-            IntentActionType = IntentActionType.UseMainAttackSkill
-        });
+        actionProcessor?.RequestAction(BrainActionRequest.Intent(IntentActionType.UseMainAttackSkill));
 
         if (elapsedTime >= Duration)
         {

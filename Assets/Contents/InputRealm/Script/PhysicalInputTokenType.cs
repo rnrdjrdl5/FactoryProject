@@ -1,6 +1,7 @@
 public enum PhysicalInputTokenType
 {
     None,
+    MoveInputChanged,
     PrimaryClick,
     SecondaryClick,
     Pick,

@@ -1,17 +1,22 @@
-public class BrainInputProcessor : Processor
+using UnityEngine;
+
+public class BrainInputCommandProcessor : Processor
 {
     BrainActionProcessor brainActionProcessor;
+    PhysicalInputStateData inputStateData;
 
     public override void Ready()
     {
         base.Ready();
 
+        inputStateData = Entity.GetEntityData<PhysicalInputStateData>();
         RefreshActionProcessor();
     }
 
     public override void Uninitialize()
     {
         brainActionProcessor = null;
+        inputStateData = null;
 
         base.Uninitialize();
     }
@@ -19,11 +24,18 @@ public class BrainInputProcessor : Processor
     public void RequestAction(InputActionType inputActionType)
     {
         RefreshActionProcessor();
+        brainActionProcessor?.RequestAction(BrainActionRequest.Input(inputActionType, GetInputDirection(inputActionType)));
+    }
 
-        brainActionProcessor?.RequestAction(new PerformInputActionRequest
+    Vector2 GetInputDirection(InputActionType inputActionType)
+    {
+        switch (inputActionType)
         {
-            InputActionType = inputActionType
-        });
+            case InputActionType.Move:
+                return inputStateData?.MoveDirection ?? Vector2.zero;
+            default:
+                return Vector2.zero;
+        }
     }
 
     void RefreshActionProcessor()

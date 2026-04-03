@@ -1,4 +1,4 @@
-public class GlobalInputProcessor : Processor
+public class GlobalInputCommandProcessor : Processor
 {
     GlobalActionProcessor globalActionProcessor;
 

@@ -1,13 +1,13 @@
-public class GlobalInputActionMapper : Processor, IPhysicalInputTokenRequester
+public class GlobalInputCommandMapper : Processor, IPhysicalInputTokenRequester
 {
-    GlobalInputProcessor globalInputProcessor;
+    GlobalInputCommandProcessor globalInputProcessor;
 
     public override void Ready()
     {
         base.Ready();
 
         var processorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
-        globalInputProcessor = processorAbility?.GetProcessor<GlobalInputProcessor>();
+        globalInputProcessor = processorAbility?.GetProcessor<GlobalInputCommandProcessor>();
     }
 
     public override void Uninitialize()
