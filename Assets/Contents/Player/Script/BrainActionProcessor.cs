@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class BrainActionProcessor : Processor, IBrainActionRequester
+public class BrainActionProcessor : Processor
 {
     Brain brain;
     Entity controlledEntity;
-    IBrainActionRequestSource actionRequestSource;
+    BrainInputAbility actionRequestSource;
     PlayerMoveAbility moveAbility;
     PlayerFollowAbility followAbility;
     SkillAbility skillAbility;
@@ -31,12 +31,12 @@ public class BrainActionProcessor : Processor, IBrainActionRequester
         base.Ready();
 
         actionRequestSource = Entity.GetAbility<BrainInputAbility>();
-        actionRequestSource?.SetActionRequester(this);
+        actionRequestSource?.SetActionProcessor(this);
     }
 
     public override void Uninitialize()
     {
-        actionRequestSource?.SetActionRequester(null);
+        actionRequestSource?.SetActionProcessor(null);
         actionRequestSource = null;
 
         if (brain != null)

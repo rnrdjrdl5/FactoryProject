@@ -41,6 +41,7 @@ class LoadFlow : ProcessorFlow
         Tables.EnumLogic.CachingTable();
         
         Entity.AddEntity<MainStorage>(MainStorage.PrefabPath);
+        Entity.AddEntity<InputRealm>(InputRealm.PrefabPath);
         Entity.AddEntity<GlobalRealm>(GlobalRealm.PrefabPath);
     }
 

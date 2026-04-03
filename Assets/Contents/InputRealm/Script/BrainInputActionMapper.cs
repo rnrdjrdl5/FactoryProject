@@ -1,18 +1,18 @@
-public class BrainTokenInputProcessor : Processor, IPhysicalInputTokenRequester
+public class BrainInputActionMapper : Processor, IPhysicalInputTokenRequester
 {
-    IBrainInputActionRequester brainInputActionRequester;
+    BrainInputProcessor brainInputProcessor;
 
     public override void Ready()
     {
         base.Ready();
 
-        var processorAbility = Entity.GetAbility<GlobalRealmProcessorAbility>();
-        brainInputActionRequester = processorAbility?.GetProcessor<BrainInputProcessor>();
+        var processorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
+        brainInputProcessor = processorAbility?.GetProcessor<BrainInputProcessor>();
     }
 
     public override void Uninitialize()
     {
-        brainInputActionRequester = null;
+        brainInputProcessor = null;
 
         base.Uninitialize();
     }
@@ -24,7 +24,7 @@ public class BrainTokenInputProcessor : Processor, IPhysicalInputTokenRequester
             return;
         }
 
-        brainInputActionRequester?.RequestAction(inputActionType);
+        brainInputProcessor?.RequestAction(inputActionType);
     }
 
     bool TryGetPlayerInputActionType(PhysicalInputTokenType tokenType, out InputActionType inputActionType)

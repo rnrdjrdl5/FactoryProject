@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class GlobalInputAbility : Ability
 {
-    IGlobalInputActionRequester actionRequester;
+    GlobalInputProcessor actionRequester;
     GlobalInputBindingData inputBindingData;
 
-    public void SetActionRequester(IGlobalInputActionRequester actionRequester)
+    public void SetActionRequester(GlobalInputProcessor actionRequester)
     {
         this.actionRequester = actionRequester;
     }

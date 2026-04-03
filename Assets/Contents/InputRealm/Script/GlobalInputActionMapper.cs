@@ -1,18 +1,18 @@
-public class GlobalTokenInputProcessor : Processor, IPhysicalInputTokenRequester
+public class GlobalInputActionMapper : Processor, IPhysicalInputTokenRequester
 {
-    IGlobalInputActionRequester globalInputActionRequester;
+    GlobalInputProcessor globalInputProcessor;
 
     public override void Ready()
     {
         base.Ready();
 
-        var processorAbility = Entity.GetAbility<GlobalRealmProcessorAbility>();
-        globalInputActionRequester = processorAbility?.GetProcessor<GlobalInputProcessor>();
+        var processorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
+        globalInputProcessor = processorAbility?.GetProcessor<GlobalInputProcessor>();
     }
 
     public override void Uninitialize()
     {
-        globalInputActionRequester = null;
+        globalInputProcessor = null;
 
         base.Uninitialize();
     }
@@ -24,7 +24,7 @@ public class GlobalTokenInputProcessor : Processor, IPhysicalInputTokenRequester
             return;
         }
 
-        globalInputActionRequester?.RequestAction(inputActionType);
+        globalInputProcessor?.RequestAction(inputActionType);
     }
 
     bool TryGetGlobalInputActionType(PhysicalInputTokenType tokenType, out GlobalInputActionType inputActionType)

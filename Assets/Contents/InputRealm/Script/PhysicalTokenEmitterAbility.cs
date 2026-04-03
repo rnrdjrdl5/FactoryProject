@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PhysicalInputAbility : Ability, IPhysicalInputTokenRequestSource
+public class PhysicalTokenEmitterAbility : Ability, IPhysicalInputTokenRequestSource
 {
     PhysicalInputBindingData inputBindingData;
     IPhysicalInputTokenRequester tokenRequester;

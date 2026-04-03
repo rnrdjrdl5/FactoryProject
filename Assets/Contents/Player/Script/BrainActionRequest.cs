@@ -4,16 +4,6 @@ public interface IBrainActionRequest
 {
 }
 
-public interface IBrainActionRequester
-{
-    void RequestAction(IBrainActionRequest request);
-}
-
-public interface IBrainActionRequestSource
-{
-    void SetActionRequester(IBrainActionRequester actionRequester);
-}
-
 public struct PerformInputActionRequest : IBrainActionRequest
 {
     public InputActionType InputActionType { get; set; }

@@ -4,14 +4,14 @@ public class MoveFlow : ProcessorFlow
 {
     public float Duration { get; private set; } = 1;
 
-    IBrainActionRequester actionRequester;
+    BrainActionProcessor actionProcessor;
     Vector2 dir;
 
     public override void OnEnterFlow()
     {
         base.OnEnterFlow();
 
-        actionRequester = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
+        actionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
         dir = Random.insideUnitCircle;
     }
 
@@ -25,7 +25,7 @@ public class MoveFlow : ProcessorFlow
             return;
         }
 
-        actionRequester?.RequestAction(new PerformCustomActionRequest
+        actionProcessor?.RequestAction(new PerformCustomActionRequest
         {
             CustomActionType = CustomActionType.Move,
             Direction = new Vector2(dir.x, dir.y)

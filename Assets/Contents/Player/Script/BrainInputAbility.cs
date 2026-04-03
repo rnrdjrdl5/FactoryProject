@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class BrainInputAbility : Ability, IBrainActionRequestSource
+public class BrainInputAbility : Ability
 {
     Brain brain;
-    IBrainActionRequester actionRequester;
+    BrainActionProcessor actionProcessor;
     InputBindingData inputBindingData;
 
     public override void Initialize(IInitData initData = null)
@@ -13,9 +13,9 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
         brain = Entity as Brain;
     }
 
-    public void SetActionRequester(IBrainActionRequester actionRequester)
+    public void SetActionProcessor(BrainActionProcessor actionProcessor)
     {
-        this.actionRequester = actionRequester;
+        this.actionProcessor = actionProcessor;
     }
 
     public void SetInputBindingData(InputBindingData inputBindingData)
@@ -25,7 +25,7 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
 
     private void Update()
     {
-        if (brain == null || brain.IsAI || actionRequester == null)
+        if (brain == null || brain.IsAI || actionProcessor == null)
         {
             return;
         }
@@ -35,7 +35,7 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
 
         if (horizontal != 0f || vertical != 0f)
         {
-            actionRequester.RequestAction(new PerformCustomActionRequest
+            actionProcessor.RequestAction(new PerformCustomActionRequest
             {
                 CustomActionType = CustomActionType.Move,
                 Direction = new Vector2(horizontal, vertical)

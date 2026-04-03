@@ -1,4 +1,4 @@
-public class GlobalInputProcessor : Processor, IGlobalInputActionRequester
+public class GlobalInputProcessor : Processor
 {
     GlobalActionProcessor globalActionProcessor;
 
@@ -6,8 +6,7 @@ public class GlobalInputProcessor : Processor, IGlobalInputActionRequester
     {
         base.Ready();
 
-        var processorAbility = Entity.GetAbility<GlobalRealmProcessorAbility>();
-        globalActionProcessor = processorAbility?.GetProcessor<GlobalActionProcessor>();
+        RefreshActionProcessor();
     }
 
     public override void Uninitialize()
@@ -19,6 +18,8 @@ public class GlobalInputProcessor : Processor, IGlobalInputActionRequester
 
     public void RequestAction(GlobalInputActionType inputActionType)
     {
+        RefreshActionProcessor();
+
         switch (inputActionType)
         {
             case GlobalInputActionType.OpenTeam:
@@ -31,5 +32,18 @@ public class GlobalInputProcessor : Processor, IGlobalInputActionRequester
                 globalActionProcessor?.OpenInventory();
                 break;
         }
+    }
+
+    void RefreshActionProcessor()
+    {
+        if (globalActionProcessor != null)
+        {
+            return;
+        }
+
+        var mainRealm = Entry.RootRealm?.GetChild<MainRealm>();
+        var globalRealm = mainRealm?.GetChild<GlobalRealm>();
+        var processorAbility = globalRealm?.GetAbility<GlobalRealmProcessorAbility>();
+        globalActionProcessor = processorAbility?.GetProcessor<GlobalActionProcessor>();
     }
 }
