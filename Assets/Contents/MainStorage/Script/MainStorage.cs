@@ -4,7 +4,6 @@ using UnityEngine;
 [EntityData(typeof(Team))]
 [EntityData(typeof(PlayerStorage))]
 [EntityData(typeof(Bag))]
-[EntityData(typeof(InputBindingData))]
 public class MainStorage : Storage
 {
     public static string PrefabPath = $"MainStorage/{typeof(MainStorage)}";

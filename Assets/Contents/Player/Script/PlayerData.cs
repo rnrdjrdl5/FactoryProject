@@ -7,6 +7,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     [JsonProperty] public Stat Stat { get; private set; }
     [JsonProperty] public Equipment Equipment { get; private set; }
     [JsonProperty] public Faction Faction { get; private set; }
+    [JsonProperty] public InputBindingData InputBindingData { get; private set; }
     [JsonProperty] public InputActionSkillData InputActionSkillData { get; private set; }
     [JsonProperty] public string PlayerKey { get; private set; }
     [JsonIgnore] public MessageBus MessageBus { get; set; }
@@ -41,6 +42,9 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Faction = new Faction();
         Faction.Initialize(initData);
 
+        InputBindingData = new InputBindingData();
+        InputBindingData.Initialize(initData);
+
         InputActionSkillData = new InputActionSkillData();
         InputActionSkillData.Initialize(initData);
 
@@ -60,6 +64,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Stat?.Uninitialize();
         Equipment?.Uninitialize();
         Faction?.Uninitialize();
+        InputBindingData?.Uninitialize();
         InputActionSkillData?.Uninitialize();
     }
 
@@ -95,6 +100,12 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
 
             MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(OnEquipmentEquip);
             MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
+        }
+
+        if (InputBindingData != null)
+        {
+            InputBindingData.MessageBus = MessageBus;
+            InputBindingData.OnSetMessageBus();
         }
 
         if (InputActionSkillData != null)
