@@ -25,7 +25,7 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
 
     private void Update()
     {
-        if (brain == null || brain.IsAI || actionRequester == null || inputBindingData == null)
+        if (brain == null || brain.IsAI || actionRequester == null)
         {
             return;
         }
@@ -42,36 +42,5 @@ public class BrainInputAbility : Ability, IBrainActionRequestSource
             });
         }
 
-        TryRequestAction(KeyCode.Z);
-        TryRequestAction(KeyCode.Mouse0);
-        TryRequestAction(KeyCode.Mouse1);
-        TryRequestAction(KeyCode.Q);
-        TryRequestAction(KeyCode.E);
-        TryRequestAction(KeyCode.R);
-        TryRequestAction(KeyCode.Space);
-        TryRequestAction(KeyCode.LeftShift);
-    }
-
-    void TryRequestAction(KeyCode keyCode)
-    {
-        if (!Input.GetKeyDown(keyCode))
-        {
-            return;
-        }
-
-        if (!inputBindingData.TryGetInputActionType(keyCode, out var inputActionType))
-        {
-            return;
-        }
-
-        RequestInputAction(inputActionType);
-    }
-
-    void RequestInputAction(InputActionType inputActionType)
-    {
-        actionRequester.RequestAction(new PerformInputActionRequest
-        {
-            InputActionType = inputActionType
-        });
     }
 }

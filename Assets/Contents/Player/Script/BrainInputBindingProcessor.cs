@@ -1,4 +1,4 @@
-public class BrainInputProcessor : Processor
+public class BrainInputBindingProcessor : Processor
 {
     Brain brain;
     BrainInputAbility brainInputAbility;

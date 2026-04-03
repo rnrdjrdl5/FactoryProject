@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GlobalProcessor : Processor
+public class GlobalActionProcessor : Processor
 {
     MainStorage mainStorage;
     Team team;

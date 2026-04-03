@@ -1,36 +1,18 @@
 public class GlobalInputProcessor : Processor, IGlobalInputActionRequester
 {
-    GlobalInputAbility globalInputAbility;
-    GlobalInputBindingData globalInputBindingData;
-    GlobalProcessor globalProcessor;
+    GlobalActionProcessor globalActionProcessor;
 
     public override void Ready()
     {
         base.Ready();
 
-        globalInputAbility = Entity.GetAbility<GlobalInputAbility>();
-        if (globalInputAbility == null)
-        {
-            return;
-        }
-
-        globalInputBindingData = Entity.GetEntityData<GlobalInputBindingData>();
-
         var processorAbility = Entity.GetAbility<GlobalRealmProcessorAbility>();
-        globalProcessor = processorAbility?.GetProcessor<GlobalProcessor>();
-
-        globalInputAbility.SetInputBindingData(globalInputBindingData);
-        globalInputAbility.SetActionRequester(this);
+        globalActionProcessor = processorAbility?.GetProcessor<GlobalActionProcessor>();
     }
 
     public override void Uninitialize()
     {
-        globalInputAbility?.SetActionRequester(null);
-        globalInputAbility?.SetInputBindingData(null);
-
-        globalInputAbility = null;
-        globalInputBindingData = null;
-        globalProcessor = null;
+        globalActionProcessor = null;
 
         base.Uninitialize();
     }
@@ -40,13 +22,13 @@ public class GlobalInputProcessor : Processor, IGlobalInputActionRequester
         switch (inputActionType)
         {
             case GlobalInputActionType.OpenTeam:
-                globalProcessor?.OpenTeam();
+                globalActionProcessor?.OpenTeam();
                 break;
             case GlobalInputActionType.OpenEquipment:
-                globalProcessor?.OpenEquipment();
+                globalActionProcessor?.OpenEquipment();
                 break;
             case GlobalInputActionType.OpenInventory:
-                globalProcessor?.OpenInventory();
+                globalActionProcessor?.OpenInventory();
                 break;
         }
     }
