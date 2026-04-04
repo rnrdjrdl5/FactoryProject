@@ -32,9 +32,3 @@ public struct BrainActionRequest
         };
     }
 }
-
-public struct PerformCustomActionRequest
-{
-    public CustomActionType CustomActionType { get; set; }
-    public Vector2 Direction { get; set; }
-}

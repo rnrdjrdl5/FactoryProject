@@ -45,7 +45,7 @@ public class BrainInputCommandProcessor : Processor
             return;
         }
 
-        var mainRealm = Entry.RootRealm?.GetChild<MainRealm>();
+        var mainRealm = Entity.GetParent<MainRealm>();
         if (mainRealm == null)
         {
             return;
