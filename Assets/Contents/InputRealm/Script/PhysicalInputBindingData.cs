@@ -23,6 +23,7 @@ public class PhysicalInputBindingData : IEntityData, IMessageBus
         SetTokenType(KeyCode.F1, PhysicalInputTokenType.ToggleTeam);
         SetTokenType(KeyCode.F2, PhysicalInputTokenType.ToggleEquipment);
         SetTokenType(KeyCode.I, PhysicalInputTokenType.ToggleInventory);
+        SetTokenType(KeyCode.Escape, PhysicalInputTokenType.Back);
     }
 
     public void Uninitialize()

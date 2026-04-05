@@ -13,4 +13,5 @@ public enum PhysicalInputTokenType
     ToggleTeam,
     ToggleEquipment,
     ToggleInventory,
+    Back,
 }

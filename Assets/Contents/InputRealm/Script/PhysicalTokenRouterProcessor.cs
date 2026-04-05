@@ -1,8 +1,7 @@
 public class PhysicalTokenRouterProcessor : Processor, IPhysicalInputTokenRequester
 {
     PhysicalTokenEmitterAbility physicalTokenEmitterAbility;
-    GlobalInputCommandMapper globalInputActionMapper;
-    BrainInputCommandMapper brainInputActionMapper;
+    InputRealmProcessorAbility inputRealmProcessorAbility;
 
     public override void Ready()
     {
@@ -20,9 +19,7 @@ public class PhysicalTokenRouterProcessor : Processor, IPhysicalInputTokenReques
         physicalTokenEmitterAbility.SetInputBindingData(physicalInputBindingData);
         physicalTokenEmitterAbility.SetInputStateData(Entity.GetEntityData<PhysicalInputStateData>());
 
-        var processorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
-        globalInputActionMapper = processorAbility?.GetProcessor<GlobalInputCommandMapper>();
-        brainInputActionMapper = processorAbility?.GetProcessor<BrainInputCommandMapper>();
+        inputRealmProcessorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
     }
 
     public override void Uninitialize()
@@ -32,15 +29,13 @@ public class PhysicalTokenRouterProcessor : Processor, IPhysicalInputTokenReques
         physicalTokenEmitterAbility?.SetInputStateData(null);
 
         physicalTokenEmitterAbility = null;
-        globalInputActionMapper = null;
-        brainInputActionMapper = null;
+        inputRealmProcessorAbility = null;
 
         base.Uninitialize();
     }
 
     public void RequestTokenInput(PhysicalInputTokenEvent tokenInput)
     {
-        globalInputActionMapper?.RequestTokenInput(tokenInput);
-        brainInputActionMapper?.RequestTokenInput(tokenInput);
+        inputRealmProcessorAbility?.ProcessInput(tokenInput);
     }
 }
