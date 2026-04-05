@@ -110,7 +110,7 @@ public static class SkillActionLogic
         foreach (var targetEntity in skillContext.TargetEntities)
         {
             var targetPlayerData = targetEntity?.GetEntityData<PlayerData>();
-            targetPlayerData?.Buff?.SetBuff(addBuffParam.BuffKey, sourceKey);
+            targetPlayerData?.Buff?.AddBuff(addBuffParam.BuffKey, sourceKey);
         }
     }
 }

@@ -22,7 +22,7 @@ public class Buff : IEntityData, IMessageBus
     {
     }
 
-    public void SetBuff(
+    public void AddBuff(
         string buffKey,
         string sourceKey,
         BuffLifetimeType buffLifetimeType = BuffLifetimeType.Runtime,

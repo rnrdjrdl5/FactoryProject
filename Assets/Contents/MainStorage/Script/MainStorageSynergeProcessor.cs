@@ -129,7 +129,7 @@ public class MainStorageSynergeProcessor : Processor
                     continue;
                 }
 
-                playerData.Buff.SetBuff(synerge.synergeBuffKey, synerge.Key, BuffLifetimeType.External);
+                playerData.Buff.AddBuff(synerge.synergeBuffKey, synerge.Key, BuffLifetimeType.External);
             }
         }
     }

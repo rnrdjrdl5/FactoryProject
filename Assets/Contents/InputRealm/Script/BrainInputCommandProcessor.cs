@@ -40,11 +40,8 @@ public class BrainInputCommandProcessor : Processor
 
     void RefreshActionProcessor()
     {
-        if (brainActionProcessor != null)
-        {
-            return;
-        }
-
+        // TODO : 수정 필요
+        
         var mainRealm = Entity.GetParent<MainRealm>();
         if (mainRealm == null)
         {
