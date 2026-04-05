@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [Processor(typeof(TeamPopupProcessor))]
-[Processor(typeof(TeamPopupLayerOwnerProcessor))]
+[Processor(typeof(TeamPopupInputLayerProcessor))]
 public class TeamPopupProcessorAbility : ProcessorAbility
 {
     

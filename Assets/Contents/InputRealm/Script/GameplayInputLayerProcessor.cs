@@ -3,8 +3,6 @@ public class GameplayInputLayerProcessor : BaseInputLayerProcessor
     GlobalInputCommandMapper globalInputCommandMapper;
     BrainInputCommandMapper brainInputCommandMapper;
 
-    public override InputLayerType LayerType => InputLayerType.Gameplay;
-
     public override void Ready()
     {
         base.Ready();
