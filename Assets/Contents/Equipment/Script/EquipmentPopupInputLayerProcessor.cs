@@ -1,6 +1,6 @@
 public class EquipmentPopupInputLayerProcessor : BasePopupInputLayerProcessor
 {
-    protected override bool ShouldConsume(PhysicalInputTokenType tokenType)
+    protected override bool CanConsume(PhysicalInputTokenType tokenType)
     {
         return tokenType == PhysicalInputTokenType.ToggleEquipment || tokenType == PhysicalInputTokenType.Back;
     }

@@ -32,7 +32,7 @@ public class BrainInputCommandProcessor : Processor
         switch (inputActionType)
         {
             case InputActionType.Move:
-                return inputStateData?.MoveDirection ?? Vector2.zero;
+                return inputStateData?.AxisDirection ?? Vector2.zero;
             default:
                 return Vector2.zero;
         }

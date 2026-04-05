@@ -1,29 +1,36 @@
 public class GameplayInputLayerProcessor : BaseInputLayerProcessor
 {
-    GlobalInputCommandMapper globalInputCommandMapper;
-    BrainInputCommandMapper brainInputCommandMapper;
+    GlobalInputCommandProcessor globalInputCommandProcessor;
+    BrainInputCommandProcessor brainInputCommandProcessor;
 
     public override void Ready()
     {
         base.Ready();
 
         var inputRealmProcessorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
-        globalInputCommandMapper = inputRealmProcessorAbility?.GetProcessor<GlobalInputCommandMapper>();
-        brainInputCommandMapper = inputRealmProcessorAbility?.GetProcessor<BrainInputCommandMapper>();
+        globalInputCommandProcessor = inputRealmProcessorAbility?.GetProcessor<GlobalInputCommandProcessor>();
+        brainInputCommandProcessor = inputRealmProcessorAbility?.GetProcessor<BrainInputCommandProcessor>();
     }
 
     public override void Uninitialize()
     {
-        globalInputCommandMapper = null;
-        brainInputCommandMapper = null;
+        globalInputCommandProcessor = null;
+        brainInputCommandProcessor = null;
 
         base.Uninitialize();
     }
 
     public override LayerResult ProcessInput(PhysicalInputTokenEvent input)
     {
-        globalInputCommandMapper?.RequestTokenInput(input);
-        brainInputCommandMapper?.RequestTokenInput(input);
+        if (GlobalInputCommandLogic.TryGetInputActionType(input.TokenType, out var globalInputActionType))
+        {
+            globalInputCommandProcessor?.RequestAction(globalInputActionType);
+        }
+
+        if (BrainInputCommandLogic.TryGetInputActionType(input.TokenType, out var inputActionType))
+        {
+            brainInputCommandProcessor?.RequestAction(inputActionType);
+        }
 
         return LayerResult.Consume;
     }

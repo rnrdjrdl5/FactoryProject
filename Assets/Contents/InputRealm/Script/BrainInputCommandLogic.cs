@@ -1,37 +1,10 @@
-public class BrainInputCommandMapper : Processor, IPhysicalInputTokenRequester
+public static class BrainInputCommandLogic
 {
-    BrainInputCommandProcessor brainInputProcessor;
-
-    public override void Ready()
-    {
-        base.Ready();
-
-        var processorAbility = Entity.GetAbility<InputRealmProcessorAbility>();
-        brainInputProcessor = processorAbility?.GetProcessor<BrainInputCommandProcessor>();
-    }
-
-    public override void Uninitialize()
-    {
-        brainInputProcessor = null;
-
-        base.Uninitialize();
-    }
-
-    public void RequestTokenInput(PhysicalInputTokenEvent tokenInput)
-    {
-        if (!TryGetPlayerInputActionType(tokenInput.TokenType, out var inputActionType))
-        {
-            return;
-        }
-
-        brainInputProcessor?.RequestAction(inputActionType);
-    }
-
-    bool TryGetPlayerInputActionType(PhysicalInputTokenType tokenType, out InputActionType inputActionType)
+    public static bool TryGetInputActionType(PhysicalInputTokenType tokenType, out InputActionType inputActionType)
     {
         switch (tokenType)
         {
-            case PhysicalInputTokenType.MoveInputChanged:
+            case PhysicalInputTokenType.AxisInputChanged:
                 inputActionType = InputActionType.Move;
                 return true;
             case PhysicalInputTokenType.Pick:
@@ -63,5 +36,4 @@ public class BrainInputCommandMapper : Processor, IPhysicalInputTokenRequester
                 return false;
         }
     }
-
 }
