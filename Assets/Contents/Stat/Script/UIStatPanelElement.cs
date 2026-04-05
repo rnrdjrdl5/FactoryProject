@@ -21,6 +21,8 @@ public class UIStatPanelElement : PanelElement
         if (playerData != null)
         {
             stat = playerData.Stat;
+            
+            stat.MessageBus.Subscribe<EntityDataMsg.StatChangedMsg>(OnStatChanged);
         }
 
         RefreshUI();
@@ -28,6 +30,11 @@ public class UIStatPanelElement : PanelElement
 
     protected override void OnUnsetPanelDatas()
     {
+        if (stat != null)
+        {
+            stat.MessageBus.Unsubscribe<EntityDataMsg.StatChangedMsg>(OnStatChanged);
+        }
+
         stat = null;
         
         base.OnUnsetPanelDatas();
@@ -53,5 +60,10 @@ public class UIStatPanelElement : PanelElement
             var statType = Tables.EnumLogic.StatTypes[i];
             uiStat.UpdateStat(statType, !stat.TryGetStat(statType, out var value) ? 0 : value);
         }
+    }
+
+    void OnStatChanged(EntityDataMsg.StatChangedMsg msg)
+    {
+        RefreshUI();
     }
 }
