@@ -14,8 +14,7 @@ public class Player : Entity
     {
         base.PreInitialize(initData);
         
-        var mainRealm = GetParent<MainRealm>();
-        var mainStorage = mainRealm.GetChild<MainStorage>();
+        var mainStorage = GetFromRoot<MainStorage>();
         var playerStorage = mainStorage.GetEntityData<PlayerStorage>();
         if (playerStorage.PlayerDataByKey.TryGetValue(UniqueId, out playerData))
         {

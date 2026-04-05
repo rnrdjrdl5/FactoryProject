@@ -40,9 +40,8 @@ public class GlobalInputCommandProcessor : Processor
         {
             return;
         }
-
-        var mainRealm = Entity.GetParent<MainRealm>();
-        var globalRealm = mainRealm?.GetChild<GlobalRealm>();
+        
+        var globalRealm = Entity.GetFromRoot<GlobalRealm>();
         var processorAbility = globalRealm?.GetAbility<GlobalRealmProcessorAbility>();
         globalActionProcessor = processorAbility?.GetProcessor<GlobalActionProcessor>();
     }
