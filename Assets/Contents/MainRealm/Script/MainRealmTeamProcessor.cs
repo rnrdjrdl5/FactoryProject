@@ -72,10 +72,15 @@ public class MainRealmTeamProcessor : Processor
         players.Clear();
         brains.Clear();
 
+        var brainAbility = Realm.GetAbility<BrainAbility>();
+        if (brainAbility == null)
+        {
+            return;
+        }
+
         Player prevPlayer = null; 
         for (int i = 0; i < teamFormation.Players.Count; i++)
         {
-            var mainRealmProcessor = ProcessorAbility.GetProcessor<MainRealmProcessor>();
             var item = teamFormation.Players[i];
             var playerTableData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
             
@@ -85,9 +90,9 @@ public class MainRealmTeamProcessor : Processor
                 playerId = id;
             }
             var playerInitData = new PlayerInitData() { PlayerKey = playerTableData.Key, Position = Vector3.zero, UniqueId = playerId };
-            var tuple = mainRealmProcessor.CreateBrainAndPlayer(Realm, Brain.PrefabPath, playerTableData.prefabPath, playerInitData);
+            var tuple = brainAbility.CreateBrainAndControlled<Player>(Brain.PrefabPath, playerTableData.prefabPath, null, playerInitData);
             var brain = tuple.brain;
-            var player = tuple.player;
+            var player = tuple.controlled;
 
             var faction = player.GetEntityData<PlayerData>()?.Faction;
             if (faction != null)
@@ -95,15 +100,15 @@ public class MainRealmTeamProcessor : Processor
                 faction.SetFactionType(Tables.FactionType.Hero);
             }
             
-            players.Add(tuple.player);
-            brains.Add(tuple.brain);
+            players.Add(player);
+            brains.Add(brain);
             
             var processorAbility = brain.GetAbility<BrainProcessorAbility>();
             var brainFlowProcessor = processorAbility.GetProcessor<BrainFlowProcessor>();
 
             if (prevPlayer !=null)
             {
-                var followAbility = tuple.player.GetAbility<PlayerFollowAbility>();
+                var followAbility = player.GetAbility<PlayerFollowAbility>();
                 followAbility.SetTarget(prevPlayer);
                 brainFlowProcessor.ChangeFlow<FollowCivilizedPlayerFlow>();
                 brain.SetControlMode(BrainControlMode.AI);
@@ -113,6 +118,7 @@ public class MainRealmTeamProcessor : Processor
             {
                 brainFlowProcessor.ChangeFlow<CommonCivilizedPlayerFlow>();
                 brain.SetControlMode(BrainControlMode.PlayerInput);
+                brainAbility.SetPlayerBrain(brain);
             }
 
             prevPlayer = player;

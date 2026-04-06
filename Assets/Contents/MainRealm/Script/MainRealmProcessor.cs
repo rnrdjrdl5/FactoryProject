@@ -5,11 +5,13 @@ public class MainRealmProcessor : Processor
 {
     public (Brain brain, Player player) CreateBrainAndPlayer(Entity ownerEntity, string brainPath, string playerPath, PlayerInitData playerInitData)
     {
-        var brain = ownerEntity.AddEntity<Brain>(brainPath);
-        var player = ownerEntity.AddEntity<Player>(playerPath, playerInitData);
-        brain.AttachControll(player);
+        var brainAbility = ownerEntity.GetAbility<BrainAbility>();
+        if (brainAbility == null)
+        {
+            return default;
+        }
 
-        return (brain, player);
+        return brainAbility.CreateBrainAndControlled<Player>(brainPath, playerPath, null, playerInitData);
     }
 
     public Player GetClosestHostilePlayer(Player player, Vector3 centerPosition, float range)
