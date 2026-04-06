@@ -50,7 +50,7 @@ public class BrainInputCommandProcessor : Processor
 
         foreach (var brain in mainRealm.GetChildren<Brain>())
         {
-            if (brain == null || brain.IsAI)
+            if (brain == null || brain.ControlMode != BrainControlMode.PlayerInput)
             {
                 continue;
             }

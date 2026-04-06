@@ -47,7 +47,7 @@ public class SpawnerProcessor : Processor
         
         var tuple = realmProcessor.CreateBrainAndPlayer(Realm, Brain.PrefabPath, playerData.prefabPath, playerInitData);
         var brain = tuple.brain;
-        brain.SetAI(true);
+        brain.SetControlMode(BrainControlMode.AI);
         
         var brainProcessorAbility = brain.GetAbility<BrainProcessorAbility>();
         var brainFlowProcessor = brainProcessorAbility.GetProcessor<BrainFlowProcessor>();

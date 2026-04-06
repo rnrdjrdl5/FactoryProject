@@ -106,13 +106,13 @@ public class MainRealmTeamProcessor : Processor
                 var followAbility = tuple.player.GetAbility<PlayerFollowAbility>();
                 followAbility.SetTarget(prevPlayer);
                 brainFlowProcessor.ChangeFlow<FollowCivilizedPlayerFlow>();
-                brain.SetAI(true);
+                brain.SetControlMode(BrainControlMode.AI);
             }
 
             else
             {
                 brainFlowProcessor.ChangeFlow<CommonCivilizedPlayerFlow>();
-                brain.SetAI(false);
+                brain.SetControlMode(BrainControlMode.PlayerInput);
             }
 
             prevPlayer = player;
