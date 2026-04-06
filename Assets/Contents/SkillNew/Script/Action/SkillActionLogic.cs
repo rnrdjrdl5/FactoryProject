@@ -33,7 +33,8 @@ public static class SkillActionLogic
             return;
         }
 
-        var damage = GetDamage(skillContext, damageParam);
+        var casterFormula = skillContext.OriginCaster?.GetEntityData<PlayerData>()?.PlayerFormula;
+        var damage = SkillDamageLogic.GetDamage(casterFormula, damageParam);
         foreach (var targetEntity in skillContext.TargetEntities)
         {
             if (targetEntity == null)
@@ -44,17 +45,6 @@ public static class SkillActionLogic
             var hpAbility = targetEntity.GetAbility<HpAbility>();
             hpAbility?.TryApplyDamage(skillContext.OriginCaster, damage);
         }
-    }
-
-    static float GetDamage(SkillContext skillContext, SkillActionDamageParam damageParam)
-    {
-        if (damageParam.Amount != null)
-        {
-            return damageParam.Amount.Value;
-        }
-
-        var casterPlayerData = skillContext.OriginCaster?.GetEntityData<PlayerData>();
-        return DamageLogic.GetDamage(casterPlayerData);
     }
 
     static void ExecuteProjectile(SkillContext skillContext, SkillActionProjectileParam projectileParam)

@@ -10,12 +10,23 @@ public static class SkillActionParamParser
             case Tables.SkillActionType.Damage:
             {
                 var param = new SkillActionDamageParam();
-                if (!SkillParamParseUtility.TryGetOptionalFloat(rawParams, 0, skillKey, "amount", out var amount))
+                if (!SkillParamParseUtility.TryGetOptionalString(rawParams, 0, out var amountRaw))
                 {
                     return null;
                 }
 
-                param.Amount = amount;
+                if (!string.IsNullOrWhiteSpace(amountRaw))
+                {
+                    if (float.TryParse(amountRaw, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var amount))
+                    {
+                        param.Amount = amount;
+                    }
+                    else
+                    {
+                        param.AmountFormula = amountRaw;
+                    }
+                }
+
                 return param;
             }
 
