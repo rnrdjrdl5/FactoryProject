@@ -1,7 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SkillAbility : Ability
 {
+    readonly Dictionary<string, SkillRuntimeState> skillRuntimeStatesByKey = new();
+
     MainRealm mainRealm;
     MainRealmProcessorAbility mainRealmProcessorAbility;
     MainRealmProcessor mainRealmProcessor;
@@ -13,6 +16,14 @@ public class SkillAbility : Ability
         mainRealm = Entity.GetParent<MainRealm>();
         mainRealmProcessorAbility = mainRealm?.GetAbility<MainRealmProcessorAbility>();
         mainRealmProcessor = mainRealmProcessorAbility?.GetProcessor<MainRealmProcessor>();
+    }
+
+    void Update()
+    {
+        foreach (var state in skillRuntimeStatesByKey.Values)
+        {
+            state.UpdateCooldown(Time.deltaTime);
+        }
     }
 
     public Vector3 GetTargetPosition(Tables.Skill skillData, Entity factionEntity)
@@ -49,6 +60,17 @@ public class SkillAbility : Ability
         return skillContext;
     }
 
+    SkillRuntimeState GetOrCreateSkillRuntimeState(string skillKey)
+    {
+        if (!skillRuntimeStatesByKey.TryGetValue(skillKey, out var state))
+        {
+            state = SkillRuntimeState.Create(skillKey);
+            skillRuntimeStatesByKey[skillKey] = state;
+        }
+
+        return state;
+    }
+
     public bool TryUseSkill(string skillKey, SkillContext parentContext = null)
     {
         var skillData = string.IsNullOrWhiteSpace(skillKey) ? null : Tables.Skill.Get(skillKey);
@@ -57,8 +79,15 @@ public class SkillAbility : Ability
             return false;
         }
 
+        var skillRuntimeState = GetOrCreateSkillRuntimeState(skillKey);
+        if (!skillRuntimeState.CanUse())
+        {
+            return false;
+        }
+
         var skillContext = CreateSkillContext(skillKey, parentContext);
         SkillActionLogic.Execute(skillContext);
+        skillRuntimeState.SetCooldown(skillData.cooldown);
 
         return true;
     }
