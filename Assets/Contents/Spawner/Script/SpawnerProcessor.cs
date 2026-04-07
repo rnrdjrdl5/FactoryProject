@@ -57,7 +57,7 @@ public class SpawnerProcessor : Processor
         
         var brainProcessorAbility = brain.GetAbility<BrainProcessorAbility>();
         var brainFlowProcessor = brainProcessorAbility.GetProcessor<BrainFlowProcessor>();
-        brainFlowProcessor.ChangeFlow<CommonWildPlayerFlow>();
+        brainFlowProcessor.ChangeFlow<EnemyAIFlow>();
         
         return brain;
     }

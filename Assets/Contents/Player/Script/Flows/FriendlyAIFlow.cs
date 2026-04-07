@@ -1,4 +1,4 @@
-public class FollowCivilizedPlayerFlow : ProcessorFlow
+public class FriendlyAIFlow : ProcessorFlow
 {
     public override void OnAddFlow()
     {

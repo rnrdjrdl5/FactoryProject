@@ -1,4 +1,4 @@
-public class CommonCivilizedPlayerFlow : ProcessorFlow
+public class PlayerInputFlow : ProcessorFlow
 {
     public override void OnAddFlow()
     {

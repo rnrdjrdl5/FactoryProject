@@ -1,4 +1,4 @@
-public class CommonWildPlayerFlow : ProcessorFlow
+public class WanderFlow : ProcessorFlow
 {
     public override void OnAddFlow()
     {

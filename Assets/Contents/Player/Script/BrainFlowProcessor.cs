@@ -9,7 +9,7 @@ public class BrainFlowProcessor : Processor
         base.Initialize(initData);
 
         flowRunnerAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
-        ChangeFlow<CommonWildPlayerFlow>();
+        ChangeFlow<WanderFlow>();
     }
 
     public void ChangeFlow<TFlow>() where TFlow : ProcessorFlow, new()

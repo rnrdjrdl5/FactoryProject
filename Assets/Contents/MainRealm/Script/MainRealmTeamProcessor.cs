@@ -110,13 +110,13 @@ public class MainRealmTeamProcessor : Processor
             {
                 var followAbility = player.GetAbility<PlayerFollowAbility>();
                 followAbility.SetTarget(prevPlayer);
-                brainFlowProcessor.ChangeFlow<FollowCivilizedPlayerFlow>();
+                brainFlowProcessor.ChangeFlow<FriendlyAIFlow>();
                 brain.SetControlMode(BrainControlMode.AI);
             }
 
             else
             {
-                brainFlowProcessor.ChangeFlow<CommonCivilizedPlayerFlow>();
+                brainFlowProcessor.ChangeFlow<PlayerInputFlow>();
                 brain.SetControlMode(BrainControlMode.PlayerInput);
                 brainAbility.SetPlayerBrain(brain);
             }

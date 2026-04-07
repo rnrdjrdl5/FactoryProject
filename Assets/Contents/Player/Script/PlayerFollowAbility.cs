@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PlayerFollowAbility : Ability
 {
+    public Player TargetPlayer => targetPlayer;
+    public float FollowDistance => followDistance;
+
     [SerializeField] Rigidbody2D rigidbody2D;
     [SerializeField] float followDistance = 2f;
     [SerializeField] float followSpeed = 5f;
