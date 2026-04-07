@@ -14,9 +14,6 @@ public class BrainFlowProcessor : Processor
 
     public void ChangeFlow<TFlow>() where TFlow : ProcessorFlow, new()
     {
-        var rootFlow = Flow.Create<TFlow>(Entity);
-        rootFlow.SetProcessor(this);
-        flowRunnerAbility.SetRootFlow(rootFlow);
-        rootFlow.NextChildFlow();
+        flowRunnerAbility.SetRootProcessorFlow<TFlow>(this);
     }
 }

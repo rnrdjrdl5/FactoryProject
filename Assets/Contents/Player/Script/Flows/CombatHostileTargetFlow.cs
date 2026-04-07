@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class CombatHostileTargetFlow : ProcessorFlow
 {
+    float attackRange = 1.5f;
+    float targetLostRange = 8f;
+    float followDistance = 1.5f;
+
     Player controlledPlayer;
     PlayerFollowAbility followAbility;
 
@@ -17,23 +21,23 @@ public class CombatHostileTargetFlow : ProcessorFlow
     {
         base.OnEnterFlow();
 
-        controlledPlayer = EnemyAIFlowLogic.GetControlledPlayer(this);
+        var brain = Entity as Brain;
+        controlledPlayer = brain?.Controll as Player;
         followAbility = controlledPlayer?.GetAbility<PlayerFollowAbility>();
     }
 
     public override void OnUpdateFlow()
     {
         var targetPlayer = followAbility?.TargetPlayer;
-        if (!EnemyAIFlowLogic.IsTargetValid(controlledPlayer, targetPlayer, EnemyAIFlowLogic.GetTargetLostRange(controlledPlayer)))
+        if (!TargetSearchLogic.IsHostileTargetInRange(controlledPlayer, targetPlayer, targetLostRange))
         {
             followAbility?.ClearTarget();
             parent?.ActivateChildFlow<WanderFlow>();
             return;
         }
 
-        EnemyAIFlowLogic.SyncFollowDistanceToAttackRange(controlledPlayer, followAbility);
+        followAbility?.SetFollowDistance(followDistance);
 
-        var attackRange = EnemyAIFlowLogic.GetMainAttackRange(controlledPlayer);
         var distance = Vector2.Distance(controlledPlayer.transform.position, targetPlayer.transform.position);
         if (distance <= attackRange)
         {

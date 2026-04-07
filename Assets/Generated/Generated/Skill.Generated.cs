@@ -12,8 +12,8 @@ namespace Tables
     public partial class Skill
     {
         public string Key { get; set; } = string.Empty;
-        public float range { get; set; }
         public float cooldown { get; set; }
+        public float range { get; set; }
         public string iconAtlasPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
         public SkillTimeType skillTimeType { get; set; }

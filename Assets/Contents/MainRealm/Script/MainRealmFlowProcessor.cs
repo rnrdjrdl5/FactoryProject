@@ -10,10 +10,7 @@ public class MainRealmFlowProcessor : Processor
         
         flowAbility = ProcessorAbility.Entity.GetAbility<FlowRunnerAbility>();
 
-        var mainRealmFlow = Flow.Create<MainRealmFlow>(ProcessorAbility.Entity);
-        mainRealmFlow.SetProcessor(this);
-        flowAbility.SetRootFlow(mainRealmFlow);
-        flowAbility.Flow.NextChildFlow();
+        flowAbility.SetRootProcessorFlow<MainRealmFlow>(this);
     }
 }
 

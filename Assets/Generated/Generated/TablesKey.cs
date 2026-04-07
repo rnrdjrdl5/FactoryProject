@@ -3,6 +3,10 @@ namespace Tables
 {
     public static class TablesKey
     {
+        public static string AI_Flow_DefaultAttackRange = "AI_Flow_DefaultAttackRange";
+        public static string AI_Flow_DefaultDetectionRange = "AI_Flow_DefaultDetectionRange";
+        public static string AI_Flow_FoolowDistanceRatio = "AI_Flow_FoolowDistanceRatio";
+        public static string AI_Flow_TargetLostRangeOffset = "AI_Flow_TargetLostRangeOffset";
         public static string Buff_1 = "Buff_1";
         public static string FactionRelation_Faction2 = "FactionRelation_Faction2";
         public static string FactionRelation_Faction3 = "FactionRelation_Faction3";

@@ -1,0 +1,4 @@
+public static class SkillLogic
+{
+        
+}

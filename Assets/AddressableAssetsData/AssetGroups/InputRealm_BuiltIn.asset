@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: InputRealm_BuiltIn
   m_GUID: cb41f7255a1ae4ccb9c9e431212d5cfa
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 8934248861fb43b9995ce491f70e4c7a
+    m_Address: InputRealm/InputRealm
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d7e3143cac64941479c893567315aac2, type: 2}
   m_SchemaSet:

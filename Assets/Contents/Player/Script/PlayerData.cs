@@ -5,15 +5,15 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     [JsonProperty] public Bag Bag { get; private set; }
     [JsonProperty] public Buff Buff { get; private set; }
     [JsonProperty] public Stat Stat { get; private set; }
-    [JsonIgnore] public PlayerFormula PlayerFormula { get; private set; }
     [JsonProperty] public Equipment Equipment { get; private set; }
     [JsonProperty] public Faction Faction { get; private set; }
     [JsonProperty] public InputBindingData InputBindingData { get; private set; }
     [JsonProperty] public InputActionSkillData InputActionSkillData { get; private set; }
     [JsonProperty] public string PlayerKey { get; private set; }
-    [JsonIgnore] public MessageBus MessageBus { get; set; }
     [JsonProperty] public long UniqueId { get; set; }
     [JsonIgnore] public Tables.Player TableData => string.IsNullOrEmpty(PlayerKey) ? null : Tables.Player.Get(PlayerKey);
+    [JsonIgnore] public PlayerFormula PlayerFormula { get; private set; }
+    [JsonIgnore] public MessageBus MessageBus { get; set; }
 
     public void Initialize(IInitData initData = null)
     {
@@ -36,6 +36,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Stat = new Stat();
         Stat.Initialize(initData);
         RefreshBaseStats();
+        
         PlayerFormula = new PlayerFormula(this);
 
         Equipment = new Equipment();

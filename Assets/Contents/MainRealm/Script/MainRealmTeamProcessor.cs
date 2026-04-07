@@ -134,6 +134,11 @@ public class MainRealmTeamProcessor : Processor
 
         foreach (var brain in brains)
         {
+            if (!Realm.GetChildren<Brain>().Contains(brain))
+            {
+                continue;
+            }
+
             Realm.RemoveChild(brain);
         }
     }

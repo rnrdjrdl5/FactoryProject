@@ -1,5 +1,9 @@
 public class DetectHostileTargetFlow : ProcessorFlow
 {
+    float detectionRange = 6f;
+    float targetLostRange = 8f;
+    float followDistance = 1.5f;
+
     Player controlledPlayer;
     PlayerFollowAbility followAbility;
 
@@ -15,14 +19,14 @@ public class DetectHostileTargetFlow : ProcessorFlow
     {
         base.OnEnterFlow();
 
-        controlledPlayer = EnemyAIFlowLogic.GetControlledPlayer(this);
+        var brain = Entity as Brain;
+        controlledPlayer = brain?.Controll as Player;
         followAbility = controlledPlayer?.GetAbility<PlayerFollowAbility>();
     }
 
     public override void OnUpdateFlow()
     {
         var targetPlayer = ResolveTargetPlayer();
-
         if (targetPlayer == null)
         {
             followAbility?.ClearTarget();
@@ -35,7 +39,7 @@ public class DetectHostileTargetFlow : ProcessorFlow
         else
         {
             followAbility?.SetTarget(targetPlayer);
-            EnemyAIFlowLogic.SyncFollowDistanceToAttackRange(controlledPlayer, followAbility);
+            followAbility?.SetFollowDistance(followDistance);
 
             if (!IsActivateFlow<CombatHostileTargetFlow>())
             {
@@ -54,13 +58,15 @@ public class DetectHostileTargetFlow : ProcessorFlow
         }
 
         var targetPlayer = followAbility?.TargetPlayer;
-        var targetLostRange = EnemyAIFlowLogic.GetTargetLostRange(controlledPlayer);
-        if (EnemyAIFlowLogic.IsTargetValid(controlledPlayer, targetPlayer, targetLostRange))
+        if (TargetSearchLogic.IsHostileTargetInRange(controlledPlayer, targetPlayer, targetLostRange))
         {
             return targetPlayer;
         }
 
-        var detectionRange = EnemyAIFlowLogic.GetDetectionRange(controlledPlayer);
-        return EnemyAIFlowLogic.FindClosestHostileTarget(this, controlledPlayer, detectionRange);
+        return TargetSearchLogic.GetClosestHostilePlayer(
+            Realm.GetChildren<Player>(),
+            controlledPlayer,
+            controlledPlayer.transform.position,
+            detectionRange);
     }
 }

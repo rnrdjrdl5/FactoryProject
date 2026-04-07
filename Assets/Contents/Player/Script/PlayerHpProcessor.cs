@@ -13,7 +13,9 @@ public class PlayerHpProcessor : Processor
         player = Entity as Player;
         
         hpAbility = Entity.GetAbility<HpAbility>();
-        hpAbility.SetMaxHp(5);
+        var hp = player.TableData.hp;
+        hpAbility.SetMaxHp(hp, false);
+        hpAbility.SetHp(hp);
         hpAbility.OnChangeHp += OnChangedHp;
     }
 

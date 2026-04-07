@@ -12,6 +12,7 @@ namespace Tables
     public partial class Player
     {
         public string Key { get; set; } = string.Empty;
+        public float hp { get; set; }
         public string iconAtlasPath { get; set; } = string.Empty;
         public string prefabPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
