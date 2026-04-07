@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bug Check"
+  short_description: "Check content code for likely bugs"
+  default_prompt: "Use $bug-check to check the current conversation content code for likely bugs."

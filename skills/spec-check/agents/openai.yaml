@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Check"
+  short_description: "Check conversation specs against code"
+  default_prompt: "Use $spec-check to verify the current conversation requirements against the referenced code."
