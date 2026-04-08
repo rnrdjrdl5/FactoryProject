@@ -4,8 +4,10 @@ public class SpawnerProcessor : Processor
 {
     MainRealm mainRealm;
     MainRealmProcessor realmProcessor;
+    MainRealmTeamProcessor teamProcessor;
     
     Spawner spawner;
+    Team spawnTeam;
     
     TimerAbility timerAbility;
     RoundAbility roundAbility;
@@ -17,8 +19,11 @@ public class SpawnerProcessor : Processor
         mainRealm = Entity.GetParent<MainRealm>();
         var mainRealmProcessorAbility = mainRealm.GetAbility<MainRealmProcessorAbility>();
         realmProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmProcessor>();
+        teamProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmTeamProcessor>();
         
         spawner = Entity as Spawner;
+        spawnTeam = teamProcessor.CreateTeam(TeamType.Spawner, spawner);
+
         timerAbility = Entity.GetAbility<TimerAbility>();
         timerAbility.SetTimerInterval(spawner.SpawnerData.tick);
         
@@ -30,6 +35,8 @@ public class SpawnerProcessor : Processor
     public override void Uninitialize()
     {
         timerAbility.OnTimer -= OnTimer;
+        teamProcessor.TryRemoveTeam(spawnTeam);
+        spawnTeam = null;
         
         base.Uninitialize();
     }
@@ -58,6 +65,9 @@ public class SpawnerProcessor : Processor
 
         var tuple = brainAbility.CreateBrainAndControlled<Player>(Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
         var brain = tuple.brain;
+        var player = tuple.controlled;
+        spawnTeam.TryAddPlayer(player);
+
         brain.SetControlMode(BrainControlMode.AI);
         
         var brainProcessorAbility = brain.GetAbility<BrainProcessorAbility>();

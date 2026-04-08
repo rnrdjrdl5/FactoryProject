@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class MainRealmTeamProcessor : Processor
 {
+    public IReadOnlyList<Team> Teams => teams;
+
+    readonly List<Team> teams = new();
     List<Player> players = new();
     List<Brain> brains = new();
     TeamStorage teamStorage;
     PlayerStorage playerStorage;
+    Team playerTeam;
     
     public override void Ready()
     {
@@ -33,8 +37,44 @@ public class MainRealmTeamProcessor : Processor
                 teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
             }
         }
+
+        ClearTeams();
         
         base.Uninitialize();
+    }
+
+    public Team CreateTeam(TeamType teamType, Entity source)
+    {
+        var team = Team.Create(teamType, source);
+        teams.Add(team);
+        return team;
+    }
+
+    public bool TryGetTeam(long teamUniqueId, out Team team)
+    {
+        team = teams.FirstOrDefault(team => team.UniqueId == teamUniqueId);
+        return team != null;
+    }
+
+    public bool TryRemoveTeam(Team team)
+    {
+        if (team == null || !teams.Remove(team))
+        {
+            return false;
+        }
+
+        team.Clear();
+        return true;
+    }
+
+    void ClearTeams()
+    {
+        foreach (var team in teams)
+        {
+            team.Clear();
+        }
+
+        teams.Clear();
     }
 
     void OnTeamFormationChanged(EntityDataMsg.TeamFormationChangedMsg msg)
@@ -78,6 +118,7 @@ public class MainRealmTeamProcessor : Processor
             return;
         }
 
+        playerTeam = CreateTeam(TeamType.PlayerInput, Realm);
         Player prevPlayer = null; 
         for (int i = 0; i < teamFormation.Players.Count; i++)
         {
@@ -108,6 +149,7 @@ public class MainRealmTeamProcessor : Processor
             
             players.Add(player);
             brains.Add(brain);
+            playerTeam.TryAddPlayer(player);
             
             var processorAbility = brain.GetAbility<BrainProcessorAbility>();
             var brainFlowProcessor = processorAbility.GetProcessor<BrainFlowProcessor>();
@@ -147,5 +189,8 @@ public class MainRealmTeamProcessor : Processor
 
             Realm.RemoveChild(brain);
         }
+
+        TryRemoveTeam(playerTeam);
+        playerTeam = null;
     }
 }
