@@ -87,6 +87,16 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
         RefreshUI();
     }
 
+    public void OnClickPlaceTeam()
+    {
+        var msg = new UIMsg.PlaceTeamFormationMsg
+        {
+            TeamFormationStorage = teamFormation
+        };
+
+        panelElement.Panel.MessageBus.Publish(msg);
+    }
+
     public void OnClickRemoveFormation()
     {
         var msg = new UIMsg.RemoveTeamFormationMsg
@@ -154,6 +164,12 @@ public static partial class UIMsg
     }
 
     public struct TeamFormationGoMsg : IMessageOrigin
+    {
+        public MessageOriginType Origin => MessageOriginType.UI;
+        public TeamFormationStorage TeamFormationStorage;
+    }
+
+    public struct PlaceTeamFormationMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.UI;
         public TeamFormationStorage TeamFormationStorage;

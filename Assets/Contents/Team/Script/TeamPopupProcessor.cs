@@ -26,6 +26,7 @@ public class TeamPopupProcessor : Processor
         teamPopup.MessageBus.Subscribe<UIMsg.SelectTeamInventoryItemMsg>(AddTeamFormationItem);
         teamPopup.MessageBus.Subscribe<UIMsg.ClickAddFormationMsg>(AddFormation);
         teamPopup.MessageBus.Subscribe<UIMsg.TeamFormationGoMsg>(GoFormation);
+        teamPopup.MessageBus.Subscribe<UIMsg.PlaceTeamFormationMsg>(PlaceFormation);
     }
 
     public override void Uninitialize()
@@ -37,6 +38,7 @@ public class TeamPopupProcessor : Processor
         teamPopup.MessageBus.Unsubscribe<UIMsg.SelectTeamInventoryItemMsg>(AddTeamFormationItem);
         teamPopup.MessageBus.Unsubscribe<UIMsg.ClickAddFormationMsg>(AddFormation);
         teamPopup.MessageBus.Unsubscribe<UIMsg.TeamFormationGoMsg>(GoFormation);
+        teamPopup.MessageBus.Unsubscribe<UIMsg.PlaceTeamFormationMsg>(PlaceFormation);
         
         base.Uninitialize();
     }
@@ -108,5 +110,13 @@ public class TeamPopupProcessor : Processor
         var processorAbility = mainRealm.GetAbility<ProcessorAbility>();
         var playerEntityProcessor = processorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
         playerEntityProcessor.CreateControlledHeroTeam(msg.TeamFormationStorage);
+    }
+
+    void PlaceFormation(UIMsg.PlaceTeamFormationMsg msg)
+    {
+        var mainRealm = Realm.GetParent<MainRealm>();
+        var processorAbility = mainRealm.GetAbility<ProcessorAbility>();
+        var playerEntityProcessor = processorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
+        playerEntityProcessor.PlaceAIHeroTeam(msg.TeamFormationStorage);
     }
 }
