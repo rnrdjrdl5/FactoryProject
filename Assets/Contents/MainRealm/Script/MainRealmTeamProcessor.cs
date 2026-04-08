@@ -89,7 +89,13 @@ public class MainRealmTeamProcessor : Processor
             {
                 playerId = id;
             }
-            var playerInitData = new PlayerInitData() { PlayerKey = playerTableData.Key, Position = Vector3.zero, UniqueId = playerId };
+            var playerInitData = new PlayerInitData()
+            {
+                PlayerKey = playerTableData.Key,
+                Position = Vector3.zero,
+                UniqueId = playerId,
+                OriginType = PlayerOriginType.PlayerOwned
+            };
             var tuple = brainAbility.CreateBrainAndControlled<Player>(Brain.PrefabPath, playerTableData.prefabPath, null, playerInitData);
             var brain = tuple.brain;
             var player = tuple.controlled;

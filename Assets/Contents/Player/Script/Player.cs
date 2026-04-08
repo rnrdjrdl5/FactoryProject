@@ -42,5 +42,6 @@ public class PlayerInitData : IInitData , IUniqueId, IPositionData
 {
     public long UniqueId { get; set; }
     public string PlayerKey;
+    public PlayerOriginType OriginType;
     public Vector3 Position { get; set; }
 }

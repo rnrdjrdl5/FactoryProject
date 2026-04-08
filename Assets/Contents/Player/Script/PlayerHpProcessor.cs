@@ -37,8 +37,11 @@ public class PlayerHpProcessor : Processor
 
         if (hp <= 0)
         {
-            dropItemProcessor ??= ProcessorAbility.GetProcessor<DropItemProcessor>();
-            dropItemProcessor.TryDropItem(Entity.transform.position, player.TableData.dropPlayerPercent, player.TableData.dropPlayerKey);
+            if (playerData?.OriginType == PlayerOriginType.WorldSpawned)
+            {
+                dropItemProcessor ??= ProcessorAbility.GetProcessor<DropItemProcessor>();
+                dropItemProcessor.TryDropItem(Entity.transform.position, player.TableData.dropPlayerPercent, player.TableData.dropPlayerKey);
+            }
             
             DestroyPlayer();
         }

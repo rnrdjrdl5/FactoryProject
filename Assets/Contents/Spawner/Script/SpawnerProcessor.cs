@@ -43,7 +43,12 @@ public class SpawnerProcessor : Processor
     {
         var spawnedPlayerKey = spawner.SpawnerData.GetSpawnPlayerKey();
         var playerData = Tables.Player.Get(spawnedPlayerKey);
-        var playerInitData = new PlayerInitData() { PlayerKey = spawnedPlayerKey, Position = position };
+        var playerInitData = new PlayerInitData()
+        {
+            PlayerKey = spawnedPlayerKey,
+            Position = position,
+            OriginType = PlayerOriginType.WorldSpawned
+        };
 
         var brainAbility = Realm.GetAbility<BrainAbility>();
         if (brainAbility == null)

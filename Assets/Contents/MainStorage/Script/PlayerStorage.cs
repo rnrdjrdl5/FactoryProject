@@ -95,7 +95,7 @@ public class PlayerStorage : IEntityData, IMessageBus
 
     public void CreateAndAddPlayerData(long playerUid, string playerKey)
     {
-        playerDataByKey.TryAdd(playerUid, PlayerData.Create(MessageBus, playerKey, playerUid));
+        playerDataByKey.TryAdd(playerUid, PlayerData.Create(MessageBus, playerKey, playerUid, PlayerOriginType.PlayerOwned));
     }
 
     public bool RemovePlayerData(long playerKey)

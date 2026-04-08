@@ -11,6 +11,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     [JsonProperty] public InputBindingData InputBindingData { get; private set; }
     [JsonProperty] public InputActionSkillData InputActionSkillData { get; private set; }
     [JsonProperty] public string PlayerKey { get; private set; }
+    [JsonProperty] public PlayerOriginType OriginType { get; private set; }
     [JsonProperty] public long UniqueId { get; set; }
     [JsonIgnore] public Tables.Player TableData => string.IsNullOrEmpty(PlayerKey) ? null : Tables.Player.Get(PlayerKey);
     [JsonIgnore] public PlayerFormula PlayerFormula { get; private set; }
@@ -26,6 +27,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         if (initData is PlayerInitData playerInitData)
         {
             PlayerKey = playerInitData.PlayerKey;
+            OriginType = playerInitData.OriginType;
         }
 
         Bag = new Bag();
@@ -237,14 +239,15 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         return new StatSourceKey(StatSourceType.Equipment, item.UniqueId.ToString());
     }
 
-    public static PlayerData Create(MessageBus messageBus, string playerKey, long uniqueId = 0)
+    public static PlayerData Create(MessageBus messageBus, string playerKey, long uniqueId = 0, PlayerOriginType originType = PlayerOriginType.None)
     {
         var playerData = new PlayerData();
         var resolvedUniqueId = uniqueId == 0 ? IDLogic.NewUniqueId() : uniqueId;
         playerData.Initialize(new PlayerInitData
         {
             UniqueId = resolvedUniqueId,
-            PlayerKey = playerKey
+            PlayerKey = playerKey,
+            OriginType = originType
         });
         playerData.MessageBus = messageBus;
         playerData.OnSetMessageBus();
