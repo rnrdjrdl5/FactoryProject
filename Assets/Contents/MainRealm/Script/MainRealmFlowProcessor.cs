@@ -58,8 +58,8 @@ class IngameFlow : ProcessorFlow
         base.OnEnterFlow();
 
         var processorAbility = Realm.GetAbility<ProcessorAbility>();
-        var teamProcessor = processorAbility.GetProcessor<MainRealmTeamProcessor>();
-        teamProcessor.CreatePlayerBySelectedTeamFormation();
+        var playerEntityProcessor = processorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
+        playerEntityProcessor.CreatePlayerBySelectedTeamFormation();
 
         // var panelAbility = Processor.Realm.GetAbility<PanelAbility>();
         // var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);

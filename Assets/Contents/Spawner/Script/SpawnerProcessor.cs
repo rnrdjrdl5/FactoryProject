@@ -1,10 +1,7 @@
-using UnityEngine;
-
 public class SpawnerProcessor : Processor
 {
-    MainRealm mainRealm;
-    MainRealmProcessor realmProcessor;
     MainRealmTeamProcessor teamProcessor;
+    MainRealmPlayerEntityProcessor playerEntityProcessor;
     
     Spawner spawner;
     Team spawnTeam;
@@ -16,10 +13,10 @@ public class SpawnerProcessor : Processor
     {
         base.Initialize(initData);
 
-        mainRealm = Entity.GetParent<MainRealm>();
+        var mainRealm = Entity.GetParent<MainRealm>();
         var mainRealmProcessorAbility = mainRealm.GetAbility<MainRealmProcessorAbility>();
-        realmProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmProcessor>();
         teamProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmTeamProcessor>();
+        playerEntityProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
         
         spawner = Entity as Spawner;
         spawnTeam = teamProcessor.CreateTeam(TeamType.Spawner, spawner);
@@ -43,37 +40,6 @@ public class SpawnerProcessor : Processor
 
     void OnTimer()
     {
-        SpawnPlayerAndBrain(roundAbility.GetRandomPoint());
-    }
-    
-    Brain SpawnPlayerAndBrain(Vector3 position)
-    {
-        var spawnedPlayerKey = spawner.SpawnerData.GetSpawnPlayerKey();
-        var playerData = Tables.Player.Get(spawnedPlayerKey);
-        var playerInitData = new PlayerInitData()
-        {
-            PlayerKey = spawnedPlayerKey,
-            Position = position,
-            OriginType = PlayerOriginType.WorldSpawned
-        };
-
-        var brainAbility = Realm.GetAbility<BrainAbility>();
-        if (brainAbility == null)
-        {
-            return null;
-        }
-
-        var tuple = brainAbility.CreateBrainAndControlled<Player>(Brain.PrefabPath, playerData.prefabPath, null, playerInitData);
-        var brain = tuple.brain;
-        var player = tuple.controlled;
-        spawnTeam.TryAddPlayer(player);
-
-        brain.SetControlMode(BrainControlMode.AI);
-        
-        var brainProcessorAbility = brain.GetAbility<BrainProcessorAbility>();
-        var brainFlowProcessor = brainProcessorAbility.GetProcessor<BrainFlowProcessor>();
-        brainFlowProcessor.ChangeFlow<EnemyAIFlow>();
-        
-        return brain;
+        playerEntityProcessor.CreateWorldSpawnedPlayer(spawner, spawnTeam, roundAbility.GetRandomPoint());
     }
 }
