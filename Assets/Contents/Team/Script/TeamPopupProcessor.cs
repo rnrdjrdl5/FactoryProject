@@ -107,6 +107,6 @@ public class TeamPopupProcessor : Processor
         var mainRealm = Realm.GetParent<MainRealm>();
         var processorAbility = mainRealm.GetAbility<ProcessorAbility>();
         var playerEntityProcessor = processorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
-        playerEntityProcessor.CreatePlayerByTeamFormation(msg.TeamFormationStorage);
+        playerEntityProcessor.CreateControlledHeroTeam(msg.TeamFormationStorage);
     }
 }

@@ -40,6 +40,6 @@ public class SpawnerProcessor : Processor
 
     void OnTimer()
     {
-        playerEntityProcessor.CreateWorldSpawnedPlayer(spawner, spawnTeam, roundAbility.GetRandomPoint());
+        playerEntityProcessor.CreatePlayerBySpawner(spawner, spawnTeam, roundAbility.GetRandomPoint());
     }
 }

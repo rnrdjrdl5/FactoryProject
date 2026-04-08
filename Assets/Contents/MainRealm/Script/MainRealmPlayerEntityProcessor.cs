@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class MainRealmPlayerEntityProcessor : Processor
 {
-    readonly List<Player> players = new();
-    readonly List<Brain> brains = new();
+    readonly List<Player> controlledHeroPlayers = new();
+    readonly List<Brain> controlledHeroBrains = new();
+
+    readonly List<Player> placedAIHeroPlayers = new();
+    readonly List<Brain> placedAIHeroBrains = new();
+    readonly List<Team> placedAIHeroTeams = new();
 
     TeamStorage teamStorage;
     PlayerStorage playerStorage;
@@ -24,7 +28,7 @@ public class MainRealmPlayerEntityProcessor : Processor
     {
         base.Ready();
 
-        TryResolveMainStorage();
+        SetStorage();
     }
 
     public override void Uninitialize()
@@ -36,7 +40,8 @@ public class MainRealmPlayerEntityProcessor : Processor
             isSubscribedTeamStorage = false;
         }
 
-        RemovePlayerAndBrain();
+        RemoveHeroPlayerAndBrain();
+        RemovePlacedAIHeroPlayerAndBrain();
 
         base.Uninitialize();
     }
@@ -49,7 +54,7 @@ public class MainRealmPlayerEntityProcessor : Processor
         if (msg.Formation != teamStorage.SelectedTeamFormation)
             return;
 
-        CreatePlayerBySelectedTeamFormation();
+        CreateControlledHeroTeam();
     }
 
     void OnTeamSelectedFormationChanged(EntityDataMsg.TeamSelectedFormationChangedMsg msg)
@@ -57,30 +62,30 @@ public class MainRealmPlayerEntityProcessor : Processor
         if (teamStorage == null || msg.Formation == null)
             return;
 
-        CreatePlayerBySelectedTeamFormation();
+        CreateControlledHeroTeam();
     }
 
-    public void CreatePlayerBySelectedTeamFormation()
+    public void CreateControlledHeroTeam()
     {
-        if (!TryResolveMainStorage())
+        if (teamStorage == null)
             return;
 
         var teamFormation = teamStorage.SelectedTeamFormation;
         if (teamFormation == null)
             return;
 
-        CreatePlayerByTeamFormation(teamFormation);
+        CreateControlledHeroTeam(teamFormation);
     }
 
-    public void CreatePlayerByTeamFormation(TeamFormationStorage teamFormation)
+    public void CreateControlledHeroTeam(TeamFormationStorage teamFormation)
     {
-        if (teamFormation == null || !TryResolveMainStorage())
+        if (teamFormation == null || playerStorage == null || teamProcessor == null)
             return;
 
-        RemovePlayerAndBrain();
+        RemoveHeroPlayerAndBrain();
 
-        players.Clear();
-        brains.Clear();
+        controlledHeroPlayers.Clear();
+        controlledHeroBrains.Clear();
 
         var brainAbility = Realm.GetAbility<BrainAbility>();
         if (brainAbility == null)
@@ -118,8 +123,8 @@ public class MainRealmPlayerEntityProcessor : Processor
                 faction.SetFactionType(Tables.FactionType.Hero);
             }
 
-            players.Add(player);
-            brains.Add(brain);
+            controlledHeroPlayers.Add(player);
+            controlledHeroBrains.Add(brain);
             playerTeam.TryAddPlayer(player);
 
             var processorAbility = brain.GetAbility<BrainProcessorAbility>();
@@ -136,14 +141,73 @@ public class MainRealmPlayerEntityProcessor : Processor
             {
                 brainFlowProcessor.ChangeFlow<PlayerInputFlow>();
                 brain.SetControlMode(BrainControlMode.PlayerInput);
-                brainAbility.SetPlayerBrain(brain);
+                brainAbility.SetMainPlayerBrain(brain);
             }
 
             prevPlayer = player;
         }
     }
 
-    public Brain CreateWorldSpawnedPlayer(Spawner spawner, Team team, Vector3 position)
+    public bool PlaceAIHeroTeam(TeamFormationStorage teamFormation)
+    {
+        if (teamFormation == null || playerStorage == null || teamProcessor == null)
+        {
+            return false;
+        }
+
+        var brainAbility = Realm.GetAbility<BrainAbility>();
+        var controlledPlayer = brainAbility?.MainPlayerBrain?.Controll as Player;
+        if (controlledPlayer == null)
+        {
+            return false;
+        }
+
+        var aiTeam = teamProcessor.CreateTeam(TeamType.PlayerAI, Realm);
+        placedAIHeroTeams.Add(aiTeam);
+
+        for (int i = 0; i < teamFormation.Players.Count; i++)
+        {
+            var item = teamFormation.Players[i];
+            var playerTableData = Tables.Player.GetPlayerByItemKey(item.ItemKey);
+
+            long playerId = 0;
+            if (playerStorage.TryGetPlayerIdByItemId(item.UniqueId, out var id))
+            {
+                playerId = id;
+            }
+
+            var playerInitData = new PlayerInitData()
+            {
+                PlayerKey = playerTableData.Key,
+                Position = controlledPlayer.transform.position,
+                UniqueId = playerId,
+                OriginType = PlayerOriginType.PlayerOwned
+            };
+            var tuple = brainAbility.CreateBrainAndControlled<Player>(Brain.PrefabPath, playerTableData.prefabPath, null, playerInitData);
+            var brain = tuple.brain;
+            var player = tuple.controlled;
+
+            var faction = player.GetEntityData<PlayerData>()?.Faction;
+            if (faction != null)
+            {
+                faction.SetFactionType(Tables.FactionType.Hero);
+            }
+
+            placedAIHeroPlayers.Add(player);
+            placedAIHeroBrains.Add(brain);
+            aiTeam.TryAddPlayer(player);
+
+            brain.SetControlMode(BrainControlMode.AI);
+
+            var processorAbility = brain.GetAbility<BrainProcessorAbility>();
+            var brainFlowProcessor = processorAbility.GetProcessor<BrainFlowProcessor>();
+            brainFlowProcessor.ChangeFlow<PlacedAIHeroFlow>();
+        }
+
+        return true;
+    }
+
+    public Brain CreatePlayerBySpawner(Spawner spawner, Team team, Vector3 position)
     {
         if (spawner == null)
         {
@@ -179,14 +243,14 @@ public class MainRealmPlayerEntityProcessor : Processor
         return brain;
     }
 
-    void RemovePlayerAndBrain()
+    void RemoveHeroPlayerAndBrain()
     {
-        foreach (var player in players)
+        foreach (var player in controlledHeroPlayers)
         {
             Realm.RemoveChild(player);
         }
 
-        foreach (var brain in brains)
+        foreach (var brain in controlledHeroBrains)
         {
             if (!Realm.GetChildren<Brain>().Contains(brain))
             {
@@ -200,7 +264,34 @@ public class MainRealmPlayerEntityProcessor : Processor
         playerTeam = null;
     }
 
-    bool TryResolveMainStorage()
+    void RemovePlacedAIHeroPlayerAndBrain()
+    {
+        foreach (var player in placedAIHeroPlayers)
+        {
+            Realm.RemoveChild(player);
+        }
+
+        foreach (var brain in placedAIHeroBrains)
+        {
+            if (!Realm.GetChildren<Brain>().Contains(brain))
+            {
+                continue;
+            }
+
+            Realm.RemoveChild(brain);
+        }
+
+        foreach (var team in placedAIHeroTeams)
+        {
+            teamProcessor.TryRemoveTeam(team);
+        }
+
+        placedAIHeroPlayers.Clear();
+        placedAIHeroBrains.Clear();
+        placedAIHeroTeams.Clear();
+    }
+
+    bool SetStorage()
     {
         teamProcessor ??= ProcessorAbility.GetProcessor<MainRealmTeamProcessor>();
         if (teamProcessor == null)
@@ -210,7 +301,7 @@ public class MainRealmPlayerEntityProcessor : Processor
 
         if (teamStorage != null && playerStorage != null)
         {
-            TrySubscribeTeamStorage();
+            SetTeamStorage();
             return true;
         }
 
@@ -222,12 +313,12 @@ public class MainRealmPlayerEntityProcessor : Processor
 
         teamStorage ??= mainStorage.GetEntityData<TeamStorage>();
         playerStorage ??= mainStorage.GetEntityData<PlayerStorage>();
-        TrySubscribeTeamStorage();
+        SetTeamStorage();
 
         return teamStorage != null && playerStorage != null;
     }
 
-    void TrySubscribeTeamStorage()
+    void SetTeamStorage()
     {
         if (isSubscribedTeamStorage || teamStorage?.MessageBus == null)
         {
