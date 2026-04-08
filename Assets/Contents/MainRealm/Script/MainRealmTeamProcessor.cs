@@ -17,36 +17,30 @@ public class MainRealmTeamProcessor : Processor
         base.Uninitialize();
     }
 
-    public Team CreateTeam(TeamType teamType, Entity source, long teamFormationUniqueId = 0)
+    public Team CreateTeam(TeamType teamType, Entity source, long sourceUniqueId = 0)
     {
-        var team = Team.Create(teamType, source, teamFormationUniqueId);
+        var team = Team.Create(teamType, source, sourceUniqueId);
         teams.Add(team);
         return team;
     }
 
-    public Team CreateControlledTeam(Entity source)
+    public Team CreateControlledTeam(Entity source, long sourceUniqueId = 0)
     {
-        controlledTeam = CreateTeam(TeamType.PlayerInput, source);
+        controlledTeam = CreateTeam(TeamType.PlayerInput, source, sourceUniqueId);
         return controlledTeam;
     }
 
-    public bool TryGetTeam(long teamUniqueId, out Team team)
-    {
-        team = teams.FirstOrDefault(team => team.UniqueId == teamUniqueId);
-        return team != null;
-    }
-
-    public bool TryGetTeam(TeamType teamType, long teamFormationUniqueId, out Team team)
+    public bool TryGetTeam(TeamType teamType, long sourceUniqueId, out Team team)
     {
         team = null;
-        if (teamFormationUniqueId == 0)
+        if (sourceUniqueId == 0)
         {
             return false;
         }
 
         team = teams.FirstOrDefault(team =>
             team.TeamType == teamType &&
-            team.TeamFormationUniqueId == teamFormationUniqueId);
+            team.SourceUniqueId == sourceUniqueId);
         return team != null;
     }
 

@@ -70,6 +70,12 @@ public class MainRealmPlayerEntityProcessor : Processor
         if (teamFormation == null || playerStorage == null || teamProcessor == null)
             return;
 
+        if (teamProcessor.ControlledTeam?.SourceUniqueId == teamFormation.UniqueId)
+            return;
+
+        if (teamProcessor.TryGetTeam(TeamType.PlayerAI, teamFormation.UniqueId, out _))
+            return;
+
         RemoveHeroPlayerAndBrain();
 
         var brainAbility = Realm.GetAbility<BrainAbility>();
@@ -78,7 +84,7 @@ public class MainRealmPlayerEntityProcessor : Processor
             return;
         }
 
-        var controlledTeam = teamProcessor.CreateControlledTeam(Realm);
+        var controlledTeam = teamProcessor.CreateControlledTeam(Realm, teamFormation.UniqueId);
         Player prevPlayer = null;
         for (int i = 0; i < teamFormation.Players.Count; i++)
         {
@@ -250,7 +256,7 @@ public class MainRealmPlayerEntityProcessor : Processor
         for (int i = teamProcessor.Teams.Count - 1; i >= 0; i--)
         {
             var team = teamProcessor.Teams[i];
-            if (team.TeamType != TeamType.PlayerAI || team.TeamFormationUniqueId == 0)
+            if (team.TeamType != TeamType.PlayerAI || team.SourceUniqueId == 0)
             {
                 continue;
             }

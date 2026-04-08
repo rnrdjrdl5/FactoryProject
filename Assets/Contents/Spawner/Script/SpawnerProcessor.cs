@@ -19,7 +19,7 @@ public class SpawnerProcessor : Processor
         playerEntityProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
         
         spawner = Entity as Spawner;
-        spawnTeam = teamProcessor.CreateTeam(TeamType.Spawner, spawner);
+        spawnTeam = teamProcessor.CreateTeam(TeamType.Spawner, spawner, spawner.UniqueId);
 
         timerAbility = Entity.GetAbility<TimerAbility>();
         timerAbility.SetTimerInterval(spawner.SpawnerData.tick);

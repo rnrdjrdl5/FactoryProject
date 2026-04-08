@@ -5,10 +5,9 @@ public class Team
 {
     readonly List<Player> players = new();
 
-    public long UniqueId { get; private set; }
     public TeamType TeamType { get; private set; }
     public Entity Source { get; private set; }
-    public long TeamFormationUniqueId { get; private set; }
+    public long SourceUniqueId { get; private set; }
     public IReadOnlyList<Player> Players => players;
     public Player Leader => Players.FirstOrDefault();
 
@@ -43,13 +42,12 @@ public class Team
         players.Clear();
     }
 
-    public static Team Create(TeamType teamType, Entity source, long teamFormationUniqueId = 0)
+    public static Team Create(TeamType teamType, Entity source, long sourceUniqueId = 0)
     {
         var team = new Team();
-        team.UniqueId = IDLogic.NewUniqueId();
         team.TeamType = teamType;
         team.Source = source;
-        team.TeamFormationUniqueId = teamFormationUniqueId;
+        team.SourceUniqueId = sourceUniqueId;
         return team;
     }
 }
