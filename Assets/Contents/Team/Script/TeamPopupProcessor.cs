@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TeamPopupProcessor : Processor
 {
-    Team team;
+    TeamStorage teamStorage;
     Inventory teamInventory;
     TeamPopup teamPopup;
     
@@ -43,7 +43,7 @@ public class TeamPopupProcessor : Processor
 
     void OnSetPanelDatasAction()
     {
-        team = teamPopup.GetTargetPanelDatas<Team>();
+        teamStorage = teamPopup.GetTargetPanelDatas<TeamStorage>();
         
         var playerData = teamPopup.GetTargetPanelDatas<PlayerStorage>();
         teamInventory = playerData.PlayerInventory;
@@ -51,55 +51,55 @@ public class TeamPopupProcessor : Processor
 
     void SelectTeamFormation(UIMsg.SelectTeamFormationMsg msg)
     {
-        if (team == null)
+        if (teamStorage == null)
         {
             return;
         }
         
-        team.SelectTeamFormation(msg.TeamFormation);
+        teamStorage.SelectTeamFormation(msg.TeamFormationStorage);
     }
 
     void RemoveTeamFormationItem(UIMsg.RemoveTeamFormationItemMsg msg)
     {
-        if (team == null)
+        if (teamStorage == null)
         {
             return;
         }
         
-        msg.TeamFormation.RemovePlayer(msg.Item);
+        msg.TeamFormationStorage.RemovePlayer(msg.Item);
         teamInventory.Unequip(msg.Item);
-        team.SelectTeamFormation(msg.TeamFormation);
+        teamStorage.SelectTeamFormation(msg.TeamFormationStorage);
     }
     
     void RemoveTeamFormation(UIMsg.RemoveTeamFormationMsg msg)
     {
-        if (team == null)
+        if (teamStorage == null)
         {
             return;
         }
         
-        team.TryRemoveTeamFormation(msg.TeamFormation);
+        teamStorage.TryRemoveTeamFormation(msg.TeamFormationStorage);
     }
 
     void AddTeamFormationItem(UIMsg.SelectTeamInventoryItemMsg msg)
     { 
-        if (team == null || team.SelectedTeamFormation.Players.Contains(msg.Item))
+        if (teamStorage == null || teamStorage.SelectedTeamFormation.Players.Contains(msg.Item))
         {
             return;
         }
         
         teamInventory.Equip(msg.Item);
-        team.SelectedTeamFormation.TryAddPlayer(msg.Item);
+        teamStorage.SelectedTeamFormation.TryAddPlayer(msg.Item);
     }
 
     void AddFormation(UIMsg.ClickAddFormationMsg msg)
     {
-        if (team == null)
+        if (teamStorage == null)
         {
             return;
         }
         
-        team.AddTeamFormation();
+        teamStorage.AddTeamFormation();
     }
 
     void GoFormation(UIMsg.TeamFormationGoMsg msg)
@@ -107,6 +107,6 @@ public class TeamPopupProcessor : Processor
         var mainRealm = Realm.GetParent<MainRealm>();
         var processorAbility = mainRealm.GetAbility<ProcessorAbility>();
         var mainRealmTeamProcessor = processorAbility.GetProcessor<MainRealmTeamProcessor>();
-        mainRealmTeamProcessor.CreatePlayerByTeamFormation(msg.TeamFormation);
+        mainRealmTeamProcessor.CreatePlayerByTeamFormation(msg.TeamFormationStorage);
     }
 }

@@ -6,18 +6,18 @@ public class MainRealmTeamProcessor : Processor
 {
     List<Player> players = new();
     List<Brain> brains = new();
-    Team team;
+    TeamStorage teamStorage;
     PlayerStorage playerStorage;
     
     public override void Ready()
     {
         base.Ready();
         
-        team = FactoryEntry.MainStorage.GetEntityData<Team>();
-        if (team?.MessageBus != null)
+        teamStorage = FactoryEntry.MainStorage.GetEntityData<TeamStorage>();
+        if (teamStorage?.MessageBus != null)
         {
-            team.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
-            team.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+            teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
+            teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
         }
 
         playerStorage = FactoryEntry.MainStorage.GetEntityData<PlayerStorage>();
@@ -25,12 +25,12 @@ public class MainRealmTeamProcessor : Processor
 
     public override void Uninitialize()
     {
-        if (team != null)
+        if (teamStorage != null)
         {
-            if (team.MessageBus != null)
+            if (teamStorage.MessageBus != null)
             {
-                team.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
-                team.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+                teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
+                teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
             }
         }
         
@@ -39,10 +39,10 @@ public class MainRealmTeamProcessor : Processor
 
     void OnTeamFormationChanged(EntityDataMsg.TeamFormationChangedMsg msg)
     {
-        if (team == null || msg.Formation == null)
+        if (teamStorage == null || msg.Formation == null)
             return;
 
-        if (msg.Formation != team.SelectedTeamFormation)
+        if (msg.Formation != teamStorage.SelectedTeamFormation)
             return;
 
         CreatePlayerBySelectedTeamFormation();
@@ -50,7 +50,7 @@ public class MainRealmTeamProcessor : Processor
 
     void OnTeamSelectedFormationChanged(EntityDataMsg.TeamSelectedFormationChangedMsg msg)
     {
-        if (team == null || msg.Formation == null)
+        if (teamStorage == null || msg.Formation == null)
             return;
         
         CreatePlayerBySelectedTeamFormation();
@@ -58,14 +58,14 @@ public class MainRealmTeamProcessor : Processor
 
     public void CreatePlayerBySelectedTeamFormation()
     {
-        var teamFormation = team.SelectedTeamFormation;
+        var teamFormation = teamStorage.SelectedTeamFormation;
         if (teamFormation == null)
             return;
         
         CreatePlayerByTeamFormation(teamFormation);
     }
 
-    public void CreatePlayerByTeamFormation(TeamFormation teamFormation)
+    public void CreatePlayerByTeamFormation(TeamFormationStorage teamFormation)
     {
         RemovePlayerAndBrain();
         

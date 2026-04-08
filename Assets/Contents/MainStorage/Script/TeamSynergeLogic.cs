@@ -11,7 +11,7 @@ public static class TeamSynergeLogic
         return synerges;
     }
 
-    public static List<ISynerge> GetAllSynerges(TeamFormation teamFormation)
+    public static List<ISynerge> GetAllSynerges(TeamFormationStorage teamFormation)
     {
         var synerges = new List<ISynerge>();
         if (teamFormation == null)
@@ -29,7 +29,7 @@ public static class TeamSynergeLogic
     }
     
     static void CollectCounts(
-        TeamFormation teamFormation,
+        TeamFormationStorage teamFormation,
         Dictionary<BiomeType, int> biomeCounts,
         Dictionary<ElementType, int> elementCounts)
     {

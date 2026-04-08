@@ -6,43 +6,43 @@ public class MainStorageSynergeProcessor : Processor
 
     readonly List<PlayerData> targetPlayerDatas = new();
     PlayerStorage playerStorage;
-    Team team;
+    TeamStorage teamStorage;
 
     public override void Ready()
     {
         base.Ready();
 
         playerStorage = Entity.GetEntityData<PlayerStorage>();
-        team = Entity.GetEntityData<Team>();
-        if (team?.MessageBus == null)
+        teamStorage = Entity.GetEntityData<TeamStorage>();
+        if (teamStorage?.MessageBus == null)
         {
             RefreshSynerges();
             return;
         }
 
-        team.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
-        team.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnSelectedTeamFormationChanged);
+        teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
+        teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnSelectedTeamFormationChanged);
         RefreshSynerges();
     }
 
     public override void Uninitialize()
     {
-        if (team?.MessageBus != null)
+        if (teamStorage?.MessageBus != null)
         {
-            team.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
-            team.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnSelectedTeamFormationChanged);
+            teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
+            teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnSelectedTeamFormationChanged);
         }
 
         targetPlayerDatas.Clear();
         playerStorage = null;
-        team = null;
+        teamStorage = null;
 
         base.Uninitialize();
     }
 
     void OnTeamFormationChanged(EntityDataMsg.TeamFormationChangedMsg msg)
     {
-        if (team == null || msg.Formation == null || msg.Formation != team.SelectedTeamFormation)
+        if (teamStorage == null || msg.Formation == null || msg.Formation != teamStorage.SelectedTeamFormation)
         {
             return;
         }
@@ -52,7 +52,7 @@ public class MainStorageSynergeProcessor : Processor
 
     void OnSelectedTeamFormationChanged(EntityDataMsg.TeamSelectedFormationChangedMsg msg)
     {
-        if (team == null)
+        if (teamStorage == null)
         {
             return;
         }
@@ -64,13 +64,13 @@ public class MainStorageSynergeProcessor : Processor
     {
         targetPlayerDatas.Clear();
 
-        if (team?.SelectedTeamFormation == null)
+        if (teamStorage?.SelectedTeamFormation == null)
         {
             RefreshBuffs();
             return;
         }
 
-        foreach (var item in team.SelectedTeamFormation.Players)
+        foreach (var item in teamStorage.SelectedTeamFormation.Players)
         {
             if (item == null)
             {
@@ -96,9 +96,9 @@ public class MainStorageSynergeProcessor : Processor
         }
 
         var allSynerges = TeamSynergeLogic.GetAllSynerges();
-        var activeSynerges = team?.SelectedTeamFormation == null
+        var activeSynerges = teamStorage?.SelectedTeamFormation == null
             ? new List<ISynerge>()
-            : TeamSynergeLogic.GetAllSynerges(team.SelectedTeamFormation);
+            : TeamSynergeLogic.GetAllSynerges(teamStorage.SelectedTeamFormation);
 
         foreach (var playerData in playerStorage.PlayerDataByKey.Values)
         {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class TeamFormation : IMessageBus
+public class TeamFormationStorage : IMessageBus
 {
     public IReadOnlyList<Item> Players => players;
     public string FormationName => formationName;
@@ -68,9 +68,9 @@ public class TeamFormation : IMessageBus
         leader = nextLeader;
     }
 
-    public static TeamFormation Create(string formationName)
+    public static TeamFormationStorage Create(string formationName)
     {
-        var teamFormation = new TeamFormation();
+        var teamFormation = new TeamFormationStorage();
         teamFormation.formationName = formationName;
         return teamFormation;
     }
@@ -81,6 +81,6 @@ public static partial class EntityDataMsg
     public struct TeamFormationChangedMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.EntityData;
-        public TeamFormation Formation;
+        public TeamFormationStorage Formation;
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class Team : IEntityData, IMessageBus
+public class TeamStorage : IEntityData, IMessageBus
 {
     const string FormationDefaultName = "Formation";
 
@@ -18,11 +18,11 @@ public class Team : IEntityData, IMessageBus
             formation.OnSetMessageBus();
         }
     }
-    public IReadOnlyList<TeamFormation> TeamFormations => teamFormations;
-    public TeamFormation SelectedTeamFormation => selectedFormation;
+    public IReadOnlyList<TeamFormationStorage> TeamFormations => teamFormations;
+    public TeamFormationStorage SelectedTeamFormation => selectedFormation;
     
-    List<TeamFormation> teamFormations = new();
-    TeamFormation selectedFormation;
+    List<TeamFormationStorage> teamFormations = new();
+    TeamFormationStorage selectedFormation;
     
     public void Initialize(IInitData initData = null)
     {
@@ -33,9 +33,9 @@ public class Team : IEntityData, IMessageBus
         
     }
 
-    public TeamFormation AddTeamFormation(string formationName)
+    public TeamFormationStorage AddTeamFormation(string formationName)
     {
-        var teamFormation = TeamFormation.Create(formationName);
+        var teamFormation = TeamFormationStorage.Create(formationName);
         teamFormation.MessageBus = MessageBus;
         teamFormation.OnSetMessageBus();
         
@@ -43,20 +43,20 @@ public class Team : IEntityData, IMessageBus
         
         MessageBus?.Publish(new EntityDataMsg.TeamFormationAddedMsg
         {
-            Team = this,
+            TeamStorage = this,
             Formation = teamFormation
         });
 
         return teamFormation;
     }
 
-    public TeamFormation AddTeamFormation()
+    public TeamFormationStorage AddTeamFormation()
     {
         var nextCount = teamFormations.Count + 1;
         return AddTeamFormation($"{FormationDefaultName} {nextCount}");
     }
 
-    public bool TryRemoveTeamFormation(TeamFormation teamFormation)
+    public bool TryRemoveTeamFormation(TeamFormationStorage teamFormation)
     {
         if (!teamFormations.Contains(teamFormation))
         {
@@ -70,20 +70,20 @@ public class Team : IEntityData, IMessageBus
             selectedFormation = null;
             MessageBus?.Publish(new EntityDataMsg.TeamSelectedFormationChangedMsg
             {
-                Team = this,
+                TeamStorage = this,
                 Formation = null
             });
         }
 
         MessageBus?.Publish(new EntityDataMsg.TeamFormationRemovedMsg
         {
-            Team = this,
+            TeamStorage = this,
             Formation = teamFormation
         });
         return true;
     }
 
-    public void SelectTeamFormation(TeamFormation teamFormation)
+    public void SelectTeamFormation(TeamFormationStorage teamFormation)
     {
         if (selectedFormation == teamFormation)
         {
@@ -94,7 +94,7 @@ public class Team : IEntityData, IMessageBus
 
         MessageBus?.Publish(new EntityDataMsg.TeamSelectedFormationChangedMsg
         {
-            Team = this,
+            TeamStorage = this,
             Formation = teamFormation
         });
     }
@@ -105,21 +105,21 @@ public static partial class EntityDataMsg
     public struct TeamFormationAddedMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.EntityData;
-        public Team Team;
-        public TeamFormation Formation;
+        public TeamStorage TeamStorage;
+        public TeamFormationStorage Formation;
     }
 
     public struct TeamFormationRemovedMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.EntityData;
-        public Team Team;
-        public TeamFormation Formation;
+        public TeamStorage TeamStorage;
+        public TeamFormationStorage Formation;
     }
 
     public struct TeamSelectedFormationChangedMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.EntityData;
-        public Team Team;
-        public TeamFormation Formation;
+        public TeamStorage TeamStorage;
+        public TeamFormationStorage Formation;
     }
 }

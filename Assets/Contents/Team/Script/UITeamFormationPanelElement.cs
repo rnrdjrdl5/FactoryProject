@@ -3,7 +3,7 @@ using System.Linq;
 using EnhancedUI.EnhancedScroller;
 using UnityEngine;
 
-// NOTE : 추후 Refresh말고도 Redraw 추가
+// NOTE: Add Redraw support later if Refresh is not enough.
 public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDelegate
 {
     [SerializeField] EnhancedScroller scroller;
@@ -11,20 +11,20 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     [SerializeField] int lowCount;
     [SerializeField] AllocGameObject allocGameObject;
 
-    IReadOnlyList<TeamFormation> teamFormationList;
+    IReadOnlyList<TeamFormationStorage> teamFormationList;
     Tables.ItemType itemType = Tables.ItemType.Player;
-    Team team;
+    TeamStorage teamStorage;
     
     protected override void OnSetPanelDatas()
     {
         base.OnSetPanelDatas();
         
-        team = GetTargetPanelDatas<Team>();
-        if (team?.MessageBus != null)
+        teamStorage = GetTargetPanelDatas<TeamStorage>();
+        if (teamStorage?.MessageBus != null)
         {
-            team.MessageBus.Subscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
-            team.MessageBus.Subscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
-            team.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+            teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
+            teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+            teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
         }
 
         RefreshUI();
@@ -32,13 +32,13 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     protected override void OnUnsetPanelDatas()
     {
-        if (team != null)
+        if (teamStorage != null)
         {
-            if (team.MessageBus != null)
+            if (teamStorage.MessageBus != null)
             {
-                team.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
-                team.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
-                team.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
+                teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
+                teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+                teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
             }
         }
 
@@ -47,7 +47,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     void OnTeamFormationAdded(EntityDataMsg.TeamFormationAddedMsg msg)
     {
-        if (msg.Team != team)
+        if (msg.TeamStorage != teamStorage)
             return;
 
         RefreshUI();
@@ -55,7 +55,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     void OnTeamFormationRemoved(EntityDataMsg.TeamFormationRemovedMsg msg)
     {
-        if (msg.Team != team)
+        if (msg.TeamStorage != teamStorage)
             return;
 
         RefreshUI();
@@ -63,7 +63,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
 
     void OnTeamSelectedFormationChanged(EntityDataMsg.TeamSelectedFormationChangedMsg msg)
     {
-        if (msg.Team != team)
+        if (msg.TeamStorage != teamStorage)
             return;
 
         RefreshUI();
@@ -73,7 +73,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     {
         base.RefreshUI();
         
-        teamFormationList = team.TeamFormations;
+        teamFormationList = teamStorage.TeamFormations;
 
         scroller.Delegate ??= this;
         scroller.ReloadData();
@@ -95,8 +95,8 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         var cellObject = allocGameObject.AllocateObject();
         var cellView = cellObject.GetComponent<UITeamFormationListCellView>();
         var teamFormation = teamFormationList[dataIndex];
-        var isSelected = team.SelectedTeamFormation != null && team.SelectedTeamFormation == teamFormation;
-        cellView.Initialize(team, teamFormation, this, isSelected);
+        var isSelected = teamStorage.SelectedTeamFormation != null && teamStorage.SelectedTeamFormation == teamFormation;
+        cellView.Initialize(teamStorage, teamFormation, this, isSelected);
 
         return cellView;
     }

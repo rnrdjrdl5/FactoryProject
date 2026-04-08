@@ -1,7 +1,7 @@
 using Tables;
 using UnityEngine;
 
-[EntityData(typeof(Team))]
+[EntityData(typeof(TeamStorage))]
 [EntityData(typeof(PlayerStorage))]
 [EntityData(typeof(Bag))]
 public class MainStorage : Storage
@@ -12,7 +12,7 @@ public class MainStorage : Storage
     {
         base.Ready();
         
-        // 더미, 추후 수정 필요
+        // TODO: Dummy data, update later.
         var processorAbility = GetAbility<ProcessorAbility>();
         var mainStorageProcessor = processorAbility.GetProcessor<MainStorageProcessor>();
 
@@ -36,8 +36,8 @@ public class MainStorage : Storage
         weaponInventory.AddItem(staffItem);
         
         
-        var team = GetEntityData<Team>();
-        var teamFormation = team.AddTeamFormation();
+        var teamStorage = GetEntityData<TeamStorage>();
+        var teamFormation = teamStorage.AddTeamFormation();
         teamFormation.TryAddPlayer(humanItem);
         teamFormation.TryAddPlayer(eagleItem);
         teamFormation.TryAddPlayer(snakeItem);
@@ -48,6 +48,6 @@ public class MainStorage : Storage
         dogItem.SetEquip(true);
         eagleItem.SetEquip(true);
         
-        team.SelectTeamFormation(teamFormation);
+        teamStorage.SelectTeamFormation(teamFormation);
     }
 }

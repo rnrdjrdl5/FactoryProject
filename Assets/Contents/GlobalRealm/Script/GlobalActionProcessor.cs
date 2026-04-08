@@ -3,14 +3,14 @@ using UnityEngine;
 public class GlobalActionProcessor : Processor
 {
     MainStorage mainStorage;
-    Team team;
+    TeamStorage teamStorage;
     
     public override void Ready()
     {
         base.Ready();
 
         mainStorage = FactoryEntry.MainStorage;
-        team = mainStorage.GetEntityData<Team>();
+        teamStorage = mainStorage.GetEntityData<TeamStorage>();
     }
 
     public void OpenTeam()

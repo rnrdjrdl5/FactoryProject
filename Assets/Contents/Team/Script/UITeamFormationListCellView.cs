@@ -11,16 +11,16 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     [SerializeField] TMP_Text formationNameText;
     
     MessageBus externalMessageBus;
-    Team team;
-    TeamFormation teamFormation;
+    TeamStorage teamStorage;
+    TeamFormationStorage teamFormation;
     UITeamFormationPanelElement panelElement;
     bool isSelected;
 
-    public void Initialize(Team team, TeamFormation teamFormation, UITeamFormationPanelElement panelElement, bool isSelected)
+    public void Initialize(TeamStorage teamStorage, TeamFormationStorage teamFormation, UITeamFormationPanelElement panelElement, bool isSelected)
     {
         Unsubscribe();
 
-        this.team = team;
+        this.teamStorage = teamStorage;
         this.teamFormation = teamFormation;
         this.panelElement = panelElement;
         this.isSelected = isSelected;
@@ -91,8 +91,8 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     {
         var msg = new UIMsg.RemoveTeamFormationMsg
         {
-            TeamFormation = teamFormation,
-            Team = team
+            TeamFormationStorage = teamFormation,
+            TeamStorage = teamStorage
         };
         
         panelElement.Panel.MessageBus.Publish(msg);
@@ -102,7 +102,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     {
         var msg = new UIMsg.SelectTeamFormationMsg
         {
-            TeamFormation = teamFormation
+            TeamFormationStorage = teamFormation
         };
         
         panelElement.Panel.MessageBus.Publish(msg);
@@ -112,7 +112,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     {
         var msg = new UIMsg.TeamFormationGoMsg
         {
-            TeamFormation = teamFormation
+            TeamFormationStorage = teamFormation
         };
         
         panelElement.Panel.MessageBus.Publish(msg);
@@ -122,7 +122,7 @@ public class UITeamFormationListCellView : EnhancedScrollerCellView
     {
         var msg = new UIMsg.RemoveTeamFormationItemMsg
         {
-            TeamFormation = teamFormation,
+            TeamFormationStorage = teamFormation,
             Item = item
         };
 
@@ -136,26 +136,26 @@ public static partial class UIMsg
     public struct RemoveTeamFormationItemMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.UI;
-        public TeamFormation TeamFormation;
+        public TeamFormationStorage TeamFormationStorage;
         public Item Item;
     }
 
     public struct RemoveTeamFormationMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.UI;
-        public TeamFormation TeamFormation;
-        public Team Team;
+        public TeamFormationStorage TeamFormationStorage;
+        public TeamStorage TeamStorage;
     }
 
     public struct SelectTeamFormationMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.UI;
-        public TeamFormation TeamFormation;
+        public TeamFormationStorage TeamFormationStorage;
     }
 
     public struct TeamFormationGoMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.UI;
-        public TeamFormation TeamFormation;
+        public TeamFormationStorage TeamFormationStorage;
     }
 }
