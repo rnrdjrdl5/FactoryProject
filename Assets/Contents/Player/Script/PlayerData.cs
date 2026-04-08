@@ -7,6 +7,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     [JsonProperty] public Stat Stat { get; private set; }
     [JsonProperty] public Equipment Equipment { get; private set; }
     [JsonProperty] public Faction Faction { get; private set; }
+    [JsonProperty] public PlayerRuntimeData RuntimeData { get; private set; }
     [JsonProperty] public InputBindingData InputBindingData { get; private set; }
     [JsonProperty] public InputActionSkillData InputActionSkillData { get; private set; }
     [JsonProperty] public string PlayerKey { get; private set; }
@@ -45,6 +46,10 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Faction = new Faction();
         Faction.Initialize(initData);
 
+        RuntimeData = new PlayerRuntimeData();
+        RuntimeData.Initialize(initData);
+        InitializeRuntimeData();
+
         InputBindingData = new InputBindingData();
         InputBindingData.Initialize(initData);
 
@@ -68,6 +73,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         PlayerFormula = null;
         Equipment?.Uninitialize();
         Faction?.Uninitialize();
+        RuntimeData?.Uninitialize();
         InputBindingData?.Uninitialize();
         InputActionSkillData?.Uninitialize();
     }
@@ -110,6 +116,12 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         {
             InputBindingData.MessageBus = MessageBus;
             InputBindingData.OnSetMessageBus();
+        }
+
+        if (RuntimeData != null)
+        {
+            RuntimeData.MessageBus = MessageBus;
+            RuntimeData.OnSetMessageBus();
         }
 
         if (InputActionSkillData != null)
@@ -181,6 +193,23 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         }
 
         InputActionSkillLogic.TrySetSkillKey(this, InputActionType.MainAttack, tableData.uniqueSkillKey);
+    }
+
+    void InitializeRuntimeData()
+    {
+        if (RuntimeData == null)
+        {
+            return;
+        }
+
+        var tableData = TableData;
+        if (tableData == null)
+        {
+            return;
+        }
+
+        RuntimeData.SetMaxHp(tableData.hp);
+        RuntimeData.FillHp();
     }
 
     void RefreshEquippedWeaponInputAction(Item item)
