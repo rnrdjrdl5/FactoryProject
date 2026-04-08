@@ -1,21 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class MainRealmPlayerEntityProcessor : Processor
 {
-    readonly List<Player> controlledHeroPlayers = new();
-    readonly List<Brain> controlledHeroBrains = new();
-
-    readonly List<Player> placedAIHeroPlayers = new();
-    readonly List<Brain> placedAIHeroBrains = new();
-    readonly List<Team> placedAIHeroTeams = new();
-
     TeamStorage teamStorage;
     PlayerStorage playerStorage;
     MainRealmTeamProcessor teamProcessor;
-    Team playerTeam;
-    bool isSubscribedTeamStorage;
 
     public override void Initialize(IInitData initData = null)
     {
@@ -33,11 +22,10 @@ public class MainRealmPlayerEntityProcessor : Processor
 
     public override void Uninitialize()
     {
-        if (isSubscribedTeamStorage && teamStorage?.MessageBus != null)
+        if (teamStorage?.MessageBus != null)
         {
             teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
             teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
-            isSubscribedTeamStorage = false;
         }
 
         RemoveHeroPlayerAndBrain();
@@ -84,16 +72,13 @@ public class MainRealmPlayerEntityProcessor : Processor
 
         RemoveHeroPlayerAndBrain();
 
-        controlledHeroPlayers.Clear();
-        controlledHeroBrains.Clear();
-
         var brainAbility = Realm.GetAbility<BrainAbility>();
         if (brainAbility == null)
         {
             return;
         }
 
-        playerTeam = teamProcessor.CreateTeam(TeamType.PlayerInput, Realm);
+        var controlledTeam = teamProcessor.CreateControlledTeam(Realm);
         Player prevPlayer = null;
         for (int i = 0; i < teamFormation.Players.Count; i++)
         {
@@ -123,9 +108,7 @@ public class MainRealmPlayerEntityProcessor : Processor
                 faction.SetFactionType(Tables.FactionType.Hero);
             }
 
-            controlledHeroPlayers.Add(player);
-            controlledHeroBrains.Add(brain);
-            playerTeam.TryAddPlayer(player);
+            controlledTeam.TryAddPlayer(player);
 
             var processorAbility = brain.GetAbility<BrainProcessorAbility>();
             var brainFlowProcessor = processorAbility.GetProcessor<BrainFlowProcessor>();
@@ -155,6 +138,12 @@ public class MainRealmPlayerEntityProcessor : Processor
             return false;
         }
 
+        if (teamProcessor.TryGetTeam(TeamType.PlayerAI, teamFormation.UniqueId, out var placedTeam))
+        {
+            RemovePlacedAIHeroTeam(placedTeam);
+            return true;
+        }
+
         var brainAbility = Realm.GetAbility<BrainAbility>();
         var controlledPlayer = brainAbility?.MainPlayerBrain?.Controll as Player;
         if (controlledPlayer == null)
@@ -162,8 +151,7 @@ public class MainRealmPlayerEntityProcessor : Processor
             return false;
         }
 
-        var aiTeam = teamProcessor.CreateTeam(TeamType.PlayerAI, Realm);
-        placedAIHeroTeams.Add(aiTeam);
+        var aiTeam = teamProcessor.CreateTeam(TeamType.PlayerAI, Realm, teamFormation.UniqueId);
 
         for (int i = 0; i < teamFormation.Players.Count; i++)
         {
@@ -193,8 +181,6 @@ public class MainRealmPlayerEntityProcessor : Processor
                 faction.SetFactionType(Tables.FactionType.Hero);
             }
 
-            placedAIHeroPlayers.Add(player);
-            placedAIHeroBrains.Add(brain);
             aiTeam.TryAddPlayer(player);
 
             brain.SetControlMode(BrainControlMode.AI);
@@ -245,50 +231,42 @@ public class MainRealmPlayerEntityProcessor : Processor
 
     void RemoveHeroPlayerAndBrain()
     {
-        foreach (var player in controlledHeroPlayers)
+        var controlledTeam = teamProcessor.ControlledTeam;
+        if (controlledTeam == null)
         {
-            Realm.RemoveChild(player);
+            return;
         }
 
-        foreach (var brain in controlledHeroBrains)
+        for (int i = controlledTeam.Players.Count - 1; i >= 0; i--)
         {
-            if (!Realm.GetChildren<Brain>().Contains(brain))
-            {
-                continue;
-            }
-
-            Realm.RemoveChild(brain);
+            Realm.RemoveChild(controlledTeam.Players[i]);
         }
 
-        teamProcessor.TryRemoveTeam(playerTeam);
-        playerTeam = null;
+        teamProcessor.TryRemoveControlledTeam();
     }
 
     void RemovePlacedAIHeroPlayerAndBrain()
     {
-        foreach (var player in placedAIHeroPlayers)
+        for (int i = teamProcessor.Teams.Count - 1; i >= 0; i--)
         {
-            Realm.RemoveChild(player);
-        }
-
-        foreach (var brain in placedAIHeroBrains)
-        {
-            if (!Realm.GetChildren<Brain>().Contains(brain))
+            var team = teamProcessor.Teams[i];
+            if (team.TeamType != TeamType.PlayerAI || team.TeamFormationUniqueId == 0)
             {
                 continue;
             }
 
-            Realm.RemoveChild(brain);
+            RemovePlacedAIHeroTeam(team);
         }
+    }
 
-        foreach (var team in placedAIHeroTeams)
+    void RemovePlacedAIHeroTeam(Team team)
+    {
+        for (int i = team.Players.Count - 1; i >= 0; i--)
         {
-            teamProcessor.TryRemoveTeam(team);
+            Realm.RemoveChild(team.Players[i]);
         }
 
-        placedAIHeroPlayers.Clear();
-        placedAIHeroBrains.Clear();
-        placedAIHeroTeams.Clear();
+        teamProcessor.TryRemoveTeam(team);
     }
 
     bool SetStorage()
@@ -320,13 +298,12 @@ public class MainRealmPlayerEntityProcessor : Processor
 
     void SetTeamStorage()
     {
-        if (isSubscribedTeamStorage || teamStorage?.MessageBus == null)
+        if (teamStorage?.MessageBus == null)
         {
             return;
         }
 
         teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
         teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
-        isSubscribedTeamStorage = true;
     }
 }

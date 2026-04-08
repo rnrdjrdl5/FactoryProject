@@ -1,8 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
-public class TeamFormationStorage : IMessageBus
+public class TeamFormationStorage : IMessageBus, IUniqueId
 {
+    public long UniqueId
+    {
+        get => uniqueId;
+        set => uniqueId = value;
+    }
     public IReadOnlyList<Item> Players => players;
     public string FormationName => formationName;
     public MessageBus MessageBus { get; set; }
@@ -10,10 +16,20 @@ public class TeamFormationStorage : IMessageBus
     
     List<Item> players = new();
     Item leader;
+    [JsonProperty] long uniqueId;
     string formationName;
     
     public void OnSetMessageBus()
     {
+        InitUniqueId();
+    }
+
+    void InitUniqueId()
+    {
+        if (uniqueId == 0)
+        {
+            uniqueId = IDLogic.NewUniqueId();
+        }
     }
     
     public bool TryAddPlayer(Item item)
@@ -71,6 +87,7 @@ public class TeamFormationStorage : IMessageBus
     public static TeamFormationStorage Create(string formationName)
     {
         var teamFormation = new TeamFormationStorage();
+        teamFormation.InitUniqueId();
         teamFormation.formationName = formationName;
         return teamFormation;
     }
