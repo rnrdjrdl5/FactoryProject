@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class CombatHostileTargetFlow : ProcessorFlow
 {
-    float attackRange = 1.5f;
-    float targetLostRange = 8f;
+    float maxChaseDistance = 8f;
+    float maxChaseDuration = 5f;
     float followDistance = 1.5f;
+    float mainSkillRange = 1.5f;
 
     Player controlledPlayer;
     PlayerFollowAbility followAbility;
@@ -24,12 +25,14 @@ public class CombatHostileTargetFlow : ProcessorFlow
         var brain = Entity as Brain;
         controlledPlayer = brain?.Controll as Player;
         followAbility = controlledPlayer?.GetAbility<PlayerFollowAbility>();
+        mainSkillRange = ResolveMainSkillRange();
     }
 
     public override void OnUpdateFlow()
     {
         var targetPlayer = followAbility?.TargetPlayer;
-        if (!TargetSearchLogic.IsHostileTargetInRange(controlledPlayer, targetPlayer, targetLostRange))
+        if (!TargetSearchLogic.IsHostileTargetInRange(controlledPlayer, targetPlayer, maxChaseDistance) ||
+            elapsedTime >= maxChaseDuration)
         {
             followAbility?.ClearTarget();
             parent?.ActivateChildFlow<WanderFlow>();
@@ -39,7 +42,7 @@ public class CombatHostileTargetFlow : ProcessorFlow
         followAbility?.SetFollowDistance(followDistance);
 
         var distance = Vector2.Distance(controlledPlayer.transform.position, targetPlayer.transform.position);
-        if (distance <= attackRange)
+        if (distance <= mainSkillRange)
         {
             if (!IsActivateFlow<AutoAttackFlow>())
             {
@@ -52,5 +55,22 @@ public class CombatHostileTargetFlow : ProcessorFlow
         }
 
         base.OnUpdateFlow();
+    }
+
+    float ResolveMainSkillRange()
+    {
+        var playerData = controlledPlayer?.GetEntityData<PlayerData>();
+        if (!InputActionSkillLogic.TryGetSkillKey(playerData, InputActionType.MainAttack, out var skillKey))
+        {
+            return mainSkillRange;
+        }
+
+        var skillData = Tables.Skill.Get(skillKey);
+        if (skillData == null)
+        {
+            return mainSkillRange;
+        }
+
+        return skillData.range;
     }
 }
