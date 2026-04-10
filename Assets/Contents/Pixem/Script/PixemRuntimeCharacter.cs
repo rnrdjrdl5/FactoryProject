@@ -6,9 +6,15 @@ using Cysharp.Threading.Tasks;
 [DisallowMultipleComponent]
 public class PixemRuntimeCharacter : MonoBehaviour
 {
+    private const string DefaultAnimationFrameCacheAddressKey = "Pixem/BuiltIn/PixemAnimationFrameCache";
+#if UNITY_EDITOR
+    private const string DefaultAnimationFrameCacheAssetPath = "Assets/Contents/Pixem/BuiltIn/PixemAnimationFrameCache.asset";
+#endif
+
     [SerializeField] private Animator animator;
     [SerializeField] private bool autoBindOnAwake = true;
     [SerializeField] private bool synchronizeSpritesInLateUpdate = true;
+    [SerializeField] private PixemAnimationFrameCache animationFrameCache;
     [SerializeField] private List<PixemPartBinding> partBindings = new List<PixemPartBinding>();
     [SerializeField] private List<PixemPartOptionIndex> partOptionIndexes = new List<PixemPartOptionIndex>();
     [SerializeField] private PixemRuntimeLoadout initialLoadout = new PixemRuntimeLoadout();
@@ -16,9 +22,11 @@ public class PixemRuntimeCharacter : MonoBehaviour
     private readonly PixemRuntimePartCatalog _catalog = new PixemRuntimePartCatalog();
     private readonly Dictionary<PixemPartType, List<PixemPartBinding>> _bindingsByType = new Dictionary<PixemPartType, List<PixemPartBinding>>();
     private readonly Dictionary<PixemPartType, PixemRuntimePartOption> _equippedOptions = new Dictionary<PixemPartType, PixemRuntimePartOption>();
+    private static readonly Dictionary<int, int> SpriteFrameIndexCache = new Dictionary<int, int>();
 
     public Animator Animator => animator;
 
+    public PixemAnimationFrameCache AnimationFrameCache => animationFrameCache;
     public IReadOnlyList<PixemPartBinding> PartBindings => partBindings;
     public IReadOnlyList<PixemPartOptionIndex> PartOptionIndexes => partOptionIndexes;
 
@@ -33,6 +41,7 @@ public class PixemRuntimeCharacter : MonoBehaviour
             AutoBindDefaultHierarchy();
         }
 
+        EnsureAnimationFrameCacheLoaded();
         RebuildBindingLookup();
         CaptureInitialLoadoutFromBindings();
         ApplyLoadout(initialLoadout);
@@ -50,11 +59,29 @@ public class PixemRuntimeCharacter : MonoBehaviour
             AutoBindDefaultHierarchy();
         }
 
+        EnsureAnimationFrameCacheLoaded();
         RebuildBindingLookup();
         CaptureInitialLoadoutFromBindings();
         ApplyLoadout(initialLoadout);
-        SyncAllSprites();
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+        {
+            return;
+        }
+
+        EnsureAnimationFrameCacheAssetLoaded();
+        if (animationFrameCache == null || animationFrameCache.HasCachedFrames)
+        {
+            return;
+        }
+
+        animationFrameCache.RebuildFromBindings(BuildDefaultBindingsSnapshot());
+    }
+#endif
 
     private void LateUpdate()
     {
@@ -88,6 +115,21 @@ public class PixemRuntimeCharacter : MonoBehaviour
         RebuildBindingLookup();
         CaptureInitialLoadoutFromBindings();
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("Rebuild Animation Frame Cache")]
+    public void RebuildAnimationFrameCache()
+    {
+        EnsureAnimationFrameCacheAssetLoaded();
+        if (animationFrameCache == null)
+        {
+            Debug.LogWarning("Missing Pixem animation frame cache asset.", this);
+            return;
+        }
+
+        animationFrameCache.RebuildFromBindings(BuildDefaultBindingsSnapshot());
+    }
+#endif
 
     public IReadOnlyList<PixemRuntimePartOption> GetAvailableOptions(PixemPartType partType)
     {
@@ -128,7 +170,7 @@ public class PixemRuntimeCharacter : MonoBehaviour
         }
 
         EquipOption(partType, option);
-        SyncSprites(partType);
+        SyncAllSprites(true);
         return true;
     }
 
@@ -142,14 +184,14 @@ public class PixemRuntimeCharacter : MonoBehaviour
         }
 
         EquipOption(partType, option);
-        SyncSprites(partType);
+        SyncAllSprites(true);
         return true;
     }
 
     public void ResetPart(PixemPartType partType)
     {
         ResetToInitial(partType);
-        SyncSprites(partType);
+        SyncSprites(partType, true);
     }
 
     public void ResetAllParts()
@@ -160,7 +202,7 @@ public class PixemRuntimeCharacter : MonoBehaviour
             ResetToInitial(partTypes[i]);
         }
 
-        SyncAllSprites();
+        SyncAllSprites(true);
     }
 
     public void ApplyLoadout(PixemRuntimeLoadout loadout)
@@ -185,7 +227,7 @@ public class PixemRuntimeCharacter : MonoBehaviour
             }
         }
 
-        SyncAllSprites();
+        SyncAllSprites(true);
     }
 
     public PixemRuntimeLoadout CaptureCurrentLoadout()
@@ -202,13 +244,18 @@ public class PixemRuntimeCharacter : MonoBehaviour
 
     public void SyncAllSprites()
     {
+        SyncAllSprites(false);
+    }
+
+    private void SyncAllSprites(bool forceSync)
+    {
         foreach (KeyValuePair<PixemPartType, List<PixemPartBinding>> pair in _bindingsByType)
         {
-            SyncSprites(pair.Key);
+            SyncSprites(pair.Key, forceSync);
         }
     }
 
-    private void SyncSprites(PixemPartType partType)
+    private void SyncSprites(PixemPartType partType, bool forceSync = false)
     {
         if (!_bindingsByType.TryGetValue(partType, out List<PixemPartBinding> bindings))
         {
@@ -229,13 +276,21 @@ public class PixemRuntimeCharacter : MonoBehaviour
             }
 
             Sprite currentSprite = binding.Renderer.sprite;
-            int frameIndex = ExtractFrameIndex(currentSprite != null ? currentSprite.name : string.Empty);
+            if (!forceSync && !binding.RequiresSync(currentSprite))
+            {
+                continue;
+            }
+
+            int frameIndex = GetFrameIndex(binding, currentSprite);
             Sprite targetSprite = option.GetSpriteByFrameIndex(frameIndex);
+            int sourceSpriteId = GetSpriteId(currentSprite);
 
             if (targetSprite != null && binding.Renderer.sprite != targetSprite)
             {
                 binding.Renderer.sprite = targetSprite;
             }
+
+            binding.MarkSynchronized(sourceSpriteId, targetSprite);
         }
     }
 
@@ -449,6 +504,33 @@ public class PixemRuntimeCharacter : MonoBehaviour
         return target != null ? target.GetComponent<SpriteRenderer>() : null;
     }
 
+    public static List<PixemPartBinding> BuildDefaultBindingsSnapshot()
+    {
+        return BuildDefaultBindings();
+    }
+
+    private void EnsureAnimationFrameCacheLoaded()
+    {
+        if (animationFrameCache != null)
+        {
+            return;
+        }
+
+        animationFrameCache = Realm.LoadResources<PixemAnimationFrameCache>(DefaultAnimationFrameCacheAddressKey);
+    }
+
+#if UNITY_EDITOR
+    private void EnsureAnimationFrameCacheAssetLoaded()
+    {
+        if (animationFrameCache != null)
+        {
+            return;
+        }
+
+        animationFrameCache = UnityEditor.AssetDatabase.LoadAssetAtPath<PixemAnimationFrameCache>(DefaultAnimationFrameCacheAssetPath);
+    }
+#endif
+
     private static List<PixemPartBinding> BuildDefaultBindings()
     {
         return new List<PixemPartBinding>
@@ -488,6 +570,41 @@ public class PixemRuntimeCharacter : MonoBehaviour
         return int.TryParse(value.Substring(separatorIndex + 1), out int frameIndex)
             ? frameIndex
             : -1;
+    }
+
+    private int GetFrameIndex(PixemPartBinding binding, Sprite sprite)
+    {
+        if (binding != null
+            && animationFrameCache != null
+            && animationFrameCache.TryGetFrameIndex(binding.PartType, binding.HierarchyPath, sprite, out int cachedFrameIndex))
+        {
+            return cachedFrameIndex;
+        }
+
+        return GetFallbackFrameIndex(sprite);
+    }
+
+    private static int GetFallbackFrameIndex(Sprite sprite)
+    {
+        if (sprite == null)
+        {
+            return -1;
+        }
+
+        int spriteId = sprite.GetInstanceID();
+        if (SpriteFrameIndexCache.TryGetValue(spriteId, out int frameIndex))
+        {
+            return frameIndex;
+        }
+
+        frameIndex = ExtractFrameIndex(sprite.name);
+        SpriteFrameIndexCache[spriteId] = frameIndex;
+        return frameIndex;
+    }
+
+    private static int GetSpriteId(Sprite sprite)
+    {
+        return sprite != null ? sprite.GetInstanceID() : 0;
     }
 
     private static string GetFolderName(PixemPartType partType)
@@ -536,6 +653,19 @@ public class PixemPartBinding
     public PixemPartType PartType;
     public string HierarchyPath;
     public SpriteRenderer Renderer;
+
+    [NonSerialized] private int _lastAppliedSpriteId;
+
+    public bool RequiresSync(Sprite currentSprite)
+    {
+        int currentSpriteId = currentSprite != null ? currentSprite.GetInstanceID() : 0;
+        return currentSpriteId != _lastAppliedSpriteId;
+    }
+
+    public void MarkSynchronized(int observedSpriteId, Sprite appliedSprite)
+    {
+        _lastAppliedSpriteId = appliedSprite != null ? appliedSprite.GetInstanceID() : observedSpriteId;
+    }
 }
 
 [Serializable]
