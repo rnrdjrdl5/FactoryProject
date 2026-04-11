@@ -12,9 +12,10 @@ namespace Tables
     public partial class Item
     {
         public string Key { get; set; } = string.Empty;
+        public ItemSlotType itemSlotType { get; set; }
         public ItemType itemType { get; set; }
         public GradeType gradeType { get; set; }
-        public string iconAtlasPath { get; set; } = string.Empty;
+        public string equipPath { get; set; } = string.Empty;
         public string iconSpritePath { get; set; } = string.Empty;
         public List<StatType> statTypes { get; set; } = new System.Collections.Generic.List<StatType>();
         public List<int> statValues { get; set; } = new System.Collections.Generic.List<int>();
@@ -46,7 +47,7 @@ namespace Tables
                         // Coalesce null lists and strings on each deserialized instance
                         kvp.Value.statTypes = kvp.Value.statTypes ?? new System.Collections.Generic.List<StatType>();
                         kvp.Value.statValues = kvp.Value.statValues ?? new System.Collections.Generic.List<int>();
-                        kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
+                        kvp.Value.equipPath = kvp.Value.equipPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
                         kvp.Value.uniqueSkillKey = kvp.Value.uniqueSkillKey ?? string.Empty;
                         kvp.Value.description = kvp.Value.description ?? string.Empty;

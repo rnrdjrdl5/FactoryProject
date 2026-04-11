@@ -6,7 +6,7 @@ public class Equipment : IEntityData, IMessageBus
     [JsonIgnore] public MessageBus MessageBus { get; set; }
     [JsonIgnore] public IEnumerable<Item> EquipItems => equipItems.Values;
     
-    [JsonProperty] Dictionary<Tables.ItemType, Item> equipItems = new();
+    [JsonProperty] Dictionary<Tables.ItemSlotType, Item> equipItems = new();
     
     public void Initialize(IInitData initData = null)
     {
@@ -26,10 +26,10 @@ public class Equipment : IEntityData, IMessageBus
             return false;
         }
 
-        equipItems.TryGetValue(item.ItemData.itemType, out var equipedItem);
+        equipItems.TryGetValue(item.ItemData.itemSlotType, out var equipedItem);
         TryUnequipItem(equipedItem);
         
-        equipItems[item.ItemData.itemType] = item;
+        equipItems[item.ItemData.itemSlotType] = item;
         item.SetEquip(true);
         
         MessageBus?.Publish(new EntityDataMsg.EquipmentEquipMsg
@@ -43,12 +43,12 @@ public class Equipment : IEntityData, IMessageBus
 
     public bool TryUnequipItem(Item item)
     {
-        if (item == null || !equipItems.ContainsKey(item.ItemData.itemType))
+        if (item == null || !equipItems.ContainsKey(item.ItemData.itemSlotType))
         {
             return false;
         }
 
-        equipItems.Remove(item.ItemData.itemType);
+        equipItems.Remove(item.ItemData.itemSlotType);
         item.SetEquip(false);
         
         MessageBus?.Publish(new EntityDataMsg.UnequipmentEquipMsg
@@ -60,9 +60,9 @@ public class Equipment : IEntityData, IMessageBus
         return true;
     }
 
-    public bool TryGetEquipUid(Tables.ItemType itemType, out Item item)
+    public bool TryGetEquipUid(Tables.ItemSlotType itemSlotType, out Item item)
     {
-        return equipItems.TryGetValue(itemType, out item);
+        return equipItems.TryGetValue(itemSlotType, out item);
     }
     
     public void OnSetMessageBus()

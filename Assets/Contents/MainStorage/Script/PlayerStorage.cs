@@ -23,11 +23,11 @@ public class PlayerStorage : IEntityData, IMessageBus
 
         if (inventory == null)
         {
-            inventory = Inventory.Create(Tables.ItemType.Player);
+            inventory = Inventory.Create(Tables.ItemSlotType.Player);
         }
         else
         {
-            inventory.Initialize(Tables.ItemType.Player);
+            inventory.Initialize(Tables.ItemSlotType.Player);
         }
     }
 

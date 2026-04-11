@@ -13,7 +13,7 @@ public class UIStat : UISetter
     {
         this.statType = statType;
 
-        var iconData = Tables.EnumLogic.GetMetaData(statType) as IIconSprite;
+        var iconData = Tables.EnumLogic.GetMetaData(statType) as IIconAtlasSprite;
         iconSprite.sprite = iconData.GetIconSprite();
         statValueText.text = $"{statValue}";
     }

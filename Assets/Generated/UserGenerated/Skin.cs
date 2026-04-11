@@ -1,6 +1,6 @@
 namespace Tables
 {
-    public partial class Skill : IIconAtlasSprite
+    public partial class Skin
     {
         // Add your custom logic here.
     }

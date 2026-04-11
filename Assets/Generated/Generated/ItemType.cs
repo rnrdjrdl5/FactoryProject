@@ -3,10 +3,15 @@ namespace Tables
 {
     public enum ItemType
     {
-        Gold = 1,
-        Weapon = 2,
-        Armor = 3,
-        Accessory = 4,
-        Player = 5,
+        Bow = 1,
+        Shield = 2,
+        Sword = 3,
+        Staff = 4,
+        Top = 5,
+        Pants = 6,
+        Cape = 7,
+        FaceAcc = 8,
+        Hat = 9,
+        Player = 10,
     }
 }

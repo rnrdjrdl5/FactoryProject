@@ -10,11 +10,11 @@ public class Inventory : IMessageBus
     [JsonIgnore] public MessageBus MessageBus { get; set; }
 
     [JsonProperty] List<Item> items = new();
-    [JsonProperty] Tables.ItemType itemType;
+    [JsonProperty] Tables.ItemSlotType itemSlotType;
     
-    public void Initialize(Tables.ItemType itemType)
+    public void Initialize(Tables.ItemSlotType itemSlotType)
     {
-        this.itemType = itemType;
+        this.itemSlotType = itemSlotType;
         items.Clear();
     }
 
@@ -101,10 +101,10 @@ public class Inventory : IMessageBus
     }
 
 
-    public static Inventory Create(Tables.ItemType itemType)
+    public static Inventory Create(Tables.ItemSlotType itemSlotType)
     {
         var inventory = new Inventory();
-        inventory.Initialize(itemType);
+        inventory.Initialize(itemSlotType);
 
         return inventory;
     }

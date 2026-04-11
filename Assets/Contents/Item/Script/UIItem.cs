@@ -11,8 +11,8 @@ public class UIItem : UISetter
     [SerializeField] TMP_Text amountText;
     [SerializeField] GameObject isEquipObject;
     
-    IIconSprite iconData;
-    IIconSprite gradeIconData;
+    IIconAtlasSprite iconAtlasData;
+    IIconAtlasSprite gradeIconAtlasData;
     IDescription descriptionData;
     Action<Item> OnClickEvent;
     Item item;
@@ -26,7 +26,7 @@ public class UIItem : UISetter
     
     public void UpdateItemData(IIconSprite iconData, IGradeType gradeData, IDescription descriptionData, int amount, bool isEquip)
     {
-        var gradeIconData = gradeData.Grade as IIconSprite;
+        var gradeIconData = gradeData.Grade as IIconAtlasSprite;
         
         SetImage(itemSprite, iconData.GetIconSprite());
         SetImage(gradeSprite, gradeIconData.GetIconSprite());

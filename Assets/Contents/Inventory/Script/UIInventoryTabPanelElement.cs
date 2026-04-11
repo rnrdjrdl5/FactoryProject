@@ -15,8 +15,8 @@ public class UIInventoryTabPanelElement : PanelElement
         for (var i = 0; i < count; i++)
         {
             var slot = tabSlots[i];
-            var itemType = EnumLogic.ItemTypes[i];
-            slot.cachedAction = () => OnClickTab(itemType);
+            var itemSlotType = EnumLogic.ItemSlotTypes[i];
+            slot.cachedAction = () => OnClickTab(itemSlotType);
             slot.button.onClick.AddListener(slot.cachedAction);
         }
     }
@@ -43,11 +43,11 @@ public class UIInventoryTabPanelElement : PanelElement
         }
     }
 
-    void OnClickTab(ItemType itemType)
+    void OnClickTab(ItemSlotType itemSlotType)
     {
         var msg = new UIMsg.InventoryChangeTabMsg()
         {
-            ItemType = itemType
+            ItemSlotType = itemSlotType
         };
 
         Panel.MessageBus?.Publish(msg);
@@ -67,6 +67,6 @@ public static partial class UIMsg
     public struct InventoryChangeTabMsg : IMessageOrigin
     {
         public MessageOriginType Origin => MessageOriginType.UI;
-        public ItemType ItemType;
+        public ItemSlotType ItemSlotType;
     }
 }

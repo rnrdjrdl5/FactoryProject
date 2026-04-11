@@ -216,7 +216,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
 
     void RefreshEquippedWeaponInputAction(Item item)
     {
-        if (item?.ItemData == null || item.ItemData.itemType != Tables.ItemType.Weapon)
+        if (item?.ItemData == null || item.ItemData.itemSlotType != Tables.ItemSlotType.RHand)
         {
             return;
         }
@@ -226,7 +226,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
 
     void ClearEquippedWeaponInputAction(Item item)
     {
-        if (item?.ItemData == null || item.ItemData.itemType != Tables.ItemType.Weapon)
+        if (item?.ItemData == null || item.ItemData.itemSlotType != Tables.ItemSlotType.RHand)
         {
             return;
         }

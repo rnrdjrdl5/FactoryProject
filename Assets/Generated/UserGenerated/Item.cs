@@ -22,7 +22,7 @@ namespace Tables
         
         public bool CanEquip()
         {
-            return itemType is ItemType.Accessory or ItemType.Armor or ItemType.Weapon;
+            return itemSlotType != ItemSlotType.Player;
         }
     }
 }

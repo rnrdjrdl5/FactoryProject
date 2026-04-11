@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Tables
 {
-    public partial class Player : IStats , IIconSprite, IGradeType, IKey , IPrefabPath
+    public partial class Player : IStats , IIconAtlasSprite, IGradeType, IKey , IPrefabPath
     {
         public static Player GetPlayerByItemKey(string itemKey)
         {

@@ -15,7 +15,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     protected Inventory inventory;
     
     List<ExItemList> itemLists = new();
-    Tables.ItemType itemType;
+    Tables.ItemSlotType itemSlotType;
 
     public override void Initialize(Panel panel, IInitData initData = null)
     {
@@ -52,7 +52,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         base.OnSetPanelDatas();
 
         bag = GetTargetPanelDatas<Bag>();
-        SetItemType(itemType);
+        SetItemType(itemSlotType);
     }
 
     protected override void OnUnsetPanelDatas()
@@ -63,9 +63,9 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
         base.OnUnsetPanelDatas();
     }
 
-    public void SetItemType(Tables.ItemType itemType)
+    public void SetItemType(Tables.ItemSlotType itemSlotType)
     {
-        this.itemType = itemType;
+        this.itemSlotType = itemSlotType;
         
         RefreshInventory();
         RefreshUI();
@@ -75,7 +75,7 @@ public class UIInventoryPanelElement : PanelElement, IEnhancedScrollerDelegate
     {
         if (bag != null)
         {
-            inventory = bag.GetInventory(itemType);
+            inventory = bag.GetInventory(itemSlotType);
         }
     }
     

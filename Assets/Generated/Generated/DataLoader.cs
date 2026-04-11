@@ -125,6 +125,20 @@ public static class DataLoader
 
         try
         {
+            Type type = typeof(Tables.Skin);
+            MethodInfo loadMethod = type.GetMethod("Load", BindingFlags.Public | BindingFlags.Static, null, new Type[]{ typeof(System.Collections.Generic.Dictionary<string, byte[]>) }, null);
+            if (loadMethod != null)
+            {
+                loadMethod.Invoke(null, new object[] { files });
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading data for Skin: {ex.Message}");
+        }
+
+        try
+        {
             Type type = typeof(Tables.Spawner);
             MethodInfo loadMethod = type.GetMethod("Load", BindingFlags.Public | BindingFlags.Static, null, new Type[]{ typeof(System.Collections.Generic.Dictionary<string, byte[]>) }, null);
             if (loadMethod != null)

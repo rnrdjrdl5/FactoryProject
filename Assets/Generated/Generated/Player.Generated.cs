@@ -12,6 +12,7 @@ namespace Tables
     public partial class Player
     {
         public string Key { get; set; } = string.Empty;
+        public string skinKey { get; set; } = string.Empty;
         public float hp { get; set; }
         public string iconAtlasPath { get; set; } = string.Empty;
         public string prefabPath { get; set; } = string.Empty;
@@ -51,6 +52,7 @@ namespace Tables
                         // Coalesce null lists and strings on each deserialized instance
                         kvp.Value.statTypes = kvp.Value.statTypes ?? new System.Collections.Generic.List<StatType>();
                         kvp.Value.statValues = kvp.Value.statValues ?? new System.Collections.Generic.List<int>();
+                        kvp.Value.skinKey = kvp.Value.skinKey ?? string.Empty;
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
                         kvp.Value.prefabPath = kvp.Value.prefabPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;

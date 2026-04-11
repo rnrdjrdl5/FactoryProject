@@ -6,8 +6,8 @@ public class InventoryProcessor : Processor
     UIInventoryTabPanelElement uiInventoryTabPanelElement;
     UIInventoryPanelElement uiInventoryPanelElement;
     Panel panel;
-
-    Tables.ItemType activateTabType;
+    
+    Tables.ItemSlotType activateTabType;
     Inventory targetInventory;
     Bag bag;
 
@@ -21,8 +21,8 @@ public class InventoryProcessor : Processor
         
         panel.MessageBus.Subscribe<UIMsg.InventoryChangeTabMsg>(OnInventoryChangeTabMsg);
         panel.OnSetPanelDatasAction += OnSetPanelData;
-        
-        activateTabType = ItemType.Weapon;
+
+        activateTabType = ItemSlotType.RHand;
         RefreshInventoryPanel();
     }
 
@@ -42,7 +42,7 @@ public class InventoryProcessor : Processor
 
     void OnInventoryChangeTabMsg(UIMsg.InventoryChangeTabMsg msg)
     {
-        activateTabType = msg.ItemType;
+        activateTabType = msg.ItemSlotType;
         RefreshInventoryPanel();
     }
 

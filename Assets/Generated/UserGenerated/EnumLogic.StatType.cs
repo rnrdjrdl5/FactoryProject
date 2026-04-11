@@ -52,7 +52,7 @@ namespace Tables
         public static StatInfo GetMetaData(StatType type) => metaData[type];
     }
 
-    public class StatInfo : IIconSprite
+    public class StatInfo : IIconAtlasSprite
     {
         public string iconAtlasPath { get; set; }
         public string iconSpritePath { get; set; }

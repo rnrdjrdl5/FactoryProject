@@ -7,14 +7,14 @@ public class UIEquipmentPanelElement : PanelElement
     [System.Serializable]
     class Slot
     {
-        public ItemType type;
+        public ItemSlotType itemSlotType;
         public UIItem ui;
         public bool clickable;
     }
     
     [SerializeField] List<Slot> slots = new();
 
-    readonly Dictionary<ItemType, Slot> slotMap = new();
+    readonly Dictionary<ItemSlotType, Slot> slotMap = new();
     
     Bag storageBag;
     PlayerData playerLocalData;
@@ -28,7 +28,7 @@ public class UIEquipmentPanelElement : PanelElement
         for (var i = 0; i < slots.Count; i++)
         {
             var slot = slots[i];
-            slotMap[slot.type] = slot;
+            slotMap[slot.itemSlotType] = slot;
             
             if (slot.clickable)
             {
@@ -65,7 +65,7 @@ public class UIEquipmentPanelElement : PanelElement
                 continue;
             }
 
-            if (slot.type == ItemType.Player)
+            if (slot.itemSlotType == ItemSlotType.Player)
             {
                 if (playerItem != null)
                 {
@@ -101,12 +101,12 @@ public class UIEquipmentPanelElement : PanelElement
             return null;
         }
 
-        if (!playerLocalData.Equipment.TryGetEquipUid(slot.type, out var equipUid))
+        if (!playerLocalData.Equipment.TryGetEquipUid(slot.itemSlotType, out var equipUid))
         {
             return null;
         }
 
-        var inventory = storageBag.GetInventory(slot.type);
+        var inventory = storageBag.GetInventory(slot.itemSlotType);
         return !inventory.TryGetItemByItemUid(equipUid.UniqueId, out var playerItem) ? null : playerItem;
     }
 
@@ -145,7 +145,7 @@ public class UIEquipmentPanelElement : PanelElement
 
     void EquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
     {
-        var type = msg.Item.ItemData.itemType;
+        var type = msg.Item.ItemData.itemSlotType;
         if (!slotMap.ContainsKey(type))
         {
             return;
@@ -156,7 +156,7 @@ public class UIEquipmentPanelElement : PanelElement
     
     void UnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
     {
-        var type = msg.Item.ItemData.itemType;
+        var type = msg.Item.ItemData.itemSlotType;
         if (!slotMap.ContainsKey(type))
         {
             return;

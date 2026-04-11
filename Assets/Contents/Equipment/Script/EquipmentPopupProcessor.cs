@@ -48,7 +48,7 @@ public class EquipmentPopupProcessor : Processor
     {
         playerStorage = equipmentPopup.GetTargetPanelDatas<PlayerStorage>();
         bag = equipmentPopup.GetTargetPanelDatas<Bag>();
-        uiInventoryPanelElement.SetItemType(ItemType.Weapon);
+        uiInventoryPanelElement.SetItemType(ItemSlotType.RHand);
         
         uiEquipmentPanelElement.SetStorageBag(bag);
     }

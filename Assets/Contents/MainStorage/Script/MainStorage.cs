@@ -1,4 +1,3 @@
-using Tables;
 using UnityEngine;
 
 [EntityData(typeof(TeamStorage))]
@@ -16,21 +15,21 @@ public class MainStorage : Storage
         var processorAbility = GetAbility<ProcessorAbility>();
         var mainStorageProcessor = processorAbility.GetProcessor<MainStorageProcessor>();
 
-        var humanItem = Item.Create(Tables.TablesKey.Item_Human, 1);
+        var humanItem = Item.Create(Tables.TablesKey.Item_Player_Player_Human, 1);
         mainStorageProcessor.AddPlayer(humanItem);
-        var eagleItem =  Item.Create(Tables.TablesKey.Item_Eagle, 1);
+        var eagleItem =  Item.Create(Tables.TablesKey.Item_Player_Player_Eagle, 1);
         mainStorageProcessor.AddPlayer(eagleItem);
-        var snakeItem = Item.Create(Tables.TablesKey.Item_Snake, 1);
+        var snakeItem = Item.Create(Tables.TablesKey.Item_Player_Player_Snake, 1);
         mainStorageProcessor.AddPlayer(snakeItem);
-        var dogItem =  Item.Create(Tables.TablesKey.Item_Dog, 1);
+        var dogItem =  Item.Create(Tables.TablesKey.Item_Player_Player_Dog, 1);
         mainStorageProcessor.AddPlayer(dogItem);
 
 
         var bag = GetEntityData<Bag>();
-        var weaponInventory = bag.GetInventory(ItemType.Weapon);
-        var bowItem =  Item.Create(Tables.TablesKey.Item_WoodBow, 1);
-        var swordItem =  Item.Create(Tables.TablesKey.Item_WoodSword, 1);
-        var staffItem =  Item.Create(Tables.TablesKey.Item_WoodStaff, 1);
+        var weaponInventory = bag.GetInventory(Tables.ItemSlotType.RHand);
+        var bowItem =  Item.Create(Tables.TablesKey.Item_RHand_Bow_1, 1);
+        var swordItem =  Item.Create(Tables.TablesKey.Item_RHand_Shield_1, 1);
+        var staffItem =  Item.Create(Tables.TablesKey.Item_RHand_Bow_2, 1);
         weaponInventory.AddItem(bowItem);
         weaponInventory.AddItem(swordItem);
         weaponInventory.AddItem(staffItem);

@@ -7,6 +7,7 @@ namespace Tables
     public static partial class EnumLogic
     {
         public static ItemType[] ItemTypes => (ItemType[])Enum.GetValues(typeof(ItemType));
+        public static ItemSlotType[] ItemSlotTypes => (ItemSlotType[])Enum.GetValues(typeof(ItemSlotType));
         public static StatType[] StatTypes => (StatType[])Enum.GetValues(typeof(StatType));
         
         #region CacheEnum

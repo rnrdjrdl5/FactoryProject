@@ -8,8 +8,8 @@ public class UITeam : UISetter
     [SerializeField] Image gradeSprite;
     [SerializeField] TMP_Text descText;
     
-    IIconSprite iconData;
-    IIconSprite gradeIconData;
+    IIconAtlasSprite iconAtlasData;
+    IIconAtlasSprite gradeIconAtlasData;
     IDescription descriptionData;
 
     public void UpdateItemData(Item item)
@@ -17,11 +17,11 @@ public class UITeam : UISetter
         UpdateItemData(item.ItemData, item.ItemData, item.ItemData, item.Amount);
     }
     
-    public void UpdateItemData(IIconSprite iconData, IGradeType gradeData, IDescription descriptionData, int amount)
+    public void UpdateItemData(IIconSprite iconAtlasData, IGradeType gradeData, IDescription descriptionData, int amount)
     {
-        var gradeIconData = gradeData.Grade as IIconSprite;
+        var gradeIconData = gradeData.Grade as IIconAtlasSprite;
         
-        SetImage(itemSprite, iconData.GetIconSprite());
+        SetImage(itemSprite, iconAtlasData.GetIconSprite());
         SetImage(gradeSprite, gradeIconData.GetIconSprite());
         SetText(descText, descriptionData.description);
     }
