@@ -9,6 +9,7 @@ public class AutoAttackFlow : ProcessorFlow
         base.OnEnterFlow();
 
         actionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
+        actionProcessor?.RequestAction(BrainActionRequest.Input(InputActionType.Move));
     }
 
     public override void OnUpdateFlow()

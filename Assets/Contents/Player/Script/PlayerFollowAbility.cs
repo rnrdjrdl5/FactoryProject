@@ -38,22 +38,25 @@ public class PlayerFollowAbility : Ability
         base.Uninitialize();
     }
 
-    public void Move()
+    public Vector2 Move()
     {
         if (targetPlayer == null || rigidbody2D == null)
         {
-            return;
+            return Vector2.zero;
         }
 
         var delta = targetPlayer.transform.position - transform.position;
         var distance = delta.magnitude;
         if (distance <= followDistance)
         {
-            return;
+            return Vector2.zero;
         }
 
         var dir = delta.normalized;
-        var nextPosition = rigidbody2D.position + (Vector2)dir * (followSpeed * Time.fixedDeltaTime);
+        var moveDelta = (Vector2)dir * (followSpeed * Time.fixedDeltaTime);
+        var nextPosition = rigidbody2D.position + moveDelta;
         rigidbody2D.MovePosition(nextPosition);
+
+        return moveDelta;
     }
 }

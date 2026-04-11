@@ -5,6 +5,7 @@ public class BrainActionExecutionContext
     public PlayerFollowAbility FollowAbility { get; set; }
     public SkillAbility SkillAbility { get; set; }
     public PlayerPickProcessor PickProcessor { get; set; }
+    public PlayerModelProcessor ModelProcessor { get; set; }
 
     public bool TryInitialize(IControlled controlled)
     {
@@ -22,6 +23,7 @@ public class BrainActionExecutionContext
 
         var processorAbility = ControlledEntity.GetAbility<PlayerProcessorAbility>();
         PickProcessor = processorAbility?.GetProcessor<PlayerPickProcessor>();
+        ModelProcessor = processorAbility?.GetProcessor<PlayerModelProcessor>();
         return true;
     }
 
@@ -37,5 +39,6 @@ public class BrainActionExecutionContext
         FollowAbility = null;
         SkillAbility = null;
         PickProcessor = null;
+        ModelProcessor = null;
     }
 }

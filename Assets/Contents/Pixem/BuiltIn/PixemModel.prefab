@@ -714,7 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 396cb6881d1aa4cbe8ba64b65a165201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 4383974337081281873}
   autoBindOnAwake: 1
   synchronizeSpritesInLateUpdate: 1
   animationFrameCache: {fileID: 11400000, guid: ffb6485661334dc5b6ff6dd5a23034df, type: 2}
@@ -1226,6 +1226,7 @@ MonoBehaviour:
       AddressKey: Pixem/Parts/Shield/Empty_Shield
     - PartType: 12
       AddressKey: Pixem/Parts/LeftHandWeapon/Empty_LeftHandWeapon
+  modelObject: {fileID: 6111234365023533707}
 --- !u!1 &3803928865322527978
 GameObject:
   m_ObjectHideFlags: 0

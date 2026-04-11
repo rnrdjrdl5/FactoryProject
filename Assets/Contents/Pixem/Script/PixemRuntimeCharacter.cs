@@ -18,6 +18,7 @@ public class PixemRuntimeCharacter : MonoBehaviour
     [SerializeField] private List<PixemPartBinding> partBindings = new List<PixemPartBinding>();
     [SerializeField] private List<PixemPartOptionIndex> partOptionIndexes = new List<PixemPartOptionIndex>();
     [SerializeField] private PixemRuntimeLoadout initialLoadout = new PixemRuntimeLoadout();
+    [SerializeField] private GameObject modelObject;
 
     private readonly PixemRuntimePartCatalog _catalog = new PixemRuntimePartCatalog();
     private readonly Dictionary<PixemPartType, List<PixemPartBinding>> _bindingsByType = new Dictionary<PixemPartType, List<PixemPartBinding>>();
@@ -25,10 +26,10 @@ public class PixemRuntimeCharacter : MonoBehaviour
     private static readonly Dictionary<int, int> SpriteFrameIndexCache = new Dictionary<int, int>();
 
     public Animator Animator => animator;
-
     public PixemAnimationFrameCache AnimationFrameCache => animationFrameCache;
     public IReadOnlyList<PixemPartBinding> PartBindings => partBindings;
     public IReadOnlyList<PixemPartOptionIndex> PartOptionIndexes => partOptionIndexes;
+    public GameObject ModelObject => modelObject;
 
     public void Configure(Animator targetAnimator, bool shouldAutoBind = true, bool shouldSyncInLateUpdate = true)
     {

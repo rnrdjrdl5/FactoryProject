@@ -5,7 +5,9 @@ using UnityEngine;
 public class Player : Entity
 {
     public Tables.Player TableData => tableData;
-    
+    public PlayerView View => view;
+
+    [SerializeField] PlayerView view;
     Tables.Player tableData;
     string playerKey;
     PlayerData playerData;

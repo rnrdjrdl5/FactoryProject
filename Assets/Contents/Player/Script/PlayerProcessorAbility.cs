@@ -5,8 +5,8 @@
 [Processor(typeof(DropItemProcessor))]
 [Processor(typeof(PlayerPickProcessor))]
 [Processor(typeof(PlayerEquipProcessor))]
+[Processor(typeof(PlayerModelProcessor))]
 public class PlayerProcessorAbility : ProcessorAbility
 {
     
 }
-

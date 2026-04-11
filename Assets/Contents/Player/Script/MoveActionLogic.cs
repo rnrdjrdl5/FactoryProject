@@ -9,7 +9,14 @@ public static class MoveActionLogic
             return false;
         }
 
-        context.MoveAbility.Move(direction);
+        var moveDelta = context.MoveAbility.Move(direction);
+        var stateType = moveDelta.sqrMagnitude > 0f ? PixemAnimationType.Run : PixemAnimationType.Idle;
+        if (moveDelta.x != 0f)
+        {
+            context.ModelProcessor.SetFlip(moveDelta.x > 0f);
+        }
+
+        context.ModelProcessor.SetStateType(stateType);
         return true;
     }
 }
