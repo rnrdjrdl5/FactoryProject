@@ -13,4 +13,166 @@ MonoBehaviour:
   m_Name: PixemAnimationFrameCache
   m_EditorClassIdentifier: 
   sourceController: {fileID: 9100000, guid: 6ad8e07fda0231e42ae4f269aba12f3a, type: 2}
-  bindings: []
+  bindings:
+  - partType: 0
+    hierarchyPath: Model/Cape
+    frameEntries:
+    - sprite: {fileID: 1370268120, guid: 05c7f8531d3024f42910ed757834614c, type: 3}
+      frameIndex: 0
+  - partType: 1
+    hierarchyPath: Model/Body
+    frameEntries:
+    - sprite: {fileID: 3690352608926420783, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 4
+    - sprite: {fileID: 3263760890698641485, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 5
+    - sprite: {fileID: -1604632557785740378, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 6
+    - sprite: {fileID: 9172855691007895633, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 7
+    - sprite: {fileID: 611544634920147467, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 8
+    - sprite: {fileID: 4194791858500448469, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 9
+    - sprite: {fileID: 3795206403585891594, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 10
+    - sprite: {fileID: 6321135647837111290, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 11
+    - sprite: {fileID: -1016732568424619638, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 12
+    - sprite: {fileID: 6683925071166027817, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 13
+    - sprite: {fileID: -819711617564442492, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 14
+    - sprite: {fileID: 748680387672881421, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 16
+    - sprite: {fileID: 515875178419039421, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 17
+    - sprite: {fileID: -5462808647348973451, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 20
+    - sprite: {fileID: 6259282626709865515, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 21
+    - sprite: {fileID: -4514953455613443652, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 24
+    - sprite: {fileID: -150145841650742671, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 25
+    - sprite: {fileID: 4795228017417100627, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 28
+    - sprite: {fileID: 3249301244532984874, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 29
+    - sprite: {fileID: 146488881565021549, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 30
+    - sprite: {fileID: -1152221422753210740, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 31
+    - sprite: {fileID: -1766302455029433624, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 32
+    - sprite: {fileID: -7233366832751514055, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 33
+    - sprite: {fileID: -5639343298066790923, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 34
+    - sprite: {fileID: -5550898615446770577, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 35
+  - partType: 1
+    hierarchyPath: Model/RightHand
+    frameEntries:
+    - sprite: {fileID: -3224816210088395291, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 0
+    - sprite: {fileID: 9172194485263239257, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 1
+    - sprite: {fileID: -7417043549575942957, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 2
+  - partType: 1
+    hierarchyPath: Model/LeftHand
+    frameEntries:
+    - sprite: {fileID: 9172194485263239257, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 1
+  - partType: 1
+    hierarchyPath: Model/LeftHand/LeftArm
+    frameEntries:
+    - sprite: {fileID: 8779598198382543800, guid: 6913a9cf1beab7245bfe7897a5346714, type: 3}
+      frameIndex: 3
+  - partType: 2
+    hierarchyPath: Model/Pants
+    frameEntries:
+    - sprite: {fileID: 6325995046696811868, guid: ad45fd6b05b319c4bbc5e41e860be630, type: 3}
+      frameIndex: 0
+    - sprite: {fileID: 2195030017684978004, guid: ad45fd6b05b319c4bbc5e41e860be630, type: 3}
+      frameIndex: 1
+    - sprite: {fileID: -2435280027374988308, guid: ad45fd6b05b319c4bbc5e41e860be630, type: 3}
+      frameIndex: 2
+    - sprite: {fileID: 2936919134473155614, guid: ad45fd6b05b319c4bbc5e41e860be630, type: 3}
+      frameIndex: 3
+    - sprite: {fileID: -3715659275938394859, guid: ad45fd6b05b319c4bbc5e41e860be630, type: 3}
+      frameIndex: 4
+    - sprite: {fileID: 2271006918484340883, guid: ad45fd6b05b319c4bbc5e41e860be630, type: 3}
+      frameIndex: 5
+    - sprite: {fileID: 1806765767145997622, guid: ad45fd6b05b319c4bbc5e41e860be630, type: 3}
+      frameIndex: 6
+  - partType: 3
+    hierarchyPath: Model/Top
+    frameEntries:
+    - sprite: {fileID: 7216689962106504866, guid: ffb751aece7e386448fb091b9f67e194, type: 3}
+      frameIndex: 0
+    - sprite: {fileID: -7362887357287272090, guid: ffb751aece7e386448fb091b9f67e194, type: 3}
+      frameIndex: 1
+    - sprite: {fileID: 119989910394428592, guid: ffb751aece7e386448fb091b9f67e194, type: 3}
+      frameIndex: 2
+    - sprite: {fileID: -4038833801828854311, guid: ffb751aece7e386448fb091b9f67e194, type: 3}
+      frameIndex: 3
+    - sprite: {fileID: 8842067062356998995, guid: ffb751aece7e386448fb091b9f67e194, type: 3}
+      frameIndex: 4
+    - sprite: {fileID: -6653951754606332185, guid: ffb751aece7e386448fb091b9f67e194, type: 3}
+      frameIndex: 5
+  - partType: 4
+    hierarchyPath: Model/Head/Face
+    frameEntries:
+    - sprite: {fileID: -4766277994681319621, guid: dfc455053a35d64409568c41f0923f36, type: 3}
+      frameIndex: 0
+    - sprite: {fileID: 3589107396469783085, guid: dfc455053a35d64409568c41f0923f36, type: 3}
+      frameIndex: 1
+  - partType: 5
+    hierarchyPath: Model/Head/FaceAcc_1
+    frameEntries:
+    - sprite: {fileID: -5360583877259669462, guid: b343f69a7d341974b9a16566b6f74b8e, type: 3}
+      frameIndex: 0
+  - partType: 6
+    hierarchyPath: Model/Head/FaceAcc_2
+    frameEntries:
+    - sprite: {fileID: -8272526619502515668, guid: 684244558bccf164fba82e8fd34f5ba3, type: 3}
+      frameIndex: 0
+  - partType: 7
+    hierarchyPath: Model/Head/Hair
+    frameEntries:
+    - sprite: {fileID: -3506278646063155669, guid: 1a041d6e179b09d4b8e755ab606f9e31, type: 3}
+      frameIndex: 0
+  - partType: 8
+    hierarchyPath: Model/Head/HairAcc
+    frameEntries:
+    - sprite: {fileID: 986616599, guid: c2955abab0b95b04f8f1f090d5da676b, type: 3}
+      frameIndex: 0
+  - partType: 9
+    hierarchyPath: Model/Head/Helmet
+    frameEntries:
+    - sprite: {fileID: -2335230837687750736, guid: 3b1f17f2facff4542b9a038fd3801ada, type: 3}
+      frameIndex: 0
+  - partType: 10
+    hierarchyPath: Model/RightHand/RightHandWeapon
+    frameEntries:
+    - sprite: {fileID: 6506801649591802597, guid: b451a246cbe270c47a15363804ea7a95, type: 3}
+      frameIndex: 0
+    - sprite: {fileID: -3281019827065774329, guid: b451a246cbe270c47a15363804ea7a95, type: 3}
+      frameIndex: 1
+    - sprite: {fileID: -8156092714177255175, guid: b451a246cbe270c47a15363804ea7a95, type: 3}
+      frameIndex: 2
+    - sprite: {fileID: 2772739603180792247, guid: b451a246cbe270c47a15363804ea7a95, type: 3}
+      frameIndex: 3
+  - partType: 11
+    hierarchyPath: Model/RightHand/Shield
+    frameEntries:
+    - sprite: {fileID: -2117782083, guid: 4b41180e3a43c224d86ab18a0bd17d19, type: 3}
+      frameIndex: 0
+  - partType: 12
+    hierarchyPath: Model/LeftHand/LeftHandWeapon
+    frameEntries:
+    - sprite: {fileID: 6057307490019089869, guid: 8874984002083e1479c530990b3c89f2, type: 3}
+      frameIndex: 0
