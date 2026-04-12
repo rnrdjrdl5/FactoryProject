@@ -5,8 +5,8 @@ namespace Tables
     {
         Gold = 1,
         Player = 2,
-        RHand = 3,
-        LHand = 4,
+        MainWeapon = 3,
+        SubWeapon = 4,
         Top = 5,
         Pants = 6,
         Cape = 7,

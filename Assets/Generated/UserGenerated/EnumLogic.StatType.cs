@@ -5,7 +5,7 @@ namespace Tables
 {
     public static partial class EnumLogic
     {
-        static Dictionary<StatType, StatInfo> metaData = new()
+        static Dictionary<StatType, StatInfo> slotMetaData = new()
         {
             {
                 StatType.Str, new()
@@ -49,7 +49,7 @@ namespace Tables
             },
         };
         
-        public static StatInfo GetMetaData(StatType type) => metaData[type];
+        public static StatInfo GetMetaData(StatType type) => slotMetaData[type];
     }
 
     public class StatInfo : IIconAtlasSprite

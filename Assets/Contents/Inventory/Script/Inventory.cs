@@ -61,13 +61,7 @@ public class Inventory : IMessageBus
         
         return true;
     }
-
-    public void Equip(string itemKey)
-    {
-        var item = items.FirstOrDefault(item => item.ItemKey == itemKey);
-        Equip(item);
-    }
-
+    
     public void Equip(Item item)
     {
         item.SetEquip(true);

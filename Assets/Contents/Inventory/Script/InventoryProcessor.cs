@@ -22,7 +22,7 @@ public class InventoryProcessor : Processor
         panel.MessageBus.Subscribe<UIMsg.InventoryChangeTabMsg>(OnInventoryChangeTabMsg);
         panel.OnSetPanelDatasAction += OnSetPanelData;
 
-        activateTabType = ItemSlotType.RHand;
+        activateTabType = ItemSlotType.MainWeapon;
         RefreshInventoryPanel();
     }
 

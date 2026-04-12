@@ -11,7 +11,7 @@ public class UIInventoryTabPanelElement : PanelElement
 
     void Awake()
     {
-        var count = Mathf.Min(tabSlots.Length, EnumLogic.ItemTypes.Length);
+        var count = Mathf.Min(tabSlots.Length, EnumLogic.ItemSlotTypes.Length);
         for (var i = 0; i < count; i++)
         {
             var slot = tabSlots[i];
@@ -36,10 +36,10 @@ public class UIInventoryTabPanelElement : PanelElement
     {
         base.Initialize(panel, initData);
 
-        var count = Mathf.Min(tabSlots.Length, EnumLogic.ItemTypes.Length);
+        var count = Mathf.Min(tabSlots.Length, EnumLogic.ItemSlotTypes.Length);
         for (var i = 0; i < count; i++)
         {
-            tabSlots[i].tabName.text = EnumLogic.GetItemName(EnumLogic.ItemTypes[i]);
+            tabSlots[i].tabName.text = EnumLogic.GetItemSlotName(EnumLogic.ItemSlotTypes[i]);
         }
     }
 

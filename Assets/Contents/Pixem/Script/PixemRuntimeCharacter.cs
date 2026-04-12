@@ -175,6 +175,18 @@ public class PixemRuntimeCharacter : MonoBehaviour
         return true;
     }
 
+    public bool UnequipPart(PixemPartType partType)
+    {
+        if (!ResetToInitial(partType))
+        {
+            Debug.LogWarning($"Cannot unequip Pixem part because the initial option is missing. Part={partType}", this);
+            return false;
+        }
+
+        SyncSprites(partType, true);
+        return true;
+    }
+
     public async UniTask<bool> EquipPartAsync(PixemPartType partType, string addressKey)
     {
         PixemRuntimePartOption option = await _catalog.LoadOptionAsync(partType, GetOptionEntries(partType), addressKey);
@@ -331,19 +343,22 @@ public class PixemRuntimeCharacter : MonoBehaviour
         }
     }
 
-    private void ResetToInitial(PixemPartType partType)
+    private bool ResetToInitial(PixemPartType partType)
     {
         string addressKey = initialLoadout.GetAddressKey(partType);
         if (string.IsNullOrEmpty(addressKey))
         {
-            return;
+            return false;
         }
 
         PixemRuntimePartOption option = _catalog.LoadOption(partType, GetOptionEntries(partType), addressKey);
         if (option != null)
         {
             _equippedOptions[partType] = option;
+            return true;
         }
+
+        return false;
     }
 
     private void CaptureInitialLoadoutFromBindings()

@@ -1,5 +1,11 @@
 using Tables;
 
+
+// NOTE : model에서는 Bow - Shield가 같은 part로 취급한다. ( 장착-해제 시 교체된다. )
+// 정의한 기획에는 Bow - Shield는 동시 장착이 된다. ( MainWeapon / SubWeaponm )
+// 결정 필요 : Bow - Shield 동시 장착 가능하게 할지? 
+// -> 1. 양손무기 개념을 추가한다
+// -> 2. 모델 규칙을 바꾼다.
 public class EquipmentPopupProcessor : Processor
 {
     EquipmentPopup equipmentPopup;
@@ -10,6 +16,7 @@ public class EquipmentPopupProcessor : Processor
     PlayerData targetPlayerData;
     Item selectedPlayer;
     Bag bag;
+    ItemSlotType activateTabType = ItemSlotType.MainWeapon;
     
     public override void Initialize(IInitData initData = null)
     {
@@ -31,6 +38,7 @@ public class EquipmentPopupProcessor : Processor
         equipmentPopup.MessageBus.Subscribe<UIMsg.SelectEquipItemMsg>(SelectEquipItem);
         equipmentPopup.MessageBus.Subscribe<UIMsg.SelectTeamLineItemMsg>(SelectTeamLineItem);
         equipmentPopup.MessageBus.Subscribe<UIMsg.SelectInventoryItemMsg>(SelectInventoryItem);
+        equipmentPopup.MessageBus.Subscribe<UIMsg.InventoryChangeTabMsg>(OnInventoryChangeTabMsg);
     }
     
     public override void Uninitialize()
@@ -40,6 +48,7 @@ public class EquipmentPopupProcessor : Processor
         equipmentPopup.MessageBus.Unsubscribe<UIMsg.SelectEquipItemMsg>(SelectEquipItem);
         equipmentPopup.MessageBus.Unsubscribe<UIMsg.SelectTeamLineItemMsg>(SelectTeamLineItem);
         equipmentPopup.MessageBus.Unsubscribe<UIMsg.SelectInventoryItemMsg>(SelectInventoryItem);
+        equipmentPopup.MessageBus.Unsubscribe<UIMsg.InventoryChangeTabMsg>(OnInventoryChangeTabMsg);
         
         base.Uninitialize();
     }
@@ -48,9 +57,10 @@ public class EquipmentPopupProcessor : Processor
     {
         playerStorage = equipmentPopup.GetTargetPanelDatas<PlayerStorage>();
         bag = equipmentPopup.GetTargetPanelDatas<Bag>();
-        uiInventoryPanelElement.SetItemType(ItemSlotType.RHand);
+        activateTabType = ItemSlotType.MainWeapon;
         
         uiEquipmentPanelElement.SetStorageBag(bag);
+        RefreshInventoryPanel();
     }
 
     void OnUnsetPanelDatasAction()
@@ -102,6 +112,17 @@ public class EquipmentPopupProcessor : Processor
         }
         
         targetPlayerData.Equipment.TryEquipItem(msg.Item);
+    }
+
+    void OnInventoryChangeTabMsg(UIMsg.InventoryChangeTabMsg msg)
+    {
+        activateTabType = msg.ItemSlotType;
+        RefreshInventoryPanel();
+    }
+
+    void RefreshInventoryPanel()
+    {
+        uiInventoryPanelElement.SetItemType(activateTabType);
     }
     
     void EquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)

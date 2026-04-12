@@ -1,3 +1,4 @@
+using Tables;
 using UnityEngine;
 
 public class PlayerModelProcessor : Processor
@@ -20,6 +21,28 @@ public class PlayerModelProcessor : Processor
 
         InitStateType();
         InitSkin();
+    }
+
+    public override void Uninitialize()
+    {
+        if (Entity.MessageBus != null)
+        {
+            Entity.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(OnEquipmentEquip);
+            Entity.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
+        }
+        
+        base.Uninitialize();
+    }
+
+    public override void Ready()
+    {
+        base.Ready();
+        
+        if (Entity.MessageBus != null)
+        {
+            Entity.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(OnEquipmentEquip);
+            Entity.MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
+        }
     }
 
     void InitSkin()
@@ -83,7 +106,6 @@ public class PlayerModelProcessor : Processor
     }
     
     void SetAnyStateTrigger()
-    
     {
         character.Animator.SetTrigger(AnimatorParameters.AnyStateTrigger);
     }
@@ -91,6 +113,22 @@ public class PlayerModelProcessor : Processor
     public void PlayAttack()
     {
         character.Animator.SetTrigger(AnimatorParameters.AttackTrigger);
+    }
+
+    void OnEquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
+    {
+        var pixemPartType = msg.Item.ItemData.itemType.ToPixemPartType();
+        character.EquipPart(pixemPartType, msg.Item.ItemData.equipPath);
+    }
+
+    void OnUnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
+    {
+        var itemTypes = msg.Item.ItemData.itemSlotType.ToItemTypes();
+        foreach (var itemType in itemTypes)
+        {
+            var pixemPartType = itemType.ToPixemPartType();
+            character.UnequipPart(pixemPartType);
+        }
     }
     
     static class AnimatorParameters

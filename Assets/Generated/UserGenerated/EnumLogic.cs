@@ -14,13 +14,27 @@ namespace Tables
         
         static string[] statNames;
         static string[] itemNames;
+        static string[] itemSlotNames;
         
         public static void CachingTable()
         {
             CachingStat();
             CachingItem();
+            CachingItemSlot();
         }
 
+        static void CachingItemSlot()
+        {
+            var max = ItemSlotTypes.Max(v => (int)v);
+            
+            itemSlotNames = new string[max + 1];
+
+            foreach (var v in ItemSlotTypes)
+            {
+                itemSlotNames[(int)v] = v.ToString();
+            }
+        }
+        
         static void CachingStat()
         {
             var max = StatTypes.Max(v => (int)v);
@@ -47,7 +61,8 @@ namespace Tables
         
         public static string GetStatName(StatType statType) => statNames[(int)statType];
         public static string GetItemName(ItemType itemType) => itemNames[(int)itemType];
-        
+        public static string GetItemSlotName(ItemSlotType itemSlotType) => itemSlotNames[(int)itemSlotType];
+
         #endregion
     }
 }

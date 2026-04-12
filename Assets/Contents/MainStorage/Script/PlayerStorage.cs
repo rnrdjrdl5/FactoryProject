@@ -73,26 +73,6 @@ public class PlayerStorage : IEntityData, IMessageBus
         return inventory.TryRemoveItem(itemKey, amount);
     }
 
-    public void Equip(string itemKey)
-    {
-        inventory.Equip(itemKey);
-    }
-
-    public void Equip(Item item)
-    {
-        inventory.Equip(item);
-    }
-
-    public void Unequip(string itemKey)
-    {
-        inventory.Unequip(itemKey);
-    }
-
-    public void Unequip(Item item)
-    {
-        inventory.Unequip(item);
-    }
-
     public void CreateAndAddPlayerData(long playerUid, string playerKey)
     {
         playerDataByKey.TryAdd(playerUid, PlayerData.Create(MessageBus, playerKey, playerUid, PlayerOriginType.PlayerOwned));
