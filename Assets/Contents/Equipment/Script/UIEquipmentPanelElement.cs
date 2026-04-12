@@ -75,7 +75,7 @@ public class UIEquipmentPanelElement : PanelElement
 
                 else
                 {
-                    slot.ui.gameObject.SetActive(false);
+                    slot.ui.UpdateEmptyItemData();
                 }
             }
             else
@@ -88,7 +88,7 @@ public class UIEquipmentPanelElement : PanelElement
                 }
                 else
                 {
-                    slot.ui.gameObject.SetActive(false);
+                    slot.ui.UpdateEmptyItemData();
                 }
             }
         }

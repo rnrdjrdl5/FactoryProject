@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Tables;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -8,14 +11,20 @@ using UnityEngine.UI;
 public class UIInventoryTabPanelElement : PanelElement
 {
     [SerializeField] TabSlot[] tabSlots;
+    [SerializeField] ItemSlotType[] withoutItemSlot;
+
+    readonly List<ItemSlotType> targetItemSlotTypes = new();
 
     void Awake()
     {
-        var count = Mathf.Min(tabSlots.Length, EnumLogic.ItemSlotTypes.Length);
+        targetItemSlotTypes.Clear();
+        targetItemSlotTypes.AddRange( EnumLogic.ItemSlotTypes.Except(withoutItemSlot));
+        
+        var count = Mathf.Min(tabSlots.Length, targetItemSlotTypes.Count);
         for (var i = 0; i < count; i++)
         {
             var slot = tabSlots[i];
-            var itemSlotType = EnumLogic.ItemSlotTypes[i];
+            var itemSlotType = targetItemSlotTypes[i];
             slot.cachedAction = () => OnClickTab(itemSlotType);
             slot.button.onClick.AddListener(slot.cachedAction);
         }
@@ -36,10 +45,10 @@ public class UIInventoryTabPanelElement : PanelElement
     {
         base.Initialize(panel, initData);
 
-        var count = Mathf.Min(tabSlots.Length, EnumLogic.ItemSlotTypes.Length);
+        var count = Mathf.Min(tabSlots.Length, targetItemSlotTypes.Count);
         for (var i = 0; i < count; i++)
         {
-            tabSlots[i].tabName.text = EnumLogic.GetItemSlotName(EnumLogic.ItemSlotTypes[i]);
+            tabSlots[i].tabName.text = EnumLogic.GetItemSlotName(targetItemSlotTypes[i]);
         }
     }
 
