@@ -74,8 +74,14 @@ public class EquipmentPopupProcessor : Processor
         {
             return;
         }
+
+        if (playerStorage.IsEquippedByPlayer(targetPlayerData, msg.Item))
+        {
+            playerStorage.TryUnequipItem(targetPlayerData, msg.Item);
+            return;
+        }
         
-        targetPlayerData.Equipment.TryEquipItem(msg.Item);
+        playerStorage.TryEquipItem(targetPlayerData, msg.Item);
     }
 
     void SelectTeamLineItem(UIMsg.SelectTeamLineItemMsg msg)
@@ -110,8 +116,14 @@ public class EquipmentPopupProcessor : Processor
         {
             return;
         }
+
+        if (playerStorage.IsEquippedByPlayer(targetPlayerData, msg.Item))
+        {
+            playerStorage.TryUnequipItem(targetPlayerData, msg.Item);
+            return;
+        }
         
-        targetPlayerData.Equipment.TryEquipItem(msg.Item);
+        playerStorage.TryEquipItem(targetPlayerData, msg.Item);
     }
 
     void OnInventoryChangeTabMsg(UIMsg.InventoryChangeTabMsg msg)

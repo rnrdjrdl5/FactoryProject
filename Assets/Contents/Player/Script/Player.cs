@@ -40,24 +40,6 @@ public class Player : Entity
         playerData = GetEntityData<PlayerData>();
         playerData.UniqueId = UniqueId;
     }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            var top = Item.Create(Tables.TablesKey.Item_Top_Top_1, 1);
-            var mainStorage = GetFromRoot<MainStorage>();
-            var bag = mainStorage.GetEntityData<Bag>();
-            var topInventory = bag.GetInventory(ItemSlotType.Top);
-            topInventory.AddItem(top);
-            
-            var item = topInventory.Items.FirstOrDefault();
-            if (item != null)
-            {
-                playerData.Equipment.TryEquipItem(item);
-            }
-        }
-    }
 }
 
 public class PlayerInitData : IInitData , IUniqueId, IPositionData

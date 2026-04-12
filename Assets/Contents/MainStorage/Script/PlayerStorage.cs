@@ -8,10 +8,12 @@ public class PlayerStorage : IEntityData, IMessageBus
 
     [JsonProperty] Dictionary<long, PlayerData> playerDataByKey = new();
     [JsonProperty] Dictionary<long, long> itemIdToPlayerId = new();
+    [JsonProperty] Dictionary<long, long> equipItemIdToPlayerId = new();
     [JsonProperty] Inventory inventory;
 
     public IReadOnlyDictionary<long, PlayerData> PlayerDataByKey => playerDataByKey;
     public IReadOnlyDictionary<long, long> ItemIdToPlayerId => itemIdToPlayerId;
+    public IReadOnlyDictionary<long, long> EquipItemIdToPlayerId => equipItemIdToPlayerId;
     public IReadOnlyList<Item> PlayerItem => inventory?.Items;
     public Inventory PlayerInventory => inventory;
     
@@ -20,6 +22,7 @@ public class PlayerStorage : IEntityData, IMessageBus
     {
         playerDataByKey.Clear();
         itemIdToPlayerId.Clear();
+        equipItemIdToPlayerId.Clear();
 
         if (inventory == null)
         {
@@ -40,6 +43,7 @@ public class PlayerStorage : IEntityData, IMessageBus
 
         playerDataByKey.Clear();
         itemIdToPlayerId.Clear();
+        equipItemIdToPlayerId.Clear();
         inventory?.Uninitialize();
     }
 
@@ -103,6 +107,89 @@ public class PlayerStorage : IEntityData, IMessageBus
     public void RemoveFromItemUid(long itemUid)
     {
         itemIdToPlayerId.Remove(itemUid);
+    }
+
+    public bool TryGetPlayerIdByEquipItemId(long itemUid, out long playerId)
+    {
+        return equipItemIdToPlayerId.TryGetValue(itemUid, out playerId);
+    }
+
+    public void AddEquipItemToPlayerId(long itemUid, long playerUid)
+    {
+        equipItemIdToPlayerId[itemUid] = playerUid;
+    }
+
+    public void RemoveEquipItemUid(long itemUid)
+    {
+        equipItemIdToPlayerId.Remove(itemUid);
+    }
+
+    public bool TryEquipItem(PlayerData targetPlayerData, Item item)
+    {
+        if (targetPlayerData == null || item == null)
+        {
+            return false;
+        }
+
+        var result = Tables.Item.TryCanEquip(item.ItemKey, out var canEquip);
+        if (!result || !canEquip)
+        {
+            return false;
+        }
+
+        targetPlayerData.Equipment.TryGetEquipUid(item.ItemData.itemSlotType, out var previousItem);
+
+        if (equipItemIdToPlayerId.TryGetValue(item.UniqueId, out var equippedPlayerUid)
+            && equippedPlayerUid != targetPlayerData.UniqueId
+            && playerDataByKey.TryGetValue(equippedPlayerUid, out var equippedPlayerData))
+        {
+            equippedPlayerData.Equipment.TryUnequipItem(item);
+            equipItemIdToPlayerId.Remove(item.UniqueId);
+        }
+
+        if (!targetPlayerData.Equipment.TryEquipItem(item))
+        {
+            return false;
+        }
+
+        if (previousItem != null && previousItem.UniqueId != item.UniqueId)
+        {
+            equipItemIdToPlayerId.Remove(previousItem.UniqueId);
+        }
+
+        equipItemIdToPlayerId[item.UniqueId] = targetPlayerData.UniqueId;
+        return true;
+    }
+
+    public bool IsEquippedByPlayer(PlayerData targetPlayerData, Item item)
+    {
+        if (targetPlayerData == null || item == null)
+        {
+            return false;
+        }
+
+        if (!targetPlayerData.Equipment.TryGetEquipUid(item.ItemData.itemSlotType, out var equippedItem))
+        {
+            return false;
+        }
+
+        return equippedItem.UniqueId == item.UniqueId;
+    }
+
+    public bool TryUnequipItem(PlayerData targetPlayerData, Item item)
+    {
+        if (!IsEquippedByPlayer(targetPlayerData, item))
+        {
+            return false;
+        }
+
+        if (!targetPlayerData.Equipment.TryUnequipItem(item))
+        {
+            return false;
+        }
+
+        equipItemIdToPlayerId.Remove(item.UniqueId);
+        return true;
     }
 
     public bool TryGetPlayerDataByPlayerUid(long playerUid, out PlayerData playerData)
