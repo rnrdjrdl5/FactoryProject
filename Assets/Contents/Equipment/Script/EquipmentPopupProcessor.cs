@@ -12,6 +12,7 @@ public class EquipmentPopupProcessor : Processor
     UIEquipmentPanelElement uiEquipmentPanelElement;
     UIInventoryPanelElement uiInventoryPanelElement;
     UIStatPanelElement uiStatPanelElement;
+    UIPixemCharacterPreviewPanelElement uiPixemCharacterPreviewPanelElement;
     PlayerStorage playerStorage;
     PlayerData targetPlayerData;
     Item selectedPlayer;
@@ -29,6 +30,7 @@ public class EquipmentPopupProcessor : Processor
         uiEquipmentPanelElement = equipmentPopup.GetPanelElement<UIEquipmentPanelElement>();
         uiInventoryPanelElement = equipmentPopup.GetPanelElement<UIInventoryPanelElement>();
         uiStatPanelElement = equipmentPopup.GetPanelElement<UIStatPanelElement>();
+        uiPixemCharacterPreviewPanelElement = equipmentPopup.GetPanelElement<UIPixemCharacterPreviewPanelElement>();
     }
 
     public override void Ready()
@@ -43,6 +45,8 @@ public class EquipmentPopupProcessor : Processor
     
     public override void Uninitialize()
     {
+        ClearTargetPlayerData();
+
         equipmentPopup.OnSetPanelDatasAction -= OnSetPanelDatasAction;
         equipmentPopup.OnUnsetPanelDatasAction -= OnUnsetPanelDatasAction;
         equipmentPopup.MessageBus.Unsubscribe<UIMsg.SelectEquipItemMsg>(SelectEquipItem);
@@ -65,7 +69,9 @@ public class EquipmentPopupProcessor : Processor
 
     void OnUnsetPanelDatasAction()
     {
+        ClearTargetPlayerData();
         playerStorage = null;
+        uiPixemCharacterPreviewPanelElement?.Clear();
     }
 
     void SelectEquipItem(UIMsg.SelectEquipItemMsg msg)
@@ -87,20 +93,21 @@ public class EquipmentPopupProcessor : Processor
     void SelectTeamLineItem(UIMsg.SelectTeamLineItemMsg msg)
     {
         selectedPlayer = msg.Item;
+        if (playerStorage == null || msg.Item == null)
+        {
+            return;
+        }
+
         if (!playerStorage.TryGetPlayerDataByItemUid(msg.Item.UniqueId, out var nextPlayerData))
         {
             return;
         }
 
         uiEquipmentPanelElement.SetPlayerData(null, null);
-        if (targetPlayerData != null)
-        {
-            targetPlayerData.Equipment.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
-            targetPlayerData.Equipment.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
-        }
+        ClearTargetPlayerData();
 
         targetPlayerData = nextPlayerData;
-        if (targetPlayerData != null)
+        if (targetPlayerData?.Equipment?.MessageBus != null)
         {
             targetPlayerData.Equipment.MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
             targetPlayerData.Equipment.MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
@@ -108,6 +115,7 @@ public class EquipmentPopupProcessor : Processor
         
         uiEquipmentPanelElement.SetPlayerData(targetPlayerData, msg.Item);
         uiStatPanelElement.SetTargetPanelDatas(new []{targetPlayerData});
+        uiPixemCharacterPreviewPanelElement?.SetPlayerData(targetPlayerData);
     }
 
     void SelectInventoryItem(UIMsg.SelectInventoryItemMsg msg)
@@ -135,6 +143,17 @@ public class EquipmentPopupProcessor : Processor
     void RefreshInventoryPanel()
     {
         uiInventoryPanelElement.SetItemType(activateTabType);
+    }
+
+    void ClearTargetPlayerData()
+    {
+        if (targetPlayerData?.Equipment?.MessageBus != null)
+        {
+            targetPlayerData.Equipment.MessageBus.Unsubscribe<EntityDataMsg.EquipmentEquipMsg>(EquipmentEquip);
+            targetPlayerData.Equipment.MessageBus.Unsubscribe<EntityDataMsg.UnequipmentEquipMsg>(UnequipmentEquip);
+        }
+
+        targetPlayerData = null;
     }
     
     void EquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)

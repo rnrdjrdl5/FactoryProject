@@ -7,6 +7,7 @@ public class PlayerModelProcessor : Processor
     public PixemAnimationType StateType => stateType;
 
     Player player;
+    PlayerData playerData;
     PixemRuntimeCharacter character;
     AttackType attackType;
     PixemAnimationType stateType;
@@ -17,6 +18,7 @@ public class PlayerModelProcessor : Processor
         base.Initialize(initData);
 
         player = Entity as Player;
+        playerData = Entity.GetEntityData<PlayerData>();
         character = player.View.Character;
 
         InitStateType();
@@ -47,11 +49,7 @@ public class PlayerModelProcessor : Processor
 
     void InitSkin()
     {
-        var skinData = Tables.Skin.Get(player.TableData.skinKey);
-        
-        character.EquipPart(PixemPartType.Body, skinData.bodyKey);
-        character.EquipPart(PixemPartType.FaceAcc1, skinData.eyeKey);
-        character.EquipPart(PixemPartType.Hair, skinData.hairKey);
+        PixemCharacterModelApplier.ApplyBaseSkin(playerData, character);
     }
     
     void InitStateType()
@@ -117,18 +115,12 @@ public class PlayerModelProcessor : Processor
 
     void OnEquipmentEquip(EntityDataMsg.EquipmentEquipMsg msg)
     {
-        var pixemPartType = msg.Item.ItemData.itemType.ToPixemPartType();
-        character.EquipPart(pixemPartType, msg.Item.ItemData.equipPath);
+        PixemCharacterModelApplier.ApplyEquipmentItem(msg.Item, character);
     }
 
     void OnUnequipmentEquip(EntityDataMsg.UnequipmentEquipMsg msg)
     {
-        var itemTypes = msg.Item.ItemData.itemSlotType.ToItemTypes();
-        foreach (var itemType in itemTypes)
-        {
-            var pixemPartType = itemType.ToPixemPartType();
-            character.UnequipPart(pixemPartType);
-        }
+        PixemCharacterModelApplier.UnequipEquipmentItem(msg.Item, character);
     }
     
     static class AnimatorParameters
