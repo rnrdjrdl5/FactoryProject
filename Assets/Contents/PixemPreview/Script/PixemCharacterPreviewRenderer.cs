@@ -6,6 +6,7 @@ public class PixemCharacterPreviewRenderer : MonoBehaviour
     [SerializeField] RenderTexture renderTexture;
     [SerializeField] PixemRuntimeCharacter character;
     [SerializeField] bool renderOnEnable;
+    [SerializeField] bool rewindAnimationToFirstFrame = true;
 
     PlayerData targetPlayerData;
 
@@ -74,6 +75,8 @@ public class PixemCharacterPreviewRenderer : MonoBehaviour
             return;
         }
 
+        RewindAnimationToFirstFrame();
+
         previewCamera.enabled = false;
         previewCamera.targetTexture = renderTexture;
         previewCamera.Render();
@@ -128,9 +131,22 @@ public class PixemCharacterPreviewRenderer : MonoBehaviour
             return;
         }
 
-        RenderTexture previous = RenderTexture.active;
+        var previous = RenderTexture.active;
         RenderTexture.active = renderTexture;
         GL.Clear(true, true, Color.clear);
         RenderTexture.active = previous;
+    }
+
+    void RewindAnimationToFirstFrame()
+    {
+        if (!rewindAnimationToFirstFrame || character?.Animator == null)
+        {
+            return;
+        }
+
+        var stateInfo = character.Animator.GetCurrentAnimatorStateInfo(0);
+        character.Animator.Play(stateInfo.fullPathHash, 0, 0f);
+        character.Animator.Update(0f);
+        character.SyncAllSprites();
     }
 }

@@ -13,6 +13,7 @@ public class EquipmentPopupProcessor : Processor
     UIInventoryPanelElement uiInventoryPanelElement;
     UIStatPanelElement uiStatPanelElement;
     UIPixemCharacterPreviewPanelElement uiPixemCharacterPreviewPanelElement;
+    PixemCharacterPreviewRenderer pixemCharacterPreviewRenderer;
     PlayerStorage playerStorage;
     PlayerData targetPlayerData;
     Item selectedPlayer;
@@ -31,6 +32,7 @@ public class EquipmentPopupProcessor : Processor
         uiInventoryPanelElement = equipmentPopup.GetPanelElement<UIInventoryPanelElement>();
         uiStatPanelElement = equipmentPopup.GetPanelElement<UIStatPanelElement>();
         uiPixemCharacterPreviewPanelElement = equipmentPopup.GetPanelElement<UIPixemCharacterPreviewPanelElement>();
+        pixemCharacterPreviewRenderer = equipmentPopup.View?.PixemCharacterPreviewRenderer;
     }
 
     public override void Ready()
@@ -45,6 +47,7 @@ public class EquipmentPopupProcessor : Processor
     
     public override void Uninitialize()
     {
+        ClearPreview();
         ClearTargetPlayerData();
 
         equipmentPopup.OnSetPanelDatasAction -= OnSetPanelDatasAction;
@@ -65,13 +68,14 @@ public class EquipmentPopupProcessor : Processor
         
         uiEquipmentPanelElement.SetStorageBag(bag);
         RefreshInventoryPanel();
+        BindPreviewTexture();
     }
 
     void OnUnsetPanelDatasAction()
     {
         ClearTargetPlayerData();
         playerStorage = null;
-        uiPixemCharacterPreviewPanelElement?.Clear();
+        ClearPreview();
     }
 
     void SelectEquipItem(UIMsg.SelectEquipItemMsg msg)
@@ -115,7 +119,7 @@ public class EquipmentPopupProcessor : Processor
         
         uiEquipmentPanelElement.SetPlayerData(targetPlayerData, msg.Item);
         uiStatPanelElement.SetTargetPanelDatas(new []{targetPlayerData});
-        uiPixemCharacterPreviewPanelElement?.SetPlayerData(targetPlayerData);
+        SetPreviewPlayerData(targetPlayerData);
     }
 
     void SelectInventoryItem(UIMsg.SelectInventoryItemMsg msg)
@@ -166,5 +170,22 @@ public class EquipmentPopupProcessor : Processor
     {
         uiEquipmentPanelElement.RefreshUI();
         uiInventoryPanelElement.RefreshUI();
+    }
+
+    void BindPreviewTexture()
+    {
+        uiPixemCharacterPreviewPanelElement?.SetTexture(pixemCharacterPreviewRenderer?.Texture);
+    }
+
+    void SetPreviewPlayerData(PlayerData playerData)
+    {
+        BindPreviewTexture();
+        pixemCharacterPreviewRenderer?.SetPlayerData(playerData);
+    }
+
+    void ClearPreview()
+    {
+        pixemCharacterPreviewRenderer?.Clear();
+        uiPixemCharacterPreviewPanelElement?.Clear();
     }
 }
