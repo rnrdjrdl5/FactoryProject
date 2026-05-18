@@ -15,12 +15,22 @@ public class GlobalActionProcessor : Processor
 
     public void OpenTeam()
     {
+        OpenTeam(default);
+    }
+
+    public void OpenTeam(ContentInputContext<TeamInputType> contentInputContext)
+    {
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var teamPopup = panelAbility.CreatePanel<TeamPopup>(TeamPopup.PrefabPath);
         teamPopup.SetTargetData(mainStorage, mainStorage.MessageBus);
     }
 
     public void OpenEquipment()
+    {
+        OpenEquipment(default);
+    }
+
+    public void OpenEquipment(ContentInputContext<EquipmentInputType> contentInputContext)
     {
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var equipmentPopup = panelAbility.CreatePanel<EquipmentPopup>(EquipmentPopup.PrefabPath);
@@ -32,6 +42,11 @@ public class GlobalActionProcessor : Processor
     }
 
     public void OpenInventory()
+    {
+        OpenInventory(default);
+    }
+
+    public void OpenInventory(ContentInputContext<InventoryInputType> contentInputContext)
     {
         var panelAbility = Realm.GetAbility<PanelAbility>();
         var inventoryPopup = panelAbility.CreatePanel<InventoryPopup>(InventoryPopup.PrefabPath);
