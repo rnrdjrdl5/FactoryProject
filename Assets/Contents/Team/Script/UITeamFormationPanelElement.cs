@@ -24,6 +24,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
         {
             teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
             teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+            teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
             teamStorage.MessageBus.Subscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
         }
 
@@ -38,6 +39,7 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
             {
                 teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationAddedMsg>(OnTeamFormationAdded);
                 teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationRemovedMsg>(OnTeamFormationRemoved);
+                teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamFormationChangedMsg>(OnTeamFormationChanged);
                 teamStorage.MessageBus.Unsubscribe<EntityDataMsg.TeamSelectedFormationChangedMsg>(OnTeamSelectedFormationChanged);
             }
         }
@@ -56,6 +58,14 @@ public class UITeamFormationPanelElement : PanelElement , IEnhancedScrollerDeleg
     void OnTeamFormationRemoved(EntityDataMsg.TeamFormationRemovedMsg msg)
     {
         if (msg.TeamStorage != teamStorage)
+            return;
+
+        RefreshUI();
+    }
+
+    void OnTeamFormationChanged(EntityDataMsg.TeamFormationChangedMsg msg)
+    {
+        if (teamStorage == null || msg.Formation == null || !teamStorage.TeamFormations.Contains(msg.Formation))
             return;
 
         RefreshUI();

@@ -18,15 +18,34 @@ public class UITeamInventoryPanelElement : PanelElement, IEnhancedScrollerDelega
     {
         base.OnSetPanelDatas();
         playerStorage = GetTargetPanelDatas<PlayerStorage>();
+        if (playerStorage?.PlayerInventory?.MessageBus != null)
+        {
+            playerStorage.PlayerInventory.MessageBus.Subscribe<EntityDataMsg.InventoryChangedMsg>(OnInventoryChanged);
+        }
         
         RefreshUI();
     }
 
     protected override void OnUnsetPanelDatas()
     {
+        if (playerStorage?.PlayerInventory?.MessageBus != null)
+        {
+            playerStorage.PlayerInventory.MessageBus.Unsubscribe<EntityDataMsg.InventoryChangedMsg>(OnInventoryChanged);
+        }
+
         playerStorage = null;
         
         base.OnUnsetPanelDatas(); 
+    }
+
+    void OnInventoryChanged(EntityDataMsg.InventoryChangedMsg msg)
+    {
+        if (playerStorage?.PlayerInventory == null || msg.Inventory != playerStorage.PlayerInventory)
+        {
+            return;
+        }
+
+        RefreshUI();
     }
 
     public override void RefreshUI()

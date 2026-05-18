@@ -42,7 +42,7 @@ public class MainRealmPlayerEntityProcessor : Processor
         if (msg.Formation != teamStorage.SelectedTeamFormation)
             return;
 
-        CreateControlledHeroTeam();
+        CreateControlledHeroTeam(true);
     }
 
     void OnTeamSelectedFormationChanged(EntityDataMsg.TeamSelectedFormationChangedMsg msg)
@@ -55,6 +55,11 @@ public class MainRealmPlayerEntityProcessor : Processor
 
     public void CreateControlledHeroTeam()
     {
+        CreateControlledHeroTeam(false);
+    }
+
+    void CreateControlledHeroTeam(bool forceRebuild)
+    {
         if (teamStorage == null)
             return;
 
@@ -62,15 +67,20 @@ public class MainRealmPlayerEntityProcessor : Processor
         if (teamFormation == null)
             return;
 
-        CreateControlledHeroTeam(teamFormation);
+        CreateControlledHeroTeam(teamFormation, forceRebuild);
     }
 
     public void CreateControlledHeroTeam(TeamFormationStorage teamFormation)
     {
+        CreateControlledHeroTeam(teamFormation, false);
+    }
+
+    void CreateControlledHeroTeam(TeamFormationStorage teamFormation, bool forceRebuild)
+    {
         if (teamFormation == null || playerStorage == null || teamProcessor == null)
             return;
 
-        if (teamProcessor.ControlledTeam?.SourceUniqueId == teamFormation.UniqueId)
+        if (!forceRebuild && teamProcessor.ControlledTeam?.SourceUniqueId == teamFormation.UniqueId)
             return;
 
         if (teamProcessor.TryGetTeam(TeamType.PlayerAI, teamFormation.UniqueId, out _))
