@@ -1,0 +1,4 @@
+interface:
+  display_name: "Folder Context MD"
+  short_description: "Draft concise folder README/AGENTS context for Codex analysis."
+  default_prompt: "Use $folder-context-md to draft a concise folder context Markdown file for Codex."
