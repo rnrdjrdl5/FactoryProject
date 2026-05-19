@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content History MD"
+  short_description: "Append Korean Content folder history."
+  default_prompt: "Use $content-history-md to append a Korean history entry under the target Content folder."
