@@ -1,4 +1,6 @@
-public class EquipmentInputLayerProcessor : BaseContentInputLayerProcessor<EquipmentInputType>
+using UnityEngine;
+
+public class EquipmentInputLayerProcessor : BaseInputLayerProcessor
 {
     GlobalActionProcessor globalActionProcessor;
 
@@ -16,34 +18,21 @@ public class EquipmentInputLayerProcessor : BaseContentInputLayerProcessor<Equip
         base.Uninitialize();
     }
 
-    protected override bool TryMapContentInput(TokenInputContext tokenInput, out ContentInputContext<EquipmentInputType> contentInput)
+    public override LayerResult ProcessInput(InputContext input)
     {
-        if (tokenInput.InputType == TokenInputType.Menu2 && tokenInput.RawContext.InputType == RawInputType.Started)
+        if (input.StateType != InputStateType.Pressed || input.KeyCode != KeyCode.F2)
         {
-            contentInput = new ContentInputContext<EquipmentInputType>(EquipmentInputType.Open, tokenInput);
-            return true;
+            return LayerResult.Pass;
         }
 
-        contentInput = default;
-        return false;
-    }
-
-    protected override LayerResult ProcessContentInput(ContentInputContext<EquipmentInputType> contentInput)
-    {
         RefreshGlobalActionProcessor();
         if (globalActionProcessor == null)
         {
             return LayerResult.Pass;
         }
 
-        switch (contentInput.InputType)
-        {
-            case EquipmentInputType.Open:
-                globalActionProcessor.OpenEquipment(contentInput);
-                return LayerResult.Consume;
-            default:
-                return LayerResult.Pass;
-        }
+        globalActionProcessor.OpenEquipment();
+        return LayerResult.Consume;
     }
 
     void RefreshGlobalActionProcessor()

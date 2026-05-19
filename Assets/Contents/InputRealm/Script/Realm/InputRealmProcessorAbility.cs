@@ -1,5 +1,5 @@
 using UnityEngine;
 
-public class InputRealmProcessorAbility : TokenInputProcessorAbility
+public class InputRealmProcessorAbility : InputProcessorAbility
 {
 }

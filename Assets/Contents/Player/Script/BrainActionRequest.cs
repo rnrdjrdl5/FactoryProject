@@ -2,34 +2,42 @@ using UnityEngine;
 
 public enum BrainActionRequestType
 {
-    Input,
+    Move,
+    Pick,
+    UseSkill,
     Intent,
 }
 
 public struct BrainActionRequest
 {
     public BrainActionRequestType RequestType { get; private set; }
-    public InputActionType InputActionType { get; private set; }
     public IntentActionType IntentActionType { get; private set; }
     public Vector2 Direction { get; private set; }
-    public ContentInputContext<PlayerInputType> ContentInputContext { get; private set; }
+    public KeyCode KeyCode { get; private set; }
 
-    public static BrainActionRequest Input(InputActionType inputActionType, Vector2 direction = default)
-    {
-        return Input(inputActionType, direction, default);
-    }
-
-    public static BrainActionRequest Input(
-        InputActionType inputActionType,
-        Vector2 direction,
-        ContentInputContext<PlayerInputType> contentInputContext)
+    public static BrainActionRequest Move(Vector2 direction = default)
     {
         return new BrainActionRequest
         {
-            RequestType = BrainActionRequestType.Input,
-            InputActionType = inputActionType,
-            Direction = direction,
-            ContentInputContext = contentInputContext
+            RequestType = BrainActionRequestType.Move,
+            Direction = direction
+        };
+    }
+
+    public static BrainActionRequest Pick()
+    {
+        return new BrainActionRequest
+        {
+            RequestType = BrainActionRequestType.Pick
+        };
+    }
+
+    public static BrainActionRequest UseSkill(KeyCode keyCode)
+    {
+        return new BrainActionRequest
+        {
+            RequestType = BrainActionRequestType.UseSkill,
+            KeyCode = keyCode
         };
     }
 

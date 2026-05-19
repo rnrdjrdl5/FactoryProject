@@ -2,42 +2,36 @@
 
 ## Summary
 
-Input is split into `Raw -> Token -> Content`.
+Input is collected into a single `InputContext` and routed through a priority layer stack.
 
 ```text
-RawInputContext
- -> TokenInputContext
-    -> ContentInputContext<TInputType>
+InputCollectorAbility
+ -> InputContext
+ -> InputProcessorAbility
+ -> BaseInputLayerProcessor.ProcessInput
 ```
 
-Framework owns raw collection, token mapping, token routing, and base layer types. Each content module owns its own content input type and input layer.
+Framework owns input collection, the input context data shape, and the layer stack. Contents own all input meaning.
 
 ## Framework Layout
 
 ```text
 Assets/DoughFramework/Framework/Script/Input
-├─ Raw
-│  ├─ InputCollectorAbility.cs
-│  ├─ RawInputContext.cs
-│  ├─ RawInputRequest.cs
-│  ├─ RawInputStateData.cs
-│  └─ RawInputType.cs
-├─ Token
-│  ├─ TokenInputBindingData.cs
-│  ├─ TokenInputContext.cs
-│  ├─ TokenInputMapperProcessor.cs
-│  ├─ TokenInputProcessorAbility.cs
-│  ├─ TokenInputRouterProcessor.cs
-│  └─ TokenInputType.cs
-├─ Layer
-│  ├─ BaseTokenInputLayerProcessor.cs
-│  └─ BasePopupTokenInputLayerProcessor.cs
-├─ Content
-│  ├─ ContentInputContext.cs
-│  └─ BaseContentInputLayerProcessor.cs
-└─ Realm
-   └─ FrameworkInputRealm.cs
+├─ InputContext.cs
+├─ InputStateType.cs
+├─ InputCollectorAbility.cs
+├─ InputProcessorAbility.cs
+└─ BaseInputLayerProcessor.cs
 ```
+
+`InputContext` contains:
+
+| Field | Meaning |
+| --- | --- |
+| `KeyCode` | Source key or button. `KeyCode.None` is used for axis input. |
+| `StateType` | `Pressed`, `Held`, or `Released`. |
+| `Axis` | Current horizontal/vertical axis value. |
+| `ScreenPosition` | Current mouse position. |
 
 ## Content Layout
 
@@ -49,58 +43,35 @@ Assets/Contents/InputRealm/Script/Realm
 
 ```text
 Assets/Contents/Player/Script/Input
-├─ PlayerInputType.cs
 └─ PlayerInputLayerProcessor.cs
 ```
 
 ```text
 Assets/Contents/Team/Script/Input
-├─ TeamInputType.cs
 ├─ TeamInputLayerProcessor.cs
 └─ TeamPopupInputLayerProcessor.cs
 ```
 
 ```text
 Assets/Contents/Equipment/Script/Input
-├─ EquipmentInputType.cs
 ├─ EquipmentInputLayerProcessor.cs
 └─ EquipmentPopupInputLayerProcessor.cs
 ```
 
 ```text
 Assets/Contents/Inventory/Script/Input
-├─ InventoryInputType.cs
 ├─ InventoryInputLayerProcessor.cs
 └─ InventoryPopupInputLayerProcessor.cs
 ```
 
-## Default Token Bindings
-
-`TokenInputBindingData` maps platform keys to neutral framework token input.
-
-| KeyCode | TokenInputType |
-| --- | --- |
-| `Mouse0` | `PointerPrimary` |
-| `Mouse1` | `PointerSecondary` |
-| `Z` | `Action1` |
-| `Q` | `Action2` |
-| `E` | `Action3` |
-| `R` | `Action4` |
-| `Space` | `Action5` |
-| `LeftShift` | `Action6` |
-| `F1` | `Menu1` |
-| `F2` | `Menu2` |
-| `I` | `Menu3` |
-| `Escape` | `Cancel` |
-
-Axis input is emitted as `TokenInputType.MoveAxis`.
-
 ## Content Input Ownership
 
-- Player input is handled by `PlayerInputLayerProcessor`.
-- Team open input is handled by `TeamInputLayerProcessor`.
-- Equipment open input is handled by `EquipmentInputLayerProcessor`.
-- Inventory open input is handled by `InventoryInputLayerProcessor`.
-- Popup close input is handled by each popup's input layer.
+- Player movement uses axis input from `KeyCode.None`.
+- Player pick uses `KeyCode.Z`.
+- Player skills use skill bindings stored by `KeyCode`.
+- Team open uses `KeyCode.F1`.
+- Equipment open uses `KeyCode.F2`.
+- Inventory open uses `KeyCode.I`.
+- Popup close uses `KeyCode.Escape` or the popup's own menu key.
 
-`InputRealm` only provides the token input layer stack. It does not own content input mapping.
+Layers return `Pass` to continue routing, `Consume` after handling input, and `Block` to stop lower-priority layers.

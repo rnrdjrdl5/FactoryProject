@@ -1,21 +1,16 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using UnityEngine;
 
 public class InputActionSkillData : IEntityData, IMessageBus
 {
     [JsonIgnore] public MessageBus MessageBus { get; set; }
 
-    [JsonProperty] Dictionary<InputActionType, string> skillKeyByInputAction = new();
+    [JsonProperty] Dictionary<KeyCode, string> skillKeyByKeyCode = new();
 
     public void Initialize(IInitData initData = null)
     {
-        skillKeyByInputAction.Clear();
-
-        foreach (InputActionType inputActionType in Enum.GetValues(typeof(InputActionType)))
-        {
-            skillKeyByInputAction[inputActionType] = string.Empty;
-        }
+        skillKeyByKeyCode.Clear();
     }
 
     public void Uninitialize()
@@ -26,14 +21,14 @@ public class InputActionSkillData : IEntityData, IMessageBus
     {
     }
 
-    public void SetSkillKey(InputActionType inputActionType, string skillKey)
+    public void SetSkillKey(KeyCode keyCode, string skillKey)
     {
-        skillKeyByInputAction[inputActionType] = skillKey ?? string.Empty;
+        skillKeyByKeyCode[keyCode] = skillKey ?? string.Empty;
     }
 
-    public bool TryGetSkillKey(InputActionType inputActionType, out string skillKey)
+    public bool TryGetSkillKey(KeyCode keyCode, out string skillKey)
     {
-        if (skillKeyByInputAction.TryGetValue(inputActionType, out skillKey) && !string.IsNullOrWhiteSpace(skillKey))
+        if (skillKeyByKeyCode.TryGetValue(keyCode, out skillKey) && !string.IsNullOrWhiteSpace(skillKey))
         {
             return true;
         }
@@ -42,13 +37,13 @@ public class InputActionSkillData : IEntityData, IMessageBus
         return false;
     }
 
-    public void ClearSkillKey(InputActionType inputActionType)
+    public void ClearSkillKey(KeyCode keyCode)
     {
-        skillKeyByInputAction[inputActionType] = string.Empty;
+        skillKeyByKeyCode[keyCode] = string.Empty;
     }
 
-    public IReadOnlyDictionary<InputActionType, string> GetAllSkillKeys()
+    public IReadOnlyDictionary<KeyCode, string> GetAllSkillKeys()
     {
-        return skillKeyByInputAction;
+        return skillKeyByKeyCode;
     }
 }

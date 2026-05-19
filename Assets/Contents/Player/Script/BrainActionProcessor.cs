@@ -46,31 +46,14 @@ public class BrainActionProcessor : Processor
     {
         switch (request.RequestType)
         {
-            case BrainActionRequestType.Input:
-                return ExecuteInputAction(request);
+            case BrainActionRequestType.Move:
+                return Move(request.Direction);
+            case BrainActionRequestType.Pick:
+                return Pick();
+            case BrainActionRequestType.UseSkill:
+                return UseSkill(request.KeyCode);
             case BrainActionRequestType.Intent:
                 return ExecuteIntentAction(request);
-            default:
-                return false;
-        }
-    }
-
-    bool ExecuteInputAction(BrainActionRequest request)
-    {
-        switch (request.InputActionType)
-        {
-            case InputActionType.Move:
-                return Move(request.Direction);
-            case InputActionType.Pick:
-                return Pick();
-            case InputActionType.MainAttack:
-            case InputActionType.SubAttack:
-            case InputActionType.Skill1:
-            case InputActionType.Skill2:
-            case InputActionType.Skill3:
-            case InputActionType.MainUtility:
-            case InputActionType.SubUtility:
-                return UseSkill(request.InputActionType);
             default:
                 return false;
         }
@@ -83,7 +66,7 @@ public class BrainActionProcessor : Processor
             case IntentActionType.FollowTarget:
                 return FollowTarget();
             case IntentActionType.UseMainAttackSkill:
-                return UseSkill(InputActionType.MainAttack);
+                return UseSkill(KeyCode.Mouse0);
             default:
                 return false;
         }
@@ -124,10 +107,10 @@ public class BrainActionProcessor : Processor
         return true;
     }
 
-    bool UseSkill(InputActionType inputActionType)
+    bool UseSkill(KeyCode keyCode)
     {
         var playerData = executionContext?.ControlledEntity?.GetEntityData<PlayerData>();
-        if (!InputActionSkillLogic.TryGetSkillKey(playerData, inputActionType, out var skillKey))
+        if (!InputActionSkillLogic.TryGetSkillKey(playerData, keyCode, out var skillKey))
         {
             return false;
         }

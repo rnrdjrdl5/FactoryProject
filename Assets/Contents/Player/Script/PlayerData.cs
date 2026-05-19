@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using UnityEngine;
 
 public class PlayerData : IEntityData, IMessageBus, IUniqueId
 {
@@ -8,7 +9,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
     [JsonProperty] public Equipment Equipment { get; private set; }
     [JsonProperty] public Faction Faction { get; private set; }
     [JsonProperty] public PlayerRuntimeData RuntimeData { get; private set; }
-    [JsonProperty] public InputBindingData InputBindingData { get; private set; }
     [JsonProperty] public InputActionSkillData InputActionSkillData { get; private set; }
     [JsonProperty] public string PlayerKey { get; private set; }
     [JsonProperty] public PlayerOriginType OriginType { get; private set; }
@@ -52,9 +52,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         RuntimeData.Initialize(initData);
         InitializeRuntimeData();
 
-        InputBindingData = new InputBindingData();
-        InputBindingData.Initialize(initData);
-
         InputActionSkillData = new InputActionSkillData();
         InputActionSkillData.Initialize(initData);
 
@@ -76,7 +73,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
         Equipment?.Uninitialize();
         Faction?.Uninitialize();
         RuntimeData?.Uninitialize();
-        InputBindingData?.Uninitialize();
         InputActionSkillData?.Uninitialize();
     }
 
@@ -112,12 +108,6 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
 
             MessageBus.Subscribe<EntityDataMsg.EquipmentEquipMsg>(OnEquipmentEquip);
             MessageBus.Subscribe<EntityDataMsg.UnequipmentEquipMsg>(OnUnequipmentEquip);
-        }
-
-        if (InputBindingData != null)
-        {
-            InputBindingData.MessageBus = MessageBus;
-            InputBindingData.OnSetMessageBus();
         }
 
         if (RuntimeData != null)
@@ -194,7 +184,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             return;
         }
 
-        InputActionSkillLogic.TrySetSkillKey(this, InputActionType.MainAttack, tableData.uniqueSkillKey);
+        InputActionSkillLogic.TrySetSkillKey(this, KeyCode.Mouse0, tableData.uniqueSkillKey);
     }
 
     void InitializeRuntimeData()
@@ -221,7 +211,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             return;
         }
 
-        InputActionSkillLogic.TrySetSkillKey(this, InputActionType.SubAttack, item.ItemData.uniqueSkillKey);
+        InputActionSkillLogic.TrySetSkillKey(this, KeyCode.Mouse1, item.ItemData.uniqueSkillKey);
     }
 
     void ClearEquippedWeaponInputAction(Item item)
@@ -231,7 +221,7 @@ public class PlayerData : IEntityData, IMessageBus, IUniqueId
             return;
         }
 
-        InputActionSkillLogic.TryClearSkillKey(this, InputActionType.SubAttack);
+        InputActionSkillLogic.TryClearSkillKey(this, KeyCode.Mouse1);
     }
 
     StatSourceKey GetEquipmentStatSourceKey(Item item)

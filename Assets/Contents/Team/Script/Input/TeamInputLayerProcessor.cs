@@ -1,4 +1,6 @@
-public class TeamInputLayerProcessor : BaseContentInputLayerProcessor<TeamInputType>
+using UnityEngine;
+
+public class TeamInputLayerProcessor : BaseInputLayerProcessor
 {
     GlobalActionProcessor globalActionProcessor;
 
@@ -16,34 +18,21 @@ public class TeamInputLayerProcessor : BaseContentInputLayerProcessor<TeamInputT
         base.Uninitialize();
     }
 
-    protected override bool TryMapContentInput(TokenInputContext tokenInput, out ContentInputContext<TeamInputType> contentInput)
+    public override LayerResult ProcessInput(InputContext input)
     {
-        if (tokenInput.InputType == TokenInputType.Menu1 && tokenInput.RawContext.InputType == RawInputType.Started)
+        if (input.StateType != InputStateType.Pressed || input.KeyCode != KeyCode.F1)
         {
-            contentInput = new ContentInputContext<TeamInputType>(TeamInputType.Open, tokenInput);
-            return true;
+            return LayerResult.Pass;
         }
 
-        contentInput = default;
-        return false;
-    }
-
-    protected override LayerResult ProcessContentInput(ContentInputContext<TeamInputType> contentInput)
-    {
         RefreshGlobalActionProcessor();
         if (globalActionProcessor == null)
         {
             return LayerResult.Pass;
         }
 
-        switch (contentInput.InputType)
-        {
-            case TeamInputType.Open:
-                globalActionProcessor.OpenTeam(contentInput);
-                return LayerResult.Consume;
-            default:
-                return LayerResult.Pass;
-        }
+        globalActionProcessor.OpenTeam();
+        return LayerResult.Consume;
     }
 
     void RefreshGlobalActionProcessor()

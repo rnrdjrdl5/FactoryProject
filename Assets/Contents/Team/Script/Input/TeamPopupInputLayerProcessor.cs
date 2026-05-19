@@ -1,7 +1,16 @@
-public class TeamPopupInputLayerProcessor : BasePopupTokenInputLayerProcessor
+using UnityEngine;
+
+public class TeamPopupInputLayerProcessor : BaseInputLayerProcessor
 {
-    protected override bool CanConsume(TokenInputType inputType)
+    public override LayerResult ProcessInput(InputContext input)
     {
-        return inputType == TokenInputType.Menu1 || inputType == TokenInputType.Cancel;
+        if (input.StateType == InputStateType.Pressed &&
+            (input.KeyCode == KeyCode.F1 || input.KeyCode == KeyCode.Escape))
+        {
+            (Entity as Panel)?.Close();
+            return LayerResult.Consume;
+        }
+
+        return LayerResult.Block;
     }
 }

@@ -25,7 +25,7 @@ public class MoveFlow : ProcessorFlow
             return;
         }
 
-        actionProcessor?.RequestAction(BrainActionRequest.Input(InputActionType.Move, new Vector2(dir.x, dir.y)));
+        actionProcessor?.RequestAction(BrainActionRequest.Move(new Vector2(dir.x, dir.y)));
     }
 
     public void SetDuration(float duration)

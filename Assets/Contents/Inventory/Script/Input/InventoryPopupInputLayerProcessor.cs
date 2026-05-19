@@ -1,7 +1,16 @@
-public class InventoryPopupInputLayerProcessor : BasePopupTokenInputLayerProcessor
+using UnityEngine;
+
+public class InventoryPopupInputLayerProcessor : BaseInputLayerProcessor
 {
-    protected override bool CanConsume(TokenInputType inputType)
+    public override LayerResult ProcessInput(InputContext input)
     {
-        return inputType == TokenInputType.Menu3 || inputType == TokenInputType.Cancel;
+        if (input.StateType == InputStateType.Pressed &&
+            (input.KeyCode == KeyCode.I || input.KeyCode == KeyCode.Escape))
+        {
+            (Entity as Panel)?.Close();
+            return LayerResult.Consume;
+        }
+
+        return LayerResult.Block;
     }
 }

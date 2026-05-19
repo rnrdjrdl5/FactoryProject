@@ -1,6 +1,8 @@
+using UnityEngine;
+
 public static class InputActionSkillLogic
 {
-    public static bool TrySetSkillKey(PlayerData playerData, InputActionType inputActionType, string skillKey)
+    public static bool TrySetSkillKey(PlayerData playerData, KeyCode keyCode, string skillKey)
     {
         if (playerData?.InputActionSkillData == null)
         {
@@ -9,7 +11,7 @@ public static class InputActionSkillLogic
 
         if (string.IsNullOrWhiteSpace(skillKey))
         {
-            playerData.InputActionSkillData.ClearSkillKey(inputActionType);
+            playerData.InputActionSkillData.ClearSkillKey(keyCode);
             return true;
         }
 
@@ -19,22 +21,22 @@ public static class InputActionSkillLogic
             return false;
         }
 
-        playerData.InputActionSkillData.SetSkillKey(inputActionType, skillKey);
+        playerData.InputActionSkillData.SetSkillKey(keyCode, skillKey);
         return true;
     }
 
-    public static bool TryClearSkillKey(PlayerData playerData, InputActionType inputActionType)
+    public static bool TryClearSkillKey(PlayerData playerData, KeyCode keyCode)
     {
         if (playerData?.InputActionSkillData == null)
         {
             return false;
         }
 
-        playerData.InputActionSkillData.ClearSkillKey(inputActionType);
+        playerData.InputActionSkillData.ClearSkillKey(keyCode);
         return true;
     }
 
-    public static bool TryGetSkillKey(PlayerData playerData, InputActionType inputActionType, out string skillKey)
+    public static bool TryGetSkillKey(PlayerData playerData, KeyCode keyCode, out string skillKey)
     {
         skillKey = string.Empty;
         if (playerData?.InputActionSkillData == null)
@@ -42,6 +44,6 @@ public static class InputActionSkillLogic
             return false;
         }
 
-        return playerData.InputActionSkillData.TryGetSkillKey(inputActionType, out skillKey);
+        return playerData.InputActionSkillData.TryGetSkillKey(keyCode, out skillKey);
     }
 }
