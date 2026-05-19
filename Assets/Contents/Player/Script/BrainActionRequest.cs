@@ -1,10 +1,5 @@
 using UnityEngine;
 
-public interface IBrainAction
-{
-    bool Execute(BrainActionExecutionContext context);
-}
-
 public struct MoveBrainAction : IBrainAction
 {
     readonly Vector2 direction;
@@ -14,14 +9,15 @@ public struct MoveBrainAction : IBrainAction
         this.direction = direction;
     }
 
-    public bool Execute(BrainActionExecutionContext context)
+    public bool Execute(BrainActionContext context)
     {
-        if (context?.MoveAbility == null)
+        var moveAbility = context?.ControlledEntity?.GetAbility<PlayerMoveAbility>();
+        if (moveAbility == null)
         {
             return false;
         }
 
-        var moveDelta = context.MoveAbility.Move(direction);
+        var moveDelta = moveAbility.Move(direction);
         BrainActionUtility.RefreshMoveAnimation(context, moveDelta);
         return true;
     }
@@ -29,14 +25,15 @@ public struct MoveBrainAction : IBrainAction
 
 public struct FollowTargetBrainAction : IBrainAction
 {
-    public bool Execute(BrainActionExecutionContext context)
+    public bool Execute(BrainActionContext context)
     {
-        if (context?.FollowAbility == null)
+        var followAbility = context?.ControlledEntity?.GetAbility<PlayerFollowAbility>();
+        if (followAbility == null)
         {
             return false;
         }
 
-        var moveDelta = context.FollowAbility.Move();
+        var moveDelta = followAbility.Move();
         BrainActionUtility.RefreshMoveAnimation(context, moveDelta);
         return true;
     }
@@ -44,14 +41,16 @@ public struct FollowTargetBrainAction : IBrainAction
 
 public struct PickBrainAction : IBrainAction
 {
-    public bool Execute(BrainActionExecutionContext context)
+    public bool Execute(BrainActionContext context)
     {
-        if (context?.PickProcessor == null)
+        var processorAbility = context?.ControlledEntity?.GetAbility<PlayerProcessorAbility>();
+        var pickProcessor = processorAbility?.GetProcessor<PlayerPickProcessor>();
+        if (pickProcessor == null)
         {
             return false;
         }
 
-        context.PickProcessor.PickItem();
+        pickProcessor.PickItem();
         return true;
     }
 }
@@ -65,7 +64,7 @@ public struct UseSkillBrainAction : IBrainAction
         this.keyCode = keyCode;
     }
 
-    public bool Execute(BrainActionExecutionContext context)
+    public bool Execute(BrainActionContext context)
     {
         var playerData = context?.ControlledEntity?.GetEntityData<PlayerData>();
         if (!InputActionSkillLogic.TryGetSkillKey(playerData, keyCode, out var skillKey))
@@ -73,13 +72,14 @@ public struct UseSkillBrainAction : IBrainAction
             return false;
         }
 
-        return context.SkillAbility != null && context.SkillAbility.TryUseSkill(skillKey);
+        var skillAbility = context.ControlledEntity.GetAbility<SkillAbility>();
+        return skillAbility != null && skillAbility.TryUseSkill(skillKey);
     }
 }
 
 public struct UseMainAttackSkillBrainAction : IBrainAction
 {
-    public bool Execute(BrainActionExecutionContext context)
+    public bool Execute(BrainActionContext context)
     {
         return new UseSkillBrainAction(KeyCode.Mouse0).Execute(context);
     }
@@ -87,9 +87,11 @@ public struct UseMainAttackSkillBrainAction : IBrainAction
 
 public static class BrainActionUtility
 {
-    public static void RefreshMoveAnimation(BrainActionExecutionContext context, Vector2 moveDelta)
+    public static void RefreshMoveAnimation(BrainActionContext context, Vector2 moveDelta)
     {
-        if (context?.ModelProcessor == null)
+        var processorAbility = context?.ControlledEntity?.GetAbility<PlayerProcessorAbility>();
+        var modelProcessor = processorAbility?.GetProcessor<PlayerModelProcessor>();
+        if (modelProcessor == null)
         {
             return;
         }
@@ -97,9 +99,9 @@ public static class BrainActionUtility
         var stateType = moveDelta.sqrMagnitude > 0f ? PixemAnimationType.Run : PixemAnimationType.Idle;
         if (moveDelta.x != 0f)
         {
-            context.ModelProcessor.SetFlip(moveDelta.x > 0f);
+            modelProcessor.SetFlip(moveDelta.x > 0f);
         }
 
-        context.ModelProcessor.SetStateType(stateType);
+        modelProcessor.SetStateType(stateType);
     }
 }
