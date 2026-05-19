@@ -1,52 +1,105 @@
 using UnityEngine;
 
-public enum BrainActionRequestType
+public interface IBrainAction
 {
-    Move,
-    Pick,
-    UseSkill,
-    Intent,
+    bool Execute(BrainActionExecutionContext context);
 }
 
-public struct BrainActionRequest
+public struct MoveBrainAction : IBrainAction
 {
-    public BrainActionRequestType RequestType { get; private set; }
-    public IntentActionType IntentActionType { get; private set; }
-    public Vector2 Direction { get; private set; }
-    public KeyCode KeyCode { get; private set; }
+    readonly Vector2 direction;
 
-    public static BrainActionRequest Move(Vector2 direction = default)
+    public MoveBrainAction(Vector2 direction = default)
     {
-        return new BrainActionRequest
-        {
-            RequestType = BrainActionRequestType.Move,
-            Direction = direction
-        };
+        this.direction = direction;
     }
 
-    public static BrainActionRequest Pick()
+    public bool Execute(BrainActionExecutionContext context)
     {
-        return new BrainActionRequest
+        if (context?.MoveAbility == null)
         {
-            RequestType = BrainActionRequestType.Pick
-        };
+            return false;
+        }
+
+        var moveDelta = context.MoveAbility.Move(direction);
+        BrainActionUtility.RefreshMoveAnimation(context, moveDelta);
+        return true;
+    }
+}
+
+public struct FollowTargetBrainAction : IBrainAction
+{
+    public bool Execute(BrainActionExecutionContext context)
+    {
+        if (context?.FollowAbility == null)
+        {
+            return false;
+        }
+
+        var moveDelta = context.FollowAbility.Move();
+        BrainActionUtility.RefreshMoveAnimation(context, moveDelta);
+        return true;
+    }
+}
+
+public struct PickBrainAction : IBrainAction
+{
+    public bool Execute(BrainActionExecutionContext context)
+    {
+        if (context?.PickProcessor == null)
+        {
+            return false;
+        }
+
+        context.PickProcessor.PickItem();
+        return true;
+    }
+}
+
+public struct UseSkillBrainAction : IBrainAction
+{
+    readonly KeyCode keyCode;
+
+    public UseSkillBrainAction(KeyCode keyCode)
+    {
+        this.keyCode = keyCode;
     }
 
-    public static BrainActionRequest UseSkill(KeyCode keyCode)
+    public bool Execute(BrainActionExecutionContext context)
     {
-        return new BrainActionRequest
+        var playerData = context?.ControlledEntity?.GetEntityData<PlayerData>();
+        if (!InputActionSkillLogic.TryGetSkillKey(playerData, keyCode, out var skillKey))
         {
-            RequestType = BrainActionRequestType.UseSkill,
-            KeyCode = keyCode
-        };
-    }
+            return false;
+        }
 
-    public static BrainActionRequest Intent(IntentActionType intentActionType)
+        return context.SkillAbility != null && context.SkillAbility.TryUseSkill(skillKey);
+    }
+}
+
+public struct UseMainAttackSkillBrainAction : IBrainAction
+{
+    public bool Execute(BrainActionExecutionContext context)
     {
-        return new BrainActionRequest
+        return new UseSkillBrainAction(KeyCode.Mouse0).Execute(context);
+    }
+}
+
+public static class BrainActionUtility
+{
+    public static void RefreshMoveAnimation(BrainActionExecutionContext context, Vector2 moveDelta)
+    {
+        if (context?.ModelProcessor == null)
         {
-            RequestType = BrainActionRequestType.Intent,
-            IntentActionType = intentActionType
-        };
+            return;
+        }
+
+        var stateType = moveDelta.sqrMagnitude > 0f ? PixemAnimationType.Run : PixemAnimationType.Idle;
+        if (moveDelta.x != 0f)
+        {
+            context.ModelProcessor.SetFlip(moveDelta.x > 0f);
+        }
+
+        context.ModelProcessor.SetStateType(stateType);
     }
 }

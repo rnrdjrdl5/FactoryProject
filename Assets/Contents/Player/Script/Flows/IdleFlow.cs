@@ -9,7 +9,7 @@ public class IdleFlow : ProcessorFlow
         base.OnEnterFlow();
 
         actionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
-        actionProcessor?.RequestAction(BrainActionRequest.Move());
+        actionProcessor?.RequestAction(new MoveBrainAction());
     }
 
     public override void OnUpdateFlow()

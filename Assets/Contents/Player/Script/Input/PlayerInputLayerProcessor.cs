@@ -8,7 +8,7 @@ public class PlayerInputLayerProcessor : BaseInputLayerProcessor
     {
         if (input.KeyCode == KeyCode.None)
         {
-            return RequestBrainAction(BrainActionRequest.Move(input.Axis));
+            return RequestBrainAction(new MoveBrainAction(input.Axis));
         }
 
         if (input.StateType != InputStateType.Pressed)
@@ -18,17 +18,18 @@ public class PlayerInputLayerProcessor : BaseInputLayerProcessor
 
         if (input.KeyCode == KeyCode.Z)
         {
-            return RequestBrainAction(BrainActionRequest.Pick());
+            return RequestBrainAction(new PickBrainAction());
         }
 
-        return RequestBrainAction(BrainActionRequest.UseSkill(input.KeyCode));
+        return RequestBrainAction(new UseSkillBrainAction(input.KeyCode));
     }
 
-    LayerResult RequestBrainAction(BrainActionRequest request)
+    LayerResult RequestBrainAction<TAction>(TAction action)
+        where TAction : struct, IBrainAction
     {
         RefreshBrainActionProcessor();
 
-        return brainActionProcessor != null && brainActionProcessor.RequestAction(request)
+        return brainActionProcessor != null && brainActionProcessor.RequestAction(action)
             ? LayerResult.Consume
             : LayerResult.Pass;
     }

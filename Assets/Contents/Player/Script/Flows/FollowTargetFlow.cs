@@ -13,6 +13,6 @@ public class FollowTargetFlow : ProcessorFlow
     {
         base.OnUpdateFlow();
 
-        actionProcessor?.RequestAction(BrainActionRequest.Intent(IntentActionType.FollowTarget));
+        actionProcessor?.RequestAction(new FollowTargetBrainAction());
     }
 }

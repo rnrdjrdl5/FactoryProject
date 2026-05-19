@@ -9,14 +9,14 @@ public class AutoAttackFlow : ProcessorFlow
         base.OnEnterFlow();
 
         actionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
-        actionProcessor?.RequestAction(BrainActionRequest.Move());
+        actionProcessor?.RequestAction(new MoveBrainAction());
     }
 
     public override void OnUpdateFlow()
     {
         base.OnUpdateFlow();
 
-        actionProcessor?.RequestAction(BrainActionRequest.Intent(IntentActionType.UseMainAttackSkill));
+        actionProcessor?.RequestAction(new UseMainAttackSkillBrainAction());
 
         if (elapsedTime >= Duration)
         {
