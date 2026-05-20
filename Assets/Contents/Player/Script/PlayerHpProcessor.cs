@@ -49,6 +49,10 @@ public class PlayerHpProcessor : Processor
     
     void DestroyPlayer()
     {
-        Realm.RemoveChild(Entity);
+        var mainRealmProcessorAbility = Realm?.GetAbility<MainRealmProcessorAbility>();
+        var teamProcessor = mainRealmProcessorAbility?.GetProcessor<MainRealmTeamProcessor>();
+        teamProcessor?.RemovePlayerFromTeams(player);
+
+        Realm.TryRemoveChild(Entity);
     }
 }
