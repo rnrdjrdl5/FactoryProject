@@ -255,7 +255,7 @@ public class MainRealmPlayerEntityProcessor : Processor
 
         for (int i = controlledTeam.Players.Count - 1; i >= 0; i--)
         {
-            Realm.RemoveChild(controlledTeam.Players[i]);
+            Realm.TryRemoveChild(controlledTeam.Players[i]);
         }
 
         teamProcessor.TryRemoveControlledTeam();
@@ -279,7 +279,7 @@ public class MainRealmPlayerEntityProcessor : Processor
     {
         for (int i = team.Players.Count - 1; i >= 0; i--)
         {
-            Realm.RemoveChild(team.Players[i]);
+            Realm.TryRemoveChild(team.Players[i]);
         }
 
         teamProcessor.TryRemoveTeam(team);

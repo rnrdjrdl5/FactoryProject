@@ -66,6 +66,21 @@ public class MainRealmTeamProcessor : Processor
         return true;
     }
 
+    public void RemovePlayerFromTeams(Player player)
+    {
+        if (player == null)
+        {
+            return;
+        }
+
+        controlledTeam?.RemovePlayer(player);
+
+        foreach (var team in teams)
+        {
+            team.RemovePlayer(player);
+        }
+    }
+
     void ClearTeams()
     {
         foreach (var team in teams)
