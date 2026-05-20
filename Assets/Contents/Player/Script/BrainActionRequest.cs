@@ -57,22 +57,16 @@ public struct PickBrainAction : IBrainAction
 
 public struct UseSkillBrainAction : IBrainAction
 {
-    readonly KeyCode keyCode;
+    readonly string skillKey;
 
-    public UseSkillBrainAction(KeyCode keyCode)
+    public UseSkillBrainAction(string skillKey)
     {
-        this.keyCode = keyCode;
+        this.skillKey = skillKey;
     }
 
     public bool Execute(BrainActionContext context)
     {
-        var playerData = context?.ControlledEntity?.GetEntityData<PlayerData>();
-        if (!InputActionSkillLogic.TryGetSkillKey(playerData, keyCode, out var skillKey))
-        {
-            return false;
-        }
-
-        var skillAbility = context.ControlledEntity.GetAbility<SkillAbility>();
+        var skillAbility = context?.ControlledEntity?.GetAbility<SkillAbility>();
         return skillAbility != null && skillAbility.TryUseSkill(skillKey);
     }
 }
@@ -81,7 +75,13 @@ public struct UseMainAttackSkillBrainAction : IBrainAction
 {
     public bool Execute(BrainActionContext context)
     {
-        return new UseSkillBrainAction(KeyCode.Mouse0).Execute(context);
+        var playerData = context?.ControlledEntity?.GetEntityData<PlayerData>();
+        if (!InputActionSkillLogic.TryGetMainAttackSkillKey(playerData, out var skillKey))
+        {
+            return false;
+        }
+
+        return new UseSkillBrainAction(skillKey).Execute(context);
     }
 }
 

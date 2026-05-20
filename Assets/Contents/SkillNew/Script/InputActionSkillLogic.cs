@@ -46,4 +46,9 @@ public static class InputActionSkillLogic
 
         return playerData.InputActionSkillData.TryGetSkillKey(keyCode, out skillKey);
     }
+
+    public static bool TryGetMainAttackSkillKey(PlayerData playerData, out string skillKey)
+    {
+        return TryGetSkillKey(playerData, KeyCode.Mouse0, out skillKey);
+    }
 }

@@ -60,7 +60,7 @@ public class CombatHostileTargetFlow : ProcessorFlow
     float ResolveMainSkillRange()
     {
         var playerData = controlledPlayer?.GetEntityData<PlayerData>();
-        if (!InputActionSkillLogic.TryGetSkillKey(playerData, KeyCode.Mouse0, out var skillKey))
+        if (!InputActionSkillLogic.TryGetMainAttackSkillKey(playerData, out var skillKey))
         {
             return mainSkillRange;
         }
