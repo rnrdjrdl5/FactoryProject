@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class StraightProjectile : ProjectileEntity
+public class StraightProjectile : ProjectileEntity, IDirectionProvider
 {
+    public Vector3 Direction => moveDirection;
+
     Vector3 moveDirection;
     float speed;
 
