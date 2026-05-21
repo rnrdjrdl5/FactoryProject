@@ -34,6 +34,11 @@ public class SkillAbility : Ability
             return Vector3.zero;
         }
 
+        if (skillData.skillTargetType == Tables.FactionRelationType.Friendly)
+        {
+            return Entity.transform.position;
+        }
+
         var targetPlayer = mainRealmProcessor?.GetClosestHostilePlayer(factionPlayer, Entity.transform.position, skillData.range);
         if (targetPlayer == null)
         {

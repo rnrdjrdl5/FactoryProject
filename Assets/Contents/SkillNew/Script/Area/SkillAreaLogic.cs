@@ -13,7 +13,7 @@ public static class SkillAreaLogic
         switch (skillContext.SkillData.ParsedAreaParam)
         {
             case SkillAreaCircleParam circleParam:
-                return GetCircleTargetEntities(originCaster, skillContext.TargetPosition, circleParam, mainRealmProcessor);
+                return GetCircleTargetEntities(skillContext, originCaster, circleParam, mainRealmProcessor);
 
             default:
                 return new List<Entity>();
@@ -21,17 +21,22 @@ public static class SkillAreaLogic
     }
 
     static List<Entity> GetCircleTargetEntities(
+        SkillContext skillContext,
         Player originCaster,
-        Vector3? targetPosition,
         SkillAreaCircleParam circleParam,
         MainRealmProcessor mainRealmProcessor)
     {
-        if (targetPosition == null || circleParam?.Radius == null)
+        if (circleParam?.Radius == null)
         {
             return new List<Entity>();
         }
 
-        var targetPlayers = mainRealmProcessor?.GetHostilePlayersInRange(originCaster, targetPosition.Value, circleParam.Radius.Value);
+        var centerPosition = GetCircleCenterPosition(skillContext, originCaster);
+        var targetPlayers = mainRealmProcessor?.GetPlayersInRange(
+            originCaster,
+            skillContext.SkillData.skillTargetType,
+            centerPosition,
+            circleParam.Radius.Value);
         if (targetPlayers == null || targetPlayers.Count == 0)
         {
             return new List<Entity>();
@@ -44,5 +49,20 @@ public static class SkillAreaLogic
         }
 
         return targetEntities;
+    }
+
+    static Vector3 GetCircleCenterPosition(SkillContext skillContext, Player originCaster)
+    {
+        if (skillContext.SkillData.skillTargetType == Tables.FactionRelationType.Friendly)
+        {
+            return originCaster.transform.position;
+        }
+
+        if (skillContext.TargetPosition != null)
+        {
+            return skillContext.TargetPosition.Value;
+        }
+
+        return originCaster.transform.position;
     }
 }

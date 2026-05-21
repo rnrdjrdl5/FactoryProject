@@ -30,6 +30,29 @@ public static class SkillActionParamParser
                 return param;
             }
 
+            case Tables.SkillActionType.Heal:
+            {
+                var param = new SkillActionHealParam();
+                if (!SkillParamParseUtility.TryGetOptionalString(rawParams, 0, out var amountRaw))
+                {
+                    return null;
+                }
+
+                if (!string.IsNullOrWhiteSpace(amountRaw))
+                {
+                    if (float.TryParse(amountRaw, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var amount))
+                    {
+                        param.Amount = amount;
+                    }
+                    else
+                    {
+                        param.AmountFormula = amountRaw;
+                    }
+                }
+
+                return param;
+            }
+
             case Tables.SkillActionType.Projectile:
             {
                 var param = new SkillActionProjectileParam();

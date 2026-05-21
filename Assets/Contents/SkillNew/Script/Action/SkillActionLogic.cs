@@ -16,6 +16,10 @@ public static class SkillActionLogic
                 ExecuteDamage(skillContext, damageParam);
                 break;
 
+            case SkillActionHealParam healParam:
+                ExecuteHeal(skillContext, healParam);
+                break;
+
             case SkillActionProjectileParam projectileParam:
                 ExecuteProjectile(skillContext, projectileParam);
                 break;
@@ -44,6 +48,32 @@ public static class SkillActionLogic
 
             var hpAbility = targetEntity.GetAbility<HpAbility>();
             hpAbility?.TryApplyDamage(skillContext.OriginCaster, damage);
+        }
+    }
+
+    static void ExecuteHeal(SkillContext skillContext, SkillActionHealParam healParam)
+    {
+        if (skillContext.TargetEntities == null || skillContext.TargetEntities.Count == 0)
+        {
+            return;
+        }
+
+        var casterFormula = skillContext.OriginCaster?.GetEntityData<PlayerData>()?.PlayerFormula;
+        var heal = SkillHealLogic.GetHeal(casterFormula, healParam);
+        if (heal <= 0f)
+        {
+            return;
+        }
+
+        foreach (var targetEntity in skillContext.TargetEntities)
+        {
+            if (targetEntity == null)
+            {
+                continue;
+            }
+
+            var hpAbility = targetEntity.GetAbility<HpAbility>();
+            hpAbility?.Heal(skillContext.OriginCaster, heal);
         }
     }
 

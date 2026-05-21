@@ -20,6 +20,7 @@ namespace Tables
         public List<string> skillTimeParam { get; set; } = new System.Collections.Generic.List<string>();
         public SkillAreaType skillAreaType { get; set; }
         public List<string> skillAreaParam { get; set; } = new System.Collections.Generic.List<string>();
+        public FactionRelationType skillTargetType { get; set; }
         public SkillActionType skillActionType { get; set; }
         public List<string> skillActionParam { get; set; } = new System.Collections.Generic.List<string>();
 

@@ -153,6 +153,7 @@ namespace Tables
         public static string Player_Human = "Player_Human";
         public static string Player_Snake = "Player_Snake";
         public static string Projectile_Human = "Projectile_Human";
+        public static string Skill_Heal_Area_1 = "Skill_Heal_Area_1";
         public static string Skill_Human_AddBuff_1 = "Skill_Human_AddBuff_1";
         public static string Skill_Human_MeleeAttack_1 = "Skill_Human_MeleeAttack_1";
         public static string Skill_Projectile_Bow_1 = "Skill_Projectile_Bow_1";

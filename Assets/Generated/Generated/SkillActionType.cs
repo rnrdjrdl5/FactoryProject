@@ -9,5 +9,6 @@ namespace Tables
         UseSkill = 4,
         ApplyStat = 5,
         AddBuff = 6,
+        Heal = 7,
     }
 }
