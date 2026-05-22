@@ -13,8 +13,9 @@ public class MainStorage : Storage
         base.Ready();
         
         // TODO: Dummy data, update later.
-        var processorAbility = GetAbility<ProcessorAbility>();
-        var mainStorageProcessor = processorAbility.GetProcessor<MainStorageProcessor>();
+        var mainStorageProcessor = this
+            .GetProcessorContext<MainStorageProcessorContext>()
+            ?.MainStorageProcessor;
         var bag = GetEntityData<Bag>();
         var testPlayerItems = new List<Item>();
 

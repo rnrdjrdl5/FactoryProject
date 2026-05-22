@@ -8,7 +8,10 @@ public class AutoAttackFlow : ProcessorFlow
     {
         base.OnEnterFlow();
 
-        actionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
+        actionProcessor = Processor
+            .ProcessorAbility
+            .GetContext<BrainProcessorContext>()
+            ?.BrainActionProcessor;
         actionProcessor?.RequestAction(new MoveBrainAction());
     }
 

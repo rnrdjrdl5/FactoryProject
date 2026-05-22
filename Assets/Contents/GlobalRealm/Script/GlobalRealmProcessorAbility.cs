@@ -8,4 +8,8 @@ using UnityEngine;
 [Processor(typeof(InventoryInputLayerProcessor))]
 public class GlobalRealmProcessorAbility : ProcessorAbility
 {
+    protected override void CreateProcessorContext()
+    {
+        GetOrCreateContext<GlobalRealmProcessorContext>();
+    }
 }

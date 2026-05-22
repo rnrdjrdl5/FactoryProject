@@ -43,8 +43,10 @@ public struct PickBrainAction : IBrainAction
 {
     public bool Execute(BrainActionContext context)
     {
-        var processorAbility = context?.ControlledEntity?.GetAbility<PlayerProcessorAbility>();
-        var pickProcessor = processorAbility?.GetProcessor<PlayerPickProcessor>();
+        var pickProcessor = context
+            ?.ControlledEntity
+            ?.GetProcessorContext<PlayerProcessorContext>()
+            ?.PlayerPickProcessor;
         if (pickProcessor == null)
         {
             return false;
@@ -89,8 +91,10 @@ public static class BrainActionUtility
 {
     public static void RefreshMoveAnimation(BrainActionContext context, Vector2 moveDelta)
     {
-        var processorAbility = context?.ControlledEntity?.GetAbility<PlayerProcessorAbility>();
-        var modelProcessor = processorAbility?.GetProcessor<PlayerModelProcessor>();
+        var modelProcessor = context
+            ?.ControlledEntity
+            ?.GetProcessorContext<PlayerProcessorContext>()
+            ?.PlayerModelProcessor;
         if (modelProcessor == null)
         {
             return;

@@ -66,8 +66,8 @@ public class PlayerBrainCommandMapper : IInputCommandMapper<PlayerBrainCommand>
                 continue;
             }
 
-            var processorAbility = brain.GetAbility<BrainProcessorAbility>();
-            if (processorAbility?.GetProcessor<BrainActionProcessor>() == null)
+            var context = brain.GetProcessorContext<BrainProcessorContext>();
+            if (context?.BrainActionProcessor == null)
             {
                 continue;
             }

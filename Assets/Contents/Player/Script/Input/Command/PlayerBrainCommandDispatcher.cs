@@ -49,8 +49,8 @@ public class PlayerBrainCommandDispatcher : IInputCommandDispatcher<PlayerBrainC
                 continue;
             }
 
-            var processorAbility = brain.GetAbility<BrainProcessorAbility>();
-            if (processorAbility?.GetProcessor<BrainActionProcessor>() is BrainActionProcessor playerBrainActionProcessor)
+            var context = brain.GetProcessorContext<BrainProcessorContext>();
+            if (context?.BrainActionProcessor is BrainActionProcessor playerBrainActionProcessor)
             {
                 brainActionProcessor = playerBrainActionProcessor;
                 return;

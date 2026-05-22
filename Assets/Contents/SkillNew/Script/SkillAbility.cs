@@ -6,7 +6,6 @@ public class SkillAbility : Ability
     readonly Dictionary<string, SkillRuntimeState> skillRuntimeStatesByKey = new();
 
     MainRealm mainRealm;
-    MainRealmProcessorAbility mainRealmProcessorAbility;
     MainRealmProcessor mainRealmProcessor;
 
     public override void Initialize(IInitData initData = null)
@@ -14,8 +13,9 @@ public class SkillAbility : Ability
         base.Initialize(initData);
 
         mainRealm = Entity.GetParent<MainRealm>();
-        mainRealmProcessorAbility = mainRealm?.GetAbility<MainRealmProcessorAbility>();
-        mainRealmProcessor = mainRealmProcessorAbility?.GetProcessor<MainRealmProcessor>();
+        mainRealmProcessor = mainRealm
+            ?.GetProcessorContext<MainRealmProcessorContext>()
+            ?.MainRealmProcessor;
     }
 
     void Update()

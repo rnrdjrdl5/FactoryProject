@@ -4,5 +4,8 @@ using UnityEngine;
 [Processor(typeof(TeamPopupInputLayerProcessor))]
 public class TeamPopupProcessorAbility : ProcessorAbility
 {
-    
+    protected override void CreateProcessorContext()
+    {
+        GetOrCreateContext<TeamPopupProcessorContext>();
+    }
 }

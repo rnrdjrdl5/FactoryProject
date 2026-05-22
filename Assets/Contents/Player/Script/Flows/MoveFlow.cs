@@ -11,7 +11,10 @@ public class MoveFlow : ProcessorFlow
     {
         base.OnEnterFlow();
 
-        actionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
+        actionProcessor = Processor
+            .ProcessorAbility
+            .GetContext<BrainProcessorContext>()
+            ?.BrainActionProcessor;
         dir = Random.insideUnitCircle;
     }
 

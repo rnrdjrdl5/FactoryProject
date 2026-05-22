@@ -10,8 +10,9 @@ public class PlayerPickProcessor : Processor
         base.Ready();
 
         mainStorage = FactoryEntry.MainStorage;
-        var processorAbility = mainStorage.GetAbility<MainStorageProcessorAbility>();
-        mainStorageProcessor = processorAbility.GetProcessor<MainStorageProcessor>();
+        mainStorageProcessor = mainStorage
+            .GetProcessorContext<MainStorageProcessorContext>()
+            ?.MainStorageProcessor;
     }
 
     public void PickItem()

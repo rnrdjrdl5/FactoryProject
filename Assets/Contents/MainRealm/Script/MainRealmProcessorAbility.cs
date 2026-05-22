@@ -6,5 +6,8 @@ using UnityEngine;
 [Processor(typeof(MainRealmProcessor))]
 public class MainRealmProcessorAbility : ProcessorAbility
 {
-    
+    protected override void CreateProcessorContext()
+    {
+        GetOrCreateContext<MainRealmProcessorContext>();
+    }
 }
