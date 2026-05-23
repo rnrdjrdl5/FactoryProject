@@ -6,6 +6,6 @@ public class EquipmentPopupProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<EquipmentPopupProcessorContext>();
+        GetContext<EquipmentPopupProcessorContext>();
     }
 }

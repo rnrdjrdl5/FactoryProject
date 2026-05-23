@@ -5,6 +5,6 @@ public class SpawnerProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<SpawnerProcessorContext>();
+        GetContext<SpawnerProcessorContext>();
     }
 }

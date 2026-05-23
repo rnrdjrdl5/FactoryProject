@@ -10,6 +10,6 @@ public class PlayerProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<PlayerProcessorContext>();
+        GetContext<PlayerProcessorContext>();
     }
 }

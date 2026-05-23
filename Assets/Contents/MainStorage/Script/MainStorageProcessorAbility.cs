@@ -4,6 +4,6 @@ public class MainStorageProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<MainStorageProcessorContext>();
+        GetContext<MainStorageProcessorContext>();
     }
 }

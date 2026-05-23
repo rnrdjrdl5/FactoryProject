@@ -10,6 +10,6 @@ public class GlobalRealmProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<GlobalRealmProcessorContext>();
+        GetContext<GlobalRealmProcessorContext>();
     }
 }

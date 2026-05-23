@@ -6,6 +6,6 @@ public class TeamPopupProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<TeamPopupProcessorContext>();
+        GetContext<TeamPopupProcessorContext>();
     }
 }

@@ -8,6 +8,6 @@ public class MainRealmProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<MainRealmProcessorContext>();
+        GetContext<MainRealmProcessorContext>();
     }
 }

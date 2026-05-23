@@ -6,6 +6,6 @@ public class InventoryProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<InventoryProcessorContext>();
+        GetContext<InventoryProcessorContext>();
     }
 }

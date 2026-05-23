@@ -5,6 +5,6 @@ public class WorldItemProcessorAbility : ProcessorAbility
 {
     protected override void CreateProcessorContext()
     {
-        GetOrCreateContext<WorldItemProcessorContext>();
+        GetContext<WorldItemProcessorContext>();
     }
 }
