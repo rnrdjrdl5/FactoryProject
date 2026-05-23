@@ -126,19 +126,20 @@ public class MainRealmPlayerEntityProcessor : Processor
 
             controlledTeam.TryAddPlayer(player);
 
-            var processorAbility = brain.GetAbility<BrainProcessorAbility>();
-            var brainFlowProcessor = processorAbility.GetProcessor<BrainFlowProcessor>();
+            var brainFlowProcessor = brain
+                .GetProcessorContext<BrainProcessorContext>()
+                ?.BrainFlowProcessor;
 
             if (prevPlayer != null)
             {
                 var followAbility = player.GetAbility<PlayerFollowAbility>();
                 followAbility.SetTarget(prevPlayer);
-                brainFlowProcessor.ChangeFlow<FriendlyAIFlow>();
+                brainFlowProcessor?.ChangeFlow<FriendlyAIFlow>();
                 brain.SetControlMode(BrainControlMode.AI);
             }
             else
             {
-                brainFlowProcessor.ChangeFlow<PlayerInputFlow>();
+                brainFlowProcessor?.ChangeFlow<PlayerInputFlow>();
                 brain.SetControlMode(BrainControlMode.PlayerInput);
                 brainAbility.SetMainPlayerBrain(brain);
             }
@@ -201,9 +202,10 @@ public class MainRealmPlayerEntityProcessor : Processor
 
             brain.SetControlMode(BrainControlMode.AI);
 
-            var processorAbility = brain.GetAbility<BrainProcessorAbility>();
-            var brainFlowProcessor = processorAbility.GetProcessor<BrainFlowProcessor>();
-            brainFlowProcessor.ChangeFlow<PlacedAIHeroFlow>();
+            var brainFlowProcessor = brain
+                .GetProcessorContext<BrainProcessorContext>()
+                ?.BrainFlowProcessor;
+            brainFlowProcessor?.ChangeFlow<PlacedAIHeroFlow>();
         }
 
         return true;
@@ -238,9 +240,10 @@ public class MainRealmPlayerEntityProcessor : Processor
 
         brain.SetControlMode(BrainControlMode.AI);
         
-        var brainProcessorAbility = brain.GetAbility<BrainProcessorAbility>();
-        var brainFlowProcessor = brainProcessorAbility.GetProcessor<BrainFlowProcessor>();
-        brainFlowProcessor.ChangeFlow<EnemyAIFlow>();
+        var brainFlowProcessor = brain
+            .GetProcessorContext<BrainProcessorContext>()
+            ?.BrainFlowProcessor;
+        brainFlowProcessor?.ChangeFlow<EnemyAIFlow>();
         
         return brain;
     }
@@ -287,7 +290,9 @@ public class MainRealmPlayerEntityProcessor : Processor
 
     bool SetStorage()
     {
-        teamProcessor ??= ProcessorAbility.GetProcessor<MainRealmTeamProcessor>();
+        teamProcessor ??= ProcessorAbility
+            .GetContext<MainRealmProcessorContext>()
+            ?.MainRealmTeamProcessor;
         if (teamProcessor == null)
         {
             return false;

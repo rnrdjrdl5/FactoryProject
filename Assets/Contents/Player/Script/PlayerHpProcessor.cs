@@ -39,8 +39,10 @@ public class PlayerHpProcessor : Processor
         {
             if (playerData?.OriginType == PlayerOriginType.WorldSpawned)
             {
-                dropItemProcessor ??= ProcessorAbility.GetProcessor<DropItemProcessor>();
-                dropItemProcessor.TryDropItem(Entity.transform.position, player.TableData.dropPlayerPercent, player.TableData.dropPlayerKey);
+                dropItemProcessor ??= ProcessorAbility
+                    .GetContext<PlayerProcessorContext>()
+                    ?.DropItemProcessor;
+                dropItemProcessor?.TryDropItem(Entity.transform.position, player.TableData.dropPlayerPercent, player.TableData.dropPlayerKey);
             }
             
             DestroyPlayer();
@@ -49,8 +51,9 @@ public class PlayerHpProcessor : Processor
     
     void DestroyPlayer()
     {
-        var mainRealmProcessorAbility = Realm?.GetAbility<MainRealmProcessorAbility>();
-        var teamProcessor = mainRealmProcessorAbility?.GetProcessor<MainRealmTeamProcessor>();
+        var teamProcessor = Realm
+            ?.GetProcessorContext<MainRealmProcessorContext>()
+            ?.MainRealmTeamProcessor;
         teamProcessor?.RemovePlayerFromTeams(player);
 
         Realm.TryRemoveChild(Entity);

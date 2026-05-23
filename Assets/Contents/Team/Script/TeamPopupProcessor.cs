@@ -107,16 +107,14 @@ public class TeamPopupProcessor : Processor
     void GoFormation(UIMsg.TeamFormationGoMsg msg)
     {
         var mainRealm = Realm.GetParent<MainRealm>();
-        var processorAbility = mainRealm.GetAbility<ProcessorAbility>();
-        var playerEntityProcessor = processorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
-        playerEntityProcessor.CreateControlledHeroTeam(msg.TeamFormationStorage);
+        var context = mainRealm.GetProcessorContext<MainRealmProcessorContext>();
+        context?.MainRealmPlayerEntityProcessor?.CreateControlledHeroTeam(msg.TeamFormationStorage);
     }
 
     void PlaceFormation(UIMsg.PlaceTeamFormationMsg msg)
     {
         var mainRealm = Realm.GetParent<MainRealm>();
-        var processorAbility = mainRealm.GetAbility<ProcessorAbility>();
-        var playerEntityProcessor = processorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
-        playerEntityProcessor.PlaceAIHeroTeam(msg.TeamFormationStorage);
+        var context = mainRealm.GetProcessorContext<MainRealmProcessorContext>();
+        context?.MainRealmPlayerEntityProcessor?.PlaceAIHeroTeam(msg.TeamFormationStorage);
     }
 }

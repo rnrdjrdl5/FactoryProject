@@ -6,7 +6,10 @@ public class FollowTargetFlow : ProcessorFlow
     {
         base.OnEnterFlow();
 
-        actionProcessor = Processor.ProcessorAbility.GetProcessor<BrainActionProcessor>();
+        actionProcessor = Processor
+            .ProcessorAbility
+            .GetContext<BrainProcessorContext>()
+            ?.BrainActionProcessor;
     }
 
     public override void OnUpdateFlow()

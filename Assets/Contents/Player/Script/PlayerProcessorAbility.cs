@@ -8,5 +8,8 @@
 [Processor(typeof(PlayerModelProcessor))]
 public class PlayerProcessorAbility : ProcessorAbility
 {
-    
+    protected override void CreateProcessorContext()
+    {
+        GetOrCreateContext<PlayerProcessorContext>();
+    }
 }

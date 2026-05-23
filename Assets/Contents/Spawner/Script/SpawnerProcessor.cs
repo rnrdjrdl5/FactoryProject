@@ -14,9 +14,9 @@ public class SpawnerProcessor : Processor
         base.Initialize(initData);
 
         var mainRealm = Entity.GetParent<MainRealm>();
-        var mainRealmProcessorAbility = mainRealm.GetAbility<MainRealmProcessorAbility>();
-        teamProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmTeamProcessor>();
-        playerEntityProcessor = mainRealmProcessorAbility.GetProcessor<MainRealmPlayerEntityProcessor>();
+        var mainRealmContext = mainRealm.GetProcessorContext<MainRealmProcessorContext>();
+        teamProcessor = mainRealmContext?.MainRealmTeamProcessor;
+        playerEntityProcessor = mainRealmContext?.MainRealmPlayerEntityProcessor;
         
         spawner = Entity as Spawner;
         spawnTeam = teamProcessor.CreateTeam(TeamType.Spawner, spawner, spawner.UniqueId);

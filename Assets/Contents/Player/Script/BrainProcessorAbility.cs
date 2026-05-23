@@ -5,5 +5,8 @@ using UnityEngine;
 [Processor(typeof(BrainActionProcessor))]
 public class BrainProcessorAbility : ProcessorAbility
 {
-    
+    protected override void CreateProcessorContext()
+    {
+        GetOrCreateContext<BrainProcessorContext>();
+    }
 }

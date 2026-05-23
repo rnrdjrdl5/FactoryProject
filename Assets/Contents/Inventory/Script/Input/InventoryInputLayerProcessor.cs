@@ -43,7 +43,8 @@ public class InventoryInputLayerProcessor : BaseInputLayerProcessor
         }
 
         var globalRealm = Entity.GetFromRoot<GlobalRealm>();
-        var processorAbility = globalRealm?.GetAbility<GlobalRealmProcessorAbility>();
-        globalActionProcessor = processorAbility?.GetProcessor<GlobalActionProcessor>();
+        globalActionProcessor = globalRealm
+            ?.GetProcessorContext<GlobalRealmProcessorContext>()
+            ?.GlobalActionProcessor;
     }
 }
