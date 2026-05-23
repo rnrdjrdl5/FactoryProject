@@ -13,6 +13,16 @@ public class MainRealmProcessor : Processor
         return TargetSearchLogic.GetHostilePlayersInRange(Entity.GetChildren<Player>(), player, centerPosition, range);
     }
 
+    public List<Player> GetFriendlyPlayersInRange(Player player, Vector3 centerPosition, float range)
+    {
+        return TargetSearchLogic.GetFriendlyPlayersInRange(Entity.GetChildren<Player>(), player, centerPosition, range);
+    }
+
+    public List<Player> GetPlayersInRange(Player player, Tables.FactionRelationType skillTargetType, Vector3 centerPosition, float range)
+    {
+        return TargetSearchLogic.GetPlayersInRange(Entity.GetChildren<Player>(), player, skillTargetType, centerPosition, range);
+    }
+
     public override void Initialize(IInitData initData = null)
     {
         base.Initialize(initData);

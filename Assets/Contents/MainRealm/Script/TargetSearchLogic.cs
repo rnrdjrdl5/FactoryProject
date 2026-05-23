@@ -5,7 +5,7 @@ public static class TargetSearchLogic
 {
     public static Player GetClosestHostilePlayer(IEnumerable<Player> players, Player player, Vector3 centerPosition, float range)
     {
-        var hostilePlayers = GetHostilePlayersInRange(players, player, centerPosition, range);
+        var hostilePlayers = GetPlayersInRange(players, player, Tables.FactionRelationType.Hostile, centerPosition, range);
         Player closestHostilePlayer = null;
         var closestDistanceSqr = float.MaxValue;
         foreach (var targetPlayer in hostilePlayers)
@@ -25,16 +25,31 @@ public static class TargetSearchLogic
 
     public static List<Player> GetHostilePlayersInRange(IEnumerable<Player> players, Player player, Vector3 centerPosition, float range)
     {
-        var hostilePlayers = new List<Player>();
+        return GetPlayersInRange(players, player, Tables.FactionRelationType.Hostile, centerPosition, range);
+    }
+
+    public static List<Player> GetFriendlyPlayersInRange(IEnumerable<Player> players, Player player, Vector3 centerPosition, float range)
+    {
+        return GetPlayersInRange(players, player, Tables.FactionRelationType.Friendly, centerPosition, range);
+    }
+
+    public static List<Player> GetPlayersInRange(
+        IEnumerable<Player> players,
+        Player player,
+        Tables.FactionRelationType relationType,
+        Vector3 centerPosition,
+        float range)
+    {
+        var targetPlayers = new List<Player>();
         if (players == null || player == null)
         {
-            return hostilePlayers;
+            return targetPlayers;
         }
 
         var rangeSqr = range * range;
         foreach (var targetPlayer in players)
         {
-            if (!IsValidHostileTarget(player, targetPlayer))
+            if (!IsValidTarget(player, targetPlayer, relationType))
             {
                 continue;
             }
@@ -44,15 +59,15 @@ public static class TargetSearchLogic
                 continue;
             }
 
-            hostilePlayers.Add(targetPlayer);
+            targetPlayers.Add(targetPlayer);
         }
 
-        return hostilePlayers;
+        return targetPlayers;
     }
 
     public static bool IsHostileTargetInRange(Player player, Player targetPlayer, float range)
     {
-        if (!IsValidHostileTarget(player, targetPlayer))
+        if (!IsValidTarget(player, targetPlayer, Tables.FactionRelationType.Hostile))
         {
             return false;
         }
@@ -70,13 +85,18 @@ public static class TargetSearchLogic
         return MathUtils.DistanceSqr2D(targetPosition, centerPosition) <= range * range;
     }
 
-    static bool IsValidHostileTarget(Player player, Player targetPlayer)
+    static bool IsValidTarget(Player player, Player targetPlayer, Tables.FactionRelationType relationType)
     {
-        if (player == null || targetPlayer == null || targetPlayer == player)
+        if (player == null || targetPlayer == null)
         {
             return false;
         }
 
-        return FactionLogic.IsHostile(player, targetPlayer);
+        if (targetPlayer == player)
+        {
+            return relationType == Tables.FactionRelationType.Friendly;
+        }
+
+        return FactionLogic.IsRelation(player, targetPlayer, relationType);
     }
 }

@@ -1,5 +1,4 @@
 using Tables;
-using UnityEngine;
 
 public static class SkillActionLogic
 {
@@ -73,7 +72,13 @@ public static class SkillActionLogic
             }
 
             var hpAbility = targetEntity.GetAbility<HpAbility>();
-            hpAbility?.Heal(skillContext.OriginCaster, heal);
+            if (hpAbility == null)
+            {
+                continue;
+            }
+
+            hpAbility.Heal(skillContext.OriginCaster, heal);
+            SkillEffectLogic.Play(skillContext.SkillData.skillEffectKey, targetEntity);
         }
     }
 

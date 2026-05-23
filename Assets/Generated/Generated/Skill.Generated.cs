@@ -23,6 +23,7 @@ namespace Tables
         public FactionRelationType skillTargetType { get; set; }
         public SkillActionType skillActionType { get; set; }
         public List<string> skillActionParam { get; set; } = new System.Collections.Generic.List<string>();
+        public string skillEffectKey { get; set; } = string.Empty;
 
         private static readonly System.Collections.Generic.Dictionary<string, Skill> _table = new System.Collections.Generic.Dictionary<string, Skill>();
         public static System.Collections.Generic.IReadOnlyDictionary<string, Skill> Table => _table;
@@ -51,6 +52,7 @@ namespace Tables
                         kvp.Value.skillActionParam = kvp.Value.skillActionParam ?? new System.Collections.Generic.List<string>();
                         kvp.Value.iconAtlasPath = kvp.Value.iconAtlasPath ?? string.Empty;
                         kvp.Value.iconSpritePath = kvp.Value.iconSpritePath ?? string.Empty;
+                        kvp.Value.skillEffectKey = kvp.Value.skillEffectKey ?? string.Empty;
                         // Ensure Key property matches dictionary key
                         kvp.Value.Key = kvp.Key;
                         _table[kvp.Key] = kvp.Value;
